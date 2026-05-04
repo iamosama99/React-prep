@@ -126,18 +126,18 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 | 2 | Function vs class components | `phase-01-fundamentals/02-function-vs-class-components.md` | ✅ |
 | 3 | Props, props.children, defaultProps | `phase-01-fundamentals/03-props-children-defaultprops.md` | ✅ |
 | 4 | State & immutability | `phase-01-fundamentals/04-state-and-immutability.md` | ✅ |
-| 5 | One-way data flow | `phase-01-fundamentals/05-one-way-data-flow.md` | 👉 **Next** |
-| 6 | Conditional rendering patterns | `phase-01-fundamentals/06-conditional-rendering.md` | ⬜ |
-| 7 | Lists & keys | `phase-01-fundamentals/07-lists-and-keys.md` | ⬜ |
-| 8 | Fragments | `phase-01-fundamentals/08-fragments.md` | ⬜ |
-| 9 | Controlled vs uncontrolled inputs | `phase-01-fundamentals/09-controlled-vs-uncontrolled-inputs.md` | ⬜ |
-| 10 | Synthetic events | `phase-01-fundamentals/10-synthetic-events.md` | ⬜ |
+| 5 | One-way data flow | `phase-01-fundamentals/05-one-way-data-flow.md` | ✅ |
+| 6 | Conditional rendering patterns | `phase-01-fundamentals/06-conditional-rendering.md` | ✅ |
+| 7 | Lists & keys | `phase-01-fundamentals/07-lists-and-keys.md` | ✅ |
+| 8 | Fragments | `phase-01-fundamentals/08-fragments.md` | ✅ |
+| 9 | Controlled vs uncontrolled inputs | `phase-01-fundamentals/09-controlled-vs-uncontrolled-inputs.md` | ✅ |
+| 10 | Synthetic events | `phase-01-fundamentals/10-synthetic-events.md` | ✅ |
 
 ### Phase 2 — Hooks (18 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | useState | `phase-02-hooks/01-use-state.md` | ⬜ |
+| 1 | useState | `phase-02-hooks/01-use-state.md` | 👉 **Next** |
 | 2 | useEffect | `phase-02-hooks/02-use-effect.md` | ⬜ |
 | 3 | useLayoutEffect | `phase-02-hooks/03-use-layout-effect.md` | ⬜ |
 | 4 | useInsertionEffect | `phase-02-hooks/04-use-insertion-effect.md` | ⬜ |
