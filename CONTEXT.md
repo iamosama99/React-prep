@@ -125,8 +125,8 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 | 1 | JSX & React.createElement | `phase-01-fundamentals/01-jsx-react-createelement.md` | ✅ |
 | 2 | Function vs class components | `phase-01-fundamentals/02-function-vs-class-components.md` | ✅ |
 | 3 | Props, props.children, defaultProps | `phase-01-fundamentals/03-props-children-defaultprops.md` | ✅ |
-| 4 | State & immutability | `phase-01-fundamentals/04-state-and-immutability.md` | 👉 **Next** |
-| 5 | One-way data flow | `phase-01-fundamentals/05-one-way-data-flow.md` | ⬜ |
+| 4 | State & immutability | `phase-01-fundamentals/04-state-and-immutability.md` | ✅ |
+| 5 | One-way data flow | `phase-01-fundamentals/05-one-way-data-flow.md` | 👉 **Next** |
 | 6 | Conditional rendering patterns | `phase-01-fundamentals/06-conditional-rendering.md` | ⬜ |
 | 7 | Lists & keys | `phase-01-fundamentals/07-lists-and-keys.md` | ⬜ |
 | 8 | Fragments | `phase-01-fundamentals/08-fragments.md` | ⬜ |
