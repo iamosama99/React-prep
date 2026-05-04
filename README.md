@@ -2,9 +2,15 @@
 
 Senior frontend engineer interview preparation — 148 topics across 14 phases.
 
-Content is written the way a senior engineer explains things: mental models first, gotchas that actually trip people up, and interview Q&A with the traps called out explicitly. No tutorials, no hand-holding, no filler.
+---
 
-**Workflow:** Topics are covered one at a time, on demand. Say "next" to continue in sequence or name a specific topic to jump to it.
+## How This Works
+
+Every topic starts with **what it is and why it exists** before going anywhere near mechanics. The goal is that nothing feels arbitrary — every API choice, every constraint, every gotcha has a reason, and that reason is explained.
+
+Language is plain but terminology is exact. Mental models are built from first principles so that when you're in an interview and the question takes an unexpected angle, you can *reason your way* to the right answer rather than recall a memorized one.
+
+**Workflow:** One topic at a time, at your pace. Say "next" to continue in sequence or name any topic to jump to it.
 
 **Code examples:** Plain JavaScript for Phases 1–8. TypeScript from Phase 9 onwards.
 
