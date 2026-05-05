@@ -142,25 +142,25 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 | 3 | useLayoutEffect | `phase-02-hooks/03-use-layout-effect.md` | ✅ |
 | 4 | useInsertionEffect | `phase-02-hooks/04-use-insertion-effect.md` | ✅ |
 | 5 | useRef | `phase-02-hooks/05-use-ref.md` | ✅ |
-| 6 | useMemo | `phase-02-hooks/06-use-memo.md` | 👉 **Next** |
-| 7 | useCallback | `phase-02-hooks/07-use-callback.md` | ⬜ |
-| 8 | useContext | `phase-02-hooks/08-use-context.md` | ⬜ |
-| 9 | useReducer | `phase-02-hooks/09-use-reducer.md` | ⬜ |
-| 10 | useImperativeHandle + forwardRef | `phase-02-hooks/10-use-imperative-handle-forward-ref.md` | ⬜ |
-| 11 | useTransition | `phase-02-hooks/11-use-transition.md` | ⬜ |
-| 12 | useDeferredValue | `phase-02-hooks/12-use-deferred-value.md` | ⬜ |
-| 13 | useId | `phase-02-hooks/13-use-id.md` | ⬜ |
-| 14 | useSyncExternalStore | `phase-02-hooks/14-use-sync-external-store.md` | ⬜ |
-| 15 | useDebugValue | `phase-02-hooks/15-use-debug-value.md` | ⬜ |
-| 16 | Rules of hooks | `phase-02-hooks/16-rules-of-hooks.md` | ⬜ |
-| 17 | Stale closure problem | `phase-02-hooks/17-stale-closure-problem.md` | ⬜ |
-| 18 | Common custom hooks | `phase-02-hooks/18-common-custom-hooks.md` | ⬜ |
+| 6 | useMemo | `phase-02-hooks/06-use-memo.md` | ✅ |
+| 7 | useCallback | `phase-02-hooks/07-use-callback.md` | ✅ |
+| 8 | useContext | `phase-02-hooks/08-use-context.md` | ✅ |
+| 9 | useReducer | `phase-02-hooks/09-use-reducer.md` | ✅ |
+| 10 | useImperativeHandle + forwardRef | `phase-02-hooks/10-use-imperative-handle-forward-ref.md` | ✅ |
+| 11 | useTransition | `phase-02-hooks/11-use-transition.md` | ✅ |
+| 12 | useDeferredValue | `phase-02-hooks/12-use-deferred-value.md` | ✅ |
+| 13 | useId | `phase-02-hooks/13-use-id.md` | ✅ |
+| 14 | useSyncExternalStore | `phase-02-hooks/14-use-sync-external-store.md` | ✅ |
+| 15 | useDebugValue | `phase-02-hooks/15-use-debug-value.md` | ✅ |
+| 16 | Rules of hooks | `phase-02-hooks/16-rules-of-hooks.md` | ✅ |
+| 17 | Stale closure problem | `phase-02-hooks/17-stale-closure-problem.md` | ✅ |
+| 18 | Common custom hooks | `phase-02-hooks/18-common-custom-hooks.md` | ✅ |
 
 ### Phase 3 — Class Components & Legacy (6 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Lifecycle methods | `phase-03-class-legacy/01-lifecycle-methods.md` | ⬜ |
+| 1 | Lifecycle methods | `phase-03-class-legacy/01-lifecycle-methods.md` | 👉 **Next** |
 | 2 | getDerivedStateFromProps | `phase-03-class-legacy/02-get-derived-state-from-props.md` | ⬜ |
 | 3 | shouldComponentUpdate | `phase-03-class-legacy/03-should-component-update.md` | ⬜ |
 | 4 | PureComponent vs React.memo | `phase-03-class-legacy/04-pure-component-vs-react-memo.md` | ⬜ |
