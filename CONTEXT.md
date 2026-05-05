@@ -137,12 +137,12 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | useState | `phase-02-hooks/01-use-state.md` | 👉 **Next** |
-| 2 | useEffect | `phase-02-hooks/02-use-effect.md` | ⬜ |
-| 3 | useLayoutEffect | `phase-02-hooks/03-use-layout-effect.md` | ⬜ |
-| 4 | useInsertionEffect | `phase-02-hooks/04-use-insertion-effect.md` | ⬜ |
-| 5 | useRef | `phase-02-hooks/05-use-ref.md` | ⬜ |
-| 6 | useMemo | `phase-02-hooks/06-use-memo.md` | ⬜ |
+| 1 | useState | `phase-02-hooks/01-use-state.md` | ✅ |
+| 2 | useEffect | `phase-02-hooks/02-use-effect.md` | ✅ |
+| 3 | useLayoutEffect | `phase-02-hooks/03-use-layout-effect.md` | ✅ |
+| 4 | useInsertionEffect | `phase-02-hooks/04-use-insertion-effect.md` | ✅ |
+| 5 | useRef | `phase-02-hooks/05-use-ref.md` | ✅ |
+| 6 | useMemo | `phase-02-hooks/06-use-memo.md` | 👉 **Next** |
 | 7 | useCallback | `phase-02-hooks/07-use-callback.md` | ⬜ |
 | 8 | useContext | `phase-02-hooks/08-use-context.md` | ⬜ |
 | 9 | useReducer | `phase-02-hooks/09-use-reducer.md` | ⬜ |
