@@ -284,7 +284,7 @@ class MyComponent extends React.Component {
 
 **Q: Why did the React ecosystem move from class to function components?**
 
-Strong answer: Two concrete reasons. First, sharing stateful logic between class components required HOCs or render props — both work, but both involve wrapping components inside other components, producing deeply nested trees ("wrapper hell") that are painful to debug. Hooks let you extract stateful logic into plain functions that any component can call directly, with no wrapping. Second, class lifecycle methods organized code by *phase* (mount, update, unmount) rather than by *concern*. Related setup and teardown logic was split across multiple methods. `useEffect` keeps a single concern's setup and cleanup together. There's also the snapshot-vs-instance behavioral difference, but the reusability and colocation wins were the primary motivations.
+Answer: Two concrete reasons. First, sharing stateful logic between class components required HOCs or render props — both work, but both involve wrapping components inside other components, producing deeply nested trees ("wrapper hell") that are painful to debug. Hooks let you extract stateful logic into plain functions that any component can call directly, with no wrapping. Second, class lifecycle methods organized code by *phase* (mount, update, unmount) rather than by *concern*. Related setup and teardown logic was split across multiple methods. `useEffect` keeps a single concern's setup and cleanup together. There's also the snapshot-vs-instance behavioral difference, but the reusability and colocation wins were the primary motivations.
 
 The trap: "Functions are simpler syntax." That's true but surface-level. The interviewer is looking for the actual engineering reasons — reusability and colocation.
 
@@ -292,7 +292,7 @@ The trap: "Functions are simpler syntax." That's true but surface-level. The int
 
 **Q: Is there anything you still can't do with function components?**
 
-Strong answer: Yes — error boundaries. Catching render errors in a subtree requires `static getDerivedStateFromError` and `componentDidCatch`, which are class-only lifecycle methods. There is no hooks equivalent. In practice this means every React app with error handling has at least one class component (or uses `react-error-boundary`, which wraps one).
+Answer: Yes — error boundaries. Catching render errors in a subtree requires `static getDerivedStateFromError` and `componentDidCatch`, which are class-only lifecycle methods. There is no hooks equivalent. In practice this means every React app with error handling has at least one class component (or uses `react-error-boundary`, which wraps one).
 
 The trap: "No, hooks can do everything classes can." This is a common overconfident answer. The error boundary exception is a real and ongoing limitation.
 
@@ -300,7 +300,7 @@ The trap: "No, hooks can do everything classes can." This is a common overconfid
 
 **Q: What is the behavioral difference between `this.props` in a class component and captured props in a function component?**
 
-Strong answer: In a class component, `this.props` is a reference to the current props object on the instance. Reading it in an asynchronous callback — a timeout, a promise, an event listener — gives you whatever props are *at the time of reading*, not at the time the callback was registered. If props change between registration and execution, the callback silently operates on new values. In a function component, props are local variables. A closure captures them at render time. An async callback created in that render will always see the props that existed when the render ran — even if the component has since re-rendered with new props. Function components give you "values frozen at render time"; class components give you "always live references."
+Answer: In a class component, `this.props` is a reference to the current props object on the instance. Reading it in an asynchronous callback — a timeout, a promise, an event listener — gives you whatever props are *at the time of reading*, not at the time the callback was registered. If props change between registration and execution, the callback silently operates on new values. In a function component, props are local variables. A closure captures them at render time. An async callback created in that render will always see the props that existed when the render ran — even if the component has since re-rendered with new props. Function components give you "values frozen at render time"; class components give you "always live references."
 
 The trap: Missing that this is a correctness issue, not just a style preference. The class behavior causes real bugs in async UI code.
 
@@ -308,7 +308,7 @@ The trap: Missing that this is a correctness issue, not just a style preference.
 
 **Q: Why can't you use hooks inside class components?**
 
-Strong answer: Hooks rely on a call-order mechanism inside React's fiber. When React renders a function component, it tracks each hook call in sequence and stores their state in a linked list on the fiber. This only works because React calls the function itself. Class components are instantiated and their `render` method is invoked, but React doesn't have a hook-tracking context set up for that execution. Calling `useState` inside a class method bypasses the mechanism entirely — React has no way to know which component the hook belongs to.
+Answer: Hooks rely on a call-order mechanism inside React's fiber. When React renders a function component, it tracks each hook call in sequence and stores their state in a linked list on the fiber. This only works because React calls the function itself. Class components are instantiated and their `render` method is invoked, but React doesn't have a hook-tracking context set up for that execution. Calling `useState` inside a class method bypasses the mechanism entirely — React has no way to know which component the hook belongs to.
 
 The trap: Thinking it's just an arbitrary rule. Understanding *why* makes the rule predictable and extends to understanding the Rules of Hooks in general.
 
@@ -316,7 +316,7 @@ The trap: Thinking it's just an arbitrary rule. Understanding *why* makes the ru
 
 **Q: What is the difference between `PureComponent` and `React.memo`?**
 
-Strong answer: Both skip re-renders using shallow prop comparison, but they apply to different paradigms. `PureComponent` is a class base — you extend `React.PureComponent` instead of `React.Component`. `React.memo` is a higher-order component — you wrap a function component: `export default React.memo(MyComponent)`. Both accept a custom comparison function (`shouldComponentUpdate` for PureComponent, a second argument to `React.memo`). They are functional equivalents in their respective worlds.
+Answer: Both skip re-renders using shallow prop comparison, but they apply to different paradigms. `PureComponent` is a class base — you extend `React.PureComponent` instead of `React.Component`. `React.memo` is a higher-order component — you wrap a function component: `export default React.memo(MyComponent)`. Both accept a custom comparison function (`shouldComponentUpdate` for PureComponent, a second argument to `React.memo`). They are functional equivalents in their respective worlds.
 
 The trap: Treating them as the same thing. They're separate APIs for separate component paradigms.
 
@@ -324,7 +324,7 @@ The trap: Treating them as the same thing. They're separate APIs for separate co
 
 **Q: In what order does React call things when a function component renders, vs when a class component renders?**
 
-Strong answer: For a function component, React calls the function directly — `MyComponent(props)` — and your hooks run in order as part of that call. The return value is the element tree. For a class component, React calls `render()` on the existing instance — `instance.render()`. Lifecycle methods (`componentDidMount`, `componentDidUpdate`, etc.) run separately at specific phases of the commit. The function model is one invocation producing output; the class model is a persistent object with methods called at different times.
+Answer: For a function component, React calls the function directly — `MyComponent(props)` — and your hooks run in order as part of that call. The return value is the element tree. For a class component, React calls `render()` on the existing instance — `instance.render()`. Lifecycle methods (`componentDidMount`, `componentDidUpdate`, etc.) run separately at specific phases of the commit. The function model is one invocation producing output; the class model is a persistent object with methods called at different times.
 
 The trap: Not understanding that React *calls* function components rather than instantiating them. This explains why you can't use `new` on a function component, and why `this` doesn't exist inside one.
 
@@ -332,7 +332,7 @@ The trap: Not understanding that React *calls* function components rather than i
 
 **Q: Can you explain what "wrapper hell" is and how hooks solve it?**
 
-Strong answer: Wrapper hell is what happens when you compose multiple HOCs or render props to inject behaviors into a component. Each HOC wraps the component in another component, so in React DevTools you see a deep chain of wrappers — `<WithAuth><WithTheme><WithLocale><ActualComponent>` — even though only one component is visible in the UI. It makes debugging hard, props collide invisibly, and the structure is difficult to reason about. Hooks solve this by letting you express the same behaviors as plain function calls inside the component body. `useAuth()`, `useTheme()`, `useLocale()` can all coexist flat inside one function without any wrapping — the component tree stays clean.
+Answer: Wrapper hell is what happens when you compose multiple HOCs or render props to inject behaviors into a component. Each HOC wraps the component in another component, so in React DevTools you see a deep chain of wrappers — `<WithAuth><WithTheme><WithLocale><ActualComponent>` — even though only one component is visible in the UI. It makes debugging hard, props collide invisibly, and the structure is difficult to reason about. Hooks solve this by letting you express the same behaviors as plain function calls inside the component body. `useAuth()`, `useTheme()`, `useLocale()` can all coexist flat inside one function without any wrapping — the component tree stays clean.
 
 The trap: Vaguely saying "HOCs are bad." The specific problem is the structural bloat and opacity they introduce, and the specific solution is that hooks decouple behavior from component wrapping.
 

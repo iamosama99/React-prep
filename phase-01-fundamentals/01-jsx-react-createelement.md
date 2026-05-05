@@ -212,7 +212,7 @@ return <><h1>Title</h1><p>Body</p></>;
 
 **Q: What does JSX compile to, and what does the output look like?**
 
-Strong answer: JSX is syntactic sugar that Babel or SWC transforms into `React.createElement(type, props, ...children)` calls before the code runs. Each call returns a plain JavaScript object — a React element — with `type`, `props`, `key`, and `ref` fields. This object is a description of what to render, not an actual DOM node. React processes these descriptions later during reconciliation to determine what DOM changes to make.
+Answer: JSX is syntactic sugar that Babel or SWC transforms into `React.createElement(type, props, ...children)` calls before the code runs. Each call returns a plain JavaScript object — a React element — with `type`, `props`, `key`, and `ref` fields. This object is a description of what to render, not an actual DOM node. React processes these descriptions later during reconciliation to determine what DOM changes to make.
 
 The trap: Saying "JSX compiles to HTML" or thinking it produces DOM nodes directly. It produces JavaScript objects. The DOM is only touched during the commit phase, not when elements are created.
 
@@ -220,7 +220,7 @@ The trap: Saying "JSX compiles to HTML" or thinking it produces DOM nodes direct
 
 **Q: Why did you previously need `import React from 'react'` in every JSX file, and why don't you need it anymore?**
 
-Strong answer: The old JSX transform compiled JSX to `React.createElement(...)`, so `React` had to be in scope. If you forgot the import, you'd get a runtime error even though you never called React directly. React 17 introduced a new transform that compiles JSX to calls imported automatically from `react/jsx-runtime`. The compiler injects that import itself. Modern tooling uses this by default, so the manual import is no longer needed for JSX — only for hooks and other named exports.
+Answer: The old JSX transform compiled JSX to `React.createElement(...)`, so `React` had to be in scope. If you forgot the import, you'd get a runtime error even though you never called React directly. React 17 introduced a new transform that compiles JSX to calls imported automatically from `react/jsx-runtime`. The compiler injects that import itself. Modern tooling uses this by default, so the manual import is no longer needed for JSX — only for hooks and other named exports.
 
 The trap: Saying "you always need it" (wrong in modern projects) or "you never need it" (wrong — you still need it to use hooks, `React.memo`, `React.lazy`, etc.).
 
@@ -228,7 +228,7 @@ The trap: Saying "you always need it" (wrong in modern projects) or "you never n
 
 **Q: Why is it `className` in JSX instead of `class`?**
 
-Strong answer: Because `class` is a reserved keyword in JavaScript, and JSX attributes compile to JavaScript object property names. React chose to match DOM property names rather than HTML attribute names — in the DOM, you set a class via `element.className`. The same principle gives us `htmlFor` instead of `for` (since `for` is reserved for loops). This is not a React convention — it's a consequence of JSX being JavaScript.
+Answer: Because `class` is a reserved keyword in JavaScript, and JSX attributes compile to JavaScript object property names. React chose to match DOM property names rather than HTML attribute names — in the DOM, you set a class via `element.className`. The same principle gives us `htmlFor` instead of `for` (since `for` is reserved for loops). This is not a React convention — it's a consequence of JSX being JavaScript.
 
 The trap: "It's just how React works." The real reason reveals an understanding that JSX is JavaScript, not HTML.
 
@@ -236,7 +236,7 @@ The trap: "It's just how React works." The real reason reveals an understanding 
 
 **Q: Why can't you use `if` statements inside JSX curly braces?**
 
-Strong answer: Because JSX curly braces can only contain *expressions* — code that evaluates to a value. `if` is a *statement* — it controls flow but doesn't produce a value. Under the hood, `{someContent}` becomes an argument to `React.createElement`, and function arguments must be expressions. You can achieve the same result with a ternary (`condition ? a : b`) or short-circuit evaluation (`condition && a`), both of which are expressions.
+Answer: Because JSX curly braces can only contain *expressions* — code that evaluates to a value. `if` is a *statement* — it controls flow but doesn't produce a value. Under the hood, `{someContent}` becomes an argument to `React.createElement`, and function arguments must be expressions. You can achieve the same result with a ternary (`condition ? a : b`) or short-circuit evaluation (`condition && a`), both of which are expressions.
 
 The trap: Thinking this is an arbitrary restriction. Once you understand that JSX compiles to function calls, the expression-only rule is a direct consequence of JavaScript semantics.
 
@@ -244,7 +244,7 @@ The trap: Thinking this is an arbitrary restriction. Once you understand that JS
 
 **Q: What's the difference between a React element and a React component?**
 
-Strong answer: A React *element* is the plain JS object produced by `React.createElement` — it's immutable data describing what to render, like `{ type: 'button', props: { children: 'Save' } }`. A React *component* is a function (or class) that accepts props and returns elements. When you write `<MyButton />`, React has a reference to the `MyButton` function — it calls that function to get elements back. Elements are the output; components are the factories.
+Answer: A React *element* is the plain JS object produced by `React.createElement` — it's immutable data describing what to render, like `{ type: 'button', props: { children: 'Save' } }`. A React *component* is a function (or class) that accepts props and returns elements. When you write `<MyButton />`, React has a reference to the `MyButton` function — it calls that function to get elements back. Elements are the output; components are the factories.
 
 The trap: Using these terms interchangeably. The distinction matters in practice — React decides when to call your component (not you), and understanding that elements are just data helps explain why creating elements doesn't immediately touch the DOM.
 
@@ -252,7 +252,7 @@ The trap: Using these terms interchangeably. The distinction matters in practice
 
 **Q: What is the JSX expression `{0 && <Spinner />}` going to render, and why?**
 
-Strong answer: It renders `0`. In JavaScript, `0 && anything` short-circuits and returns `0` — not `false`. React renders `false`, `null`, and `undefined` as nothing, but it *does* render numbers, including `0`. So you get the number zero appearing in your UI. The fix is to coerce the condition to a boolean: `{count > 0 && <Spinner />}` or `{Boolean(count) && <Spinner />}`.
+Answer: It renders `0`. In JavaScript, `0 && anything` short-circuits and returns `0` — not `false`. React renders `false`, `null`, and `undefined` as nothing, but it *does* render numbers, including `0`. So you get the number zero appearing in your UI. The fix is to coerce the condition to a boolean: `{count > 0 && <Spinner />}` or `{Boolean(count) && <Spinner />}`.
 
 The trap: Assuming all falsy values behave the same in JSX. They don't. `0` is the only falsy value that renders.
 
@@ -260,7 +260,7 @@ The trap: Assuming all falsy values behave the same in JSX. They don't. `0` is t
 
 **Q: What happens when React sees a lowercase tag vs an uppercase tag in JSX?**
 
-Strong answer: Lowercase tags (`<div>`, `<button>`, `<mycomponent>`) compile to `React.createElement('div', ...)` — a string as the type. React treats string types as native DOM elements. Uppercase tags (`<MyComponent>`) compile to `React.createElement(MyComponent, ...)` — the variable as the type. React treats function/class types as components and calls them. This is why custom components must start with a capital letter: if you write `<myComponent />`, React won't call your function — it'll try to render an unknown HTML element called `mycomponent`.
+Answer: Lowercase tags (`<div>`, `<button>`, `<mycomponent>`) compile to `React.createElement('div', ...)` — a string as the type. React treats string types as native DOM elements. Uppercase tags (`<MyComponent>`) compile to `React.createElement(MyComponent, ...)` — the variable as the type. React treats function/class types as components and calls them. This is why custom components must start with a capital letter: if you write `<myComponent />`, React won't call your function — it'll try to render an unknown HTML element called `mycomponent`.
 
 The trap: Thinking the capital letter convention is just a style rule. It's semantic — it determines how React treats the type.
 
@@ -268,9 +268,9 @@ The trap: Thinking the capital letter convention is just a style rule. It's sema
 
 **Q: Why can't you return two adjacent elements from a component without a wrapper?**
 
-Strong answer: Because `React.createElement` takes a single root `type`. A component must return a single element, which can have many children. When you need sibling elements without a DOM wrapper, you use a Fragment — `<>...</>` or `<React.Fragment>` — which compiles to `React.createElement(React.Fragment, null, ...)`. Fragments render nothing in the DOM; they're a purely virtual grouping mechanism.
+Answer: Because `React.createElement` takes a single root `type`. A component must return a single element, which can have many children. When you need sibling elements without a DOM wrapper, you use a Fragment — `<>...</>` or `<React.Fragment>` — which compiles to `React.createElement(React.Fragment, null, ...)`. Fragments render nothing in the DOM; they're a purely virtual grouping mechanism.
 
-The trap: Not knowing what a Fragment compiles to. A strong answer names `React.Fragment` as the type and explains that it renders to nothing in the DOM.
+The trap: Not knowing what a Fragment compiles to. The answer should name `React.Fragment` as the type and explain that it renders to nothing in the DOM.
 
 ---
 

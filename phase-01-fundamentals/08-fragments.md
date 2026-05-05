@@ -180,7 +180,7 @@ In practice, you'll use `null` for "render nothing" and Fragments for "render ch
 
 **Q: What is a React Fragment and why does it exist?**
 
-Strong answer: A Fragment is a component that renders its children directly without emitting any DOM element. It exists to solve the mismatch between React's requirement that a component return a single root element (JSX is a function call, functions return one value) and the common need to return multiple sibling elements. Without Fragments, you'd wrap siblings in a `<div>`, which pollutes the DOM and breaks semantically structured HTML like tables and definition lists. `<>...</>` or `<React.Fragment>` satisfies the single-root constraint in JSX while contributing zero DOM output.
+Answer: A Fragment is a component that renders its children directly without emitting any DOM element. It exists to solve the mismatch between React's requirement that a component return a single root element (JSX is a function call, functions return one value) and the common need to return multiple sibling elements. Without Fragments, you'd wrap siblings in a `<div>`, which pollutes the DOM and breaks semantically structured HTML like tables and definition lists. `<>...</>` or `<React.Fragment>` satisfies the single-root constraint in JSX while contributing zero DOM output.
 
 The trap: Saying Fragments are "just a shortcut for a div." They're the opposite — they're specifically for situations where a div would be wrong or unnecessary.
 
@@ -188,7 +188,7 @@ The trap: Saying Fragments are "just a shortcut for a div." They're the opposite
 
 **Q: When do you need `<React.Fragment>` instead of `<>`?**
 
-Strong answer: When you need to add a `key` prop — specifically in lists where the Fragment is the outermost element of each list item. The shorthand `<>` is syntactic sugar for `React.Fragment` with no props. Since props can't be passed to it, you must use the full `<React.Fragment key={...}>` when a key is needed. The `key` prop is the only prop Fragments accept — there's no `className`, `style`, or anything else, because Fragments have no DOM node to attach attributes to.
+Answer: When you need to add a `key` prop — specifically in lists where the Fragment is the outermost element of each list item. The shorthand `<>` is syntactic sugar for `React.Fragment` with no props. Since props can't be passed to it, you must use the full `<React.Fragment key={...}>` when a key is needed. The `key` prop is the only prop Fragments accept — there's no `className`, `style`, or anything else, because Fragments have no DOM node to attach attributes to.
 
 The trap: Not knowing the long form exists, or not knowing *when* it's needed. The key-in-a-list scenario is the canonical use case.
 
@@ -196,7 +196,7 @@ The trap: Not knowing the long form exists, or not knowing *when* it's needed. T
 
 **Q: Does using a Fragment instead of a `div` affect performance?**
 
-Strong answer: Yes, marginally — Fragments produce one fewer DOM node, which reduces DOM tree depth slightly. For most applications this is immeasurable. The more meaningful benefit is structural correctness: unnecessary divs can break CSS layouts (particularly flexbox and grid where direct child relationships matter), interfere with semantic HTML rules, and add DOM depth that CSS selectors have to pierce. Fragments are the right default when you genuinely don't need a DOM wrapper — not as a performance optimization, but as a correctness choice.
+Answer: Yes, marginally — Fragments produce one fewer DOM node, which reduces DOM tree depth slightly. For most applications this is immeasurable. The more meaningful benefit is structural correctness: unnecessary divs can break CSS layouts (particularly flexbox and grid where direct child relationships matter), interfere with semantic HTML rules, and add DOM depth that CSS selectors have to pierce. Fragments are the right default when you genuinely don't need a DOM wrapper — not as a performance optimization, but as a correctness choice.
 
 The trap: Saying "no performance difference at all." There is a small difference (one fewer DOM node), though it's rarely significant enough to be the primary reason to use Fragments.
 

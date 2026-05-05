@@ -168,7 +168,7 @@ This hook is an implementation detail for library authors, not application code.
 
 **Q: What's `useInsertionEffect` for, and when would you use it?**
 
-Strong answer: `useInsertionEffect` runs before `useLayoutEffect` and `useEffect`. It's designed for CSS-in-JS libraries that need to inject styles before other effects run and measure the DOM.
+Answer: `useInsertionEffect` runs before `useLayoutEffect` and `useEffect`. It's designed for CSS-in-JS libraries that need to inject styles before other effects run and measure the DOM.
 
 If an effect measures an element, it needs the final CSS already applied. With `useInsertionEffect`, the library injects styles first, then measurements in other effects see the correct values.
 
@@ -180,7 +180,7 @@ The trap: Beginners think `useInsertionEffect` is for initialization code. It's 
 
 **Q: Why can't you measure elements in `useInsertionEffect`?**
 
-Strong answer: Because the browser hasn't laid out the DOM yet. At the point when `useInsertionEffect` runs, React has inserted DOM nodes, but the browser hasn't calculated their sizes, positions, or styles. So `offsetWidth`, `getBoundingClientRect()`, etc. will return stale or 0 values.
+Answer: Because the browser hasn't laid out the DOM yet. At the point when `useInsertionEffect` runs, React has inserted DOM nodes, but the browser hasn't calculated their sizes, positions, or styles. So `offsetWidth`, `getBoundingClientRect()`, etc. will return stale or 0 values.
 
 That's what `useLayoutEffect` is for — it runs after the browser has calculated layout, so measurements are accurate.
 
@@ -198,7 +198,7 @@ The trap: Developers confuse the effects' purposes and try to measure in `useIns
 
 **Q: How is `useInsertionEffect` different from injecting styles in a `<style>` tag?**
 
-Strong answer: `useInsertionEffect` injects styles at the exact right moment in React's render cycle — before other effects run. A static `<style>` tag in your HTML always loads, even if you don't need it. Dynamic injection via `useInsertionEffect` lets libraries inject styles on-demand, per-component.
+Answer: `useInsertionEffect` injects styles at the exact right moment in React's render cycle — before other effects run. A static `<style>` tag in your HTML always loads, even if you don't need it. Dynamic injection via `useInsertionEffect` lets libraries inject styles on-demand, per-component.
 
 Also, `useInsertionEffect` allows cleanup — when the component unmounts, the effect cleanup can remove the styles from the page. A static `<style>` tag stays forever.
 
@@ -210,7 +210,7 @@ The trap: This is mostly relevant to library code. App developers writing HTML u
 
 **Q: Can you access refs in `useInsertionEffect`?**
 
-Strong answer: No. Refs won't be populated yet. `useInsertionEffect` runs at a point in the React lifecycle where DOM nodes have been inserted, but the browser hasn't laid them out, and React's internal state for refs hasn't fully settled.
+Answer: No. Refs won't be populated yet. `useInsertionEffect` runs at a point in the React lifecycle where DOM nodes have been inserted, but the browser hasn't laid them out, and React's internal state for refs hasn't fully settled.
 
 Use `useLayoutEffect` or `useEffect` to access refs.
 

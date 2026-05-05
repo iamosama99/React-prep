@@ -276,7 +276,7 @@ Every effect run updates state, which triggers the effect again.
 
 **Q: When does `useLayoutEffect` run relative to painting?**
 
-Strong answer: After React commits DOM mutations but *before* the browser paints the screen. It's synchronous — React waits for the effect to complete before allowing the paint to happen. This is different from `useEffect`, which runs *after* the paint.
+Answer: After React commits DOM mutations but *before* the browser paints the screen. It's synchronous — React waits for the effect to complete before allowing the paint to happen. This is different from `useEffect`, which runs *after* the paint.
 
 Use `useLayoutEffect` when you need to make DOM measurements or mutations that, if they happened after paint, would cause visible flicker or jank.
 
@@ -286,7 +286,7 @@ The trap: Developers don't know this hook exists or don't understand the timing 
 
 **Q: Give an example where you'd use `useLayoutEffect` instead of `useEffect`.**
 
-Strong answer: Measuring a DOM element and using that measurement to set a style, before the paint happens.
+Answer: Measuring a DOM element and using that measurement to set a style, before the paint happens.
 
 ```javascript
 function Component() {
@@ -311,7 +311,7 @@ The trap: Overusing `useLayoutEffect`. Most effects should be `useEffect`. Only 
 
 **Q: Why is `useLayoutEffect` bad for performance, and when should you avoid it?**
 
-Strong answer: `useLayoutEffect` is synchronous — the browser can't paint until it completes. If your effect is slow, it blocks the UI thread and causes jank.
+Answer: `useLayoutEffect` is synchronous — the browser can't paint until it completes. If your effect is slow, it blocks the UI thread and causes jank.
 
 Avoid it when:
 - You're doing expensive computations (can defer to `useEffect` or a Web Worker)
@@ -343,7 +343,7 @@ The trap: Developers put all their logic in `useLayoutEffect` thinking it's the 
 
 **Q: Does `useLayoutEffect` run on the server?**
 
-Strong answer: No. It only runs in the browser after hydration. `useLayoutEffect` is inherently a browser API (it deals with DOM measurements and paint timing, which don't exist on the server).
+Answer: No. It only runs in the browser after hydration. `useLayoutEffect` is inherently a browser API (it deals with DOM measurements and paint timing, which don't exist on the server).
 
 If you're doing SSR, use `useEffect` for code that should run on both server and client. Use `useLayoutEffect` only for browser-specific measurements.
 
@@ -361,7 +361,7 @@ The trap: Code that reads `window` or `document` in `useLayoutEffect` will crash
 
 **Q: What's the cleanup function do in `useLayoutEffect`?**
 
-Strong answer: Same as in `useEffect` — it runs before the effect re-runs and before the component unmounts. It lets you undo whatever the effect did.
+Answer: Same as in `useEffect` — it runs before the effect re-runs and before the component unmounts. It lets you undo whatever the effect did.
 
 ```javascript
 useLayoutEffect(() => {

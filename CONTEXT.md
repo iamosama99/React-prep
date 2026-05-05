@@ -65,7 +65,7 @@ No padding. If there are two, write two. If there are six, write six.
 
 **Q: [Question text]**
 
-Strong answer: [What a senior engineer would say. Be complete — this is the reference answer.]
+Answer: [What a senior engineer would say. Be complete — this is the reference answer.]
 
 The trap: [What the interviewer is watching for. What weaker candidates say or miss.]
 
@@ -85,7 +85,7 @@ The trap: [What the interviewer is watching for. What weaker candidates say or m
 - Write the "how it works" sections as a senior engineer explaining over coffee, not as documentation
 - Connect concepts to each other — reference prior topics when relevant, set up the next topic at the end
 - Never pad. If a section doesn't apply, don't invent content to fill it
-- Interview questions: write as many as the topic genuinely warrants. Include the strong answer AND the trap
+- Interview questions: write as many as the topic genuinely warrants. Include the answer AND the trap
 
 ---
 

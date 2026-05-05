@@ -64,19 +64,19 @@ Language is plain but terminology is exact. Mental models are built from first p
 - [ ] [useLayoutEffect](phase-02-hooks/03-use-layout-effect.md) — sync DOM mutations before paint
 - [ ] [useInsertionEffect](phase-02-hooks/04-use-insertion-effect.md) — CSS-in-JS library use case
 - [ ] [useRef](phase-02-hooks/05-use-ref.md) — DOM access AND mutable instance variable
-- [ ] [useMemo](phase-02-hooks/06-use-memo.md) — referential equality, when memoization hurts
-- [ ] [useCallback](phase-02-hooks/07-use-callback.md) — stable function refs, parent-child re-render chain
-- [ ] [useContext](phase-02-hooks/08-use-context.md) — provider pattern, re-render limitations
-- [ ] [useReducer](phase-02-hooks/09-use-reducer.md) — complex state, when to prefer over useState
-- [ ] [useImperativeHandle + forwardRef](phase-02-hooks/10-use-imperative-handle-forward-ref.md) — exposing methods to parent
-- [ ] [useTransition](phase-02-hooks/11-use-transition.md) — non-urgent state updates, isPending UI
-- [ ] [useDeferredValue](phase-02-hooks/12-use-deferred-value.md) — debounced rendering for expensive lists
-- [ ] [useId](phase-02-hooks/13-use-id.md) — SSR-safe unique IDs for a11y
-- [ ] [useSyncExternalStore](phase-02-hooks/14-use-sync-external-store.md) — subscribing to external stores safely
-- [ ] [useDebugValue](phase-02-hooks/15-use-debug-value.md) — DevTools labels for custom hooks
-- [ ] [Rules of hooks](phase-02-hooks/16-rules-of-hooks.md) — why top-level only, ESLint plugin internals
-- [ ] [Stale closure problem](phase-02-hooks/17-stale-closure-problem.md) — common cause of bugs, ref escape hatch
-- [ ] [Common custom hooks](phase-02-hooks/18-common-custom-hooks.md) — useDebounce, useFetch, usePrevious, useOnClickOutside, useLocalStorage, useIntersectionObserver
+- [x] [useMemo](phase-02-hooks/06-use-memo.md) — referential equality, when memoization hurts
+- [x] [useCallback](phase-02-hooks/07-use-callback.md) — stable function refs, parent-child re-render chain
+- [x] [useContext](phase-02-hooks/08-use-context.md) — provider pattern, re-render limitations
+- [x] [useReducer](phase-02-hooks/09-use-reducer.md) — complex state, when to prefer over useState
+- [x] [useImperativeHandle + forwardRef](phase-02-hooks/10-use-imperative-handle-forward-ref.md) — exposing methods to parent
+- [x] [useTransition](phase-02-hooks/11-use-transition.md) — non-urgent state updates, isPending UI
+- [x] [useDeferredValue](phase-02-hooks/12-use-deferred-value.md) — debounced rendering for expensive lists
+- [x] [useId](phase-02-hooks/13-use-id.md) — SSR-safe unique IDs for a11y
+- [x] [useSyncExternalStore](phase-02-hooks/14-use-sync-external-store.md) — subscribing to external stores safely
+- [x] [useDebugValue](phase-02-hooks/15-use-debug-value.md) — DevTools labels for custom hooks
+- [x] [Rules of hooks](phase-02-hooks/16-rules-of-hooks.md) — why top-level only, ESLint plugin internals
+- [x] [Stale closure problem](phase-02-hooks/17-stale-closure-problem.md) — common cause of bugs, ref escape hatch
+- [x] [Common custom hooks](phase-02-hooks/18-common-custom-hooks.md) — useDebounce, useFetch, usePrevious, useOnClickOutside, useLocalStorage, useIntersectionObserver
 
 ---
 

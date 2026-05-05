@@ -300,7 +300,7 @@ The new value appears in the *next render*. If you need to use the new value imm
 
 **Q: What is state in React, and how is it different from props?**
 
-Strong answer: State is data that a component owns and can change over time. Props are data passed in from a parent — read-only inside the component, owned by the caller. The key distinction is *ownership*: props are what you're given, state is what you hold. When state changes, React re-renders the component. When props change (parent re-renders with new values), the component also re-renders — but the component can't initiate that change itself. State is for internal, mutable data; props are for external, immutable data.
+Answer: State is data that a component owns and can change over time. Props are data passed in from a parent — read-only inside the component, owned by the caller. The key distinction is *ownership*: props are what you're given, state is what you hold. When state changes, React re-renders the component. When props change (parent re-renders with new values), the component also re-renders — but the component can't initiate that change itself. State is for internal, mutable data; props are for external, immutable data.
 
 The trap: Saying "state is for dynamic data, props are for static data." Props change too — they just change when the parent says so. The real distinction is ownership and write access.
 
@@ -308,7 +308,7 @@ The trap: Saying "state is for dynamic data, props are for static data." Props c
 
 **Q: Why must you never mutate state directly in React? What happens if you do?**
 
-Strong answer: React uses reference equality (`===`) to detect state changes. If you mutate an object in place — `user.name = 'Ali'` — the object's reference doesn't change. When you pass the same reference to `setUser`, React compares old and new: they're the same reference, so it concludes nothing changed, and no re-render happens. The UI silently stays stale. Even if a re-render happens later for another reason, you've now corrupted the snapshot model — any previous render's closures that captured the old state reference will see the mutated value, because it's the same object. You break time-travel debugging, you break `React.memo`'s shallow comparison, and you break predictability generally. The fix is to always produce a new reference for any changed value.
+Answer: React uses reference equality (`===`) to detect state changes. If you mutate an object in place — `user.name = 'Ali'` — the object's reference doesn't change. When you pass the same reference to `setUser`, React compares old and new: they're the same reference, so it concludes nothing changed, and no re-render happens. The UI silently stays stale. Even if a re-render happens later for another reason, you've now corrupted the snapshot model — any previous render's closures that captured the old state reference will see the mutated value, because it's the same object. You break time-travel debugging, you break `React.memo`'s shallow comparison, and you break predictability generally. The fix is to always produce a new reference for any changed value.
 
 The trap: Thinking React throws an error. It doesn't. Silent breakage is harder to debug than a crash.
 
@@ -316,7 +316,7 @@ The trap: Thinking React throws an error. It doesn't. Silent breakage is harder 
 
 **Q: What is the functional update form of `useState`, and when should you use it?**
 
-Strong answer: Instead of `setCount(count + 1)`, you pass a function: `setCount(prev => prev + 1)`. The function receives the most recent committed (or pending) state, not the closure's snapshot. You must use this form when the new state depends on the previous state, especially when multiple updates happen in the same synchronous batch, or when the update happens inside a closure that might be stale (like a `setTimeout` or event listener that captured an old value). The classic failure case: calling `setCount(count + 1)` three times in one handler increments by 1, not 3, because all three calls read the same snapshot. The functional form queues each update on top of the last: 0 → 1 → 2 → 3.
+Answer: Instead of `setCount(count + 1)`, you pass a function: `setCount(prev => prev + 1)`. The function receives the most recent committed (or pending) state, not the closure's snapshot. You must use this form when the new state depends on the previous state, especially when multiple updates happen in the same synchronous batch, or when the update happens inside a closure that might be stale (like a `setTimeout` or event listener that captured an old value). The classic failure case: calling `setCount(count + 1)` three times in one handler increments by 1, not 3, because all three calls read the same snapshot. The functional form queues each update on top of the last: 0 → 1 → 2 → 3.
 
 The trap: Using `setCount(count + 1)` everywhere and only switching to the functional form when debugging a bug. The safer default is to always use the functional form when the next value is derived from the previous one.
 
@@ -324,7 +324,7 @@ The trap: Using `setCount(count + 1)` everywhere and only switching to the funct
 
 **Q: Why does calling `useState`'s setter not merge the object, like `this.setState` did in class components?**
 
-Strong answer: `this.setState` in class components did a shallow merge of the update object into `this.state`. This was a convenience, but it came with its own problems — it was implicit behavior, and deep properties still weren't merged. `useState`'s setter is a full replacement: whatever you pass becomes the new state. This is more predictable and explicit. The cost is that you have to manually spread when updating objects: `setUser(prev => ({ ...prev, name: 'Ali' }))`. It's slightly more verbose, but the behavior is unambiguous. This is one of the most common gotchas when migrating from class to function components.
+Answer: `this.setState` in class components did a shallow merge of the update object into `this.state`. This was a convenience, but it came with its own problems — it was implicit behavior, and deep properties still weren't merged. `useState`'s setter is a full replacement: whatever you pass becomes the new state. This is more predictable and explicit. The cost is that you have to manually spread when updating objects: `setUser(prev => ({ ...prev, name: 'Ali' }))`. It's slightly more verbose, but the behavior is unambiguous. This is one of the most common gotchas when migrating from class to function components.
 
 The trap: Doing `setUser({ name: 'Ali' })` and wondering why role and other fields disappeared.
 
@@ -332,7 +332,7 @@ The trap: Doing `setUser({ name: 'Ali' })` and wondering why role and other fiel
 
 **Q: What is lazy initialization in `useState`, and why does it matter?**
 
-Strong answer: `useState` accepts either a value or a function as its argument. If you pass a function — `useState(() => expensiveComputation())` — React calls it only on the first render to get the initial value. If you pass a value directly — `useState(expensiveComputation())` — the computation runs on *every render*, even though React only uses the result on the first. For lightweight computations, this is harmless. For something expensive — reading from localStorage, parsing large data, computing a complex initial structure — you'd be paying the cost on every render for no reason. Lazy initialization is how you avoid that: pass the initializer function, not its result.
+Answer: `useState` accepts either a value or a function as its argument. If you pass a function — `useState(() => expensiveComputation())` — React calls it only on the first render to get the initial value. If you pass a value directly — `useState(expensiveComputation())` — the computation runs on *every render*, even though React only uses the result on the first. For lightweight computations, this is harmless. For something expensive — reading from localStorage, parsing large data, computing a complex initial structure — you'd be paying the cost on every render for no reason. Lazy initialization is how you avoid that: pass the initializer function, not its result.
 
 The trap: Forgetting the `() =>` and wondering why a supposedly-one-time operation is slow every render.
 
@@ -340,7 +340,7 @@ The trap: Forgetting the `() =>` and wondering why a supposedly-one-time operati
 
 **Q: State update after `useState`'s setter is called — when does the new value appear?**
 
-Strong answer: Not immediately. State updates are asynchronous — they're scheduled and applied on the next render. After calling `setCount(5)`, reading `count` on the very next line still gives you the old value. The function doesn't suspend or wait — it returns immediately, and React queues the update for when it's ready to re-render. The new value appears when the component function is called again for the next render. If you need to work with the new value immediately in the same synchronous execution, store it in a local variable: `const newCount = count + 1; setCount(newCount); doSomethingWith(newCount)`.
+Answer: Not immediately. State updates are asynchronous — they're scheduled and applied on the next render. After calling `setCount(5)`, reading `count` on the very next line still gives you the old value. The function doesn't suspend or wait — it returns immediately, and React queues the update for when it's ready to re-render. The new value appears when the component function is called again for the next render. If you need to work with the new value immediately in the same synchronous execution, store it in a local variable: `const newCount = count + 1; setCount(newCount); doSomethingWith(newCount)`.
 
 The trap: Reading state right after setting it and assuming you'll see the new value.
 
@@ -348,7 +348,7 @@ The trap: Reading state right after setting it and assuming you'll see the new v
 
 **Q: What is automatic batching in React 18, and what changed from React 17?**
 
-Strong answer: Batching is React's optimization of grouping multiple state updates together and applying them in a single re-render. In React 17 and earlier, batching only applied inside React synthetic event handlers. Updates inside `setTimeout`, `Promise.then`, or native DOM event listeners each triggered their own re-render — meaning three `setState` calls inside a `setTimeout` caused three re-renders. React 18 extended batching to cover all contexts by default, including async code. This means three updates inside a `setTimeout` or `await` block now produce one re-render instead of three. It's a free performance improvement, but code that relied on seeing intermediate renders between async `setState` calls may behave differently.
+Answer: Batching is React's optimization of grouping multiple state updates together and applying them in a single re-render. In React 17 and earlier, batching only applied inside React synthetic event handlers. Updates inside `setTimeout`, `Promise.then`, or native DOM event listeners each triggered their own re-render — meaning three `setState` calls inside a `setTimeout` caused three re-renders. React 18 extended batching to cover all contexts by default, including async code. This means three updates inside a `setTimeout` or `await` block now produce one re-render instead of three. It's a free performance improvement, but code that relied on seeing intermediate renders between async `setState` calls may behave differently.
 
 The trap: Not knowing this changed at all, or claiming "batching has always applied everywhere." The async-context change is what's new in React 18.
 
@@ -356,7 +356,7 @@ The trap: Not knowing this changed at all, or claiming "batching has always appl
 
 **Q: If two state variables always change together, is that a problem?**
 
-Strong answer: It's a signal — probably yes. If you always update `firstName` and `lastName` together, they should probably be one `{ firstName, lastName }` state object. Keeping them separate means you have to keep them in sync manually — if you forget one setter, you have inconsistent state. Combining related state makes the relationship explicit and removes the sync burden. The opposite problem is combining *unrelated* state: `{ count, name, isOpen }` in one object means any change to any field forces you to spread the whole thing and risks accidentally clobbering fields. The rule: group state that changes together, separate state that changes independently.
+Answer: It's a signal — probably yes. If you always update `firstName` and `lastName` together, they should probably be one `{ firstName, lastName }` state object. Keeping them separate means you have to keep them in sync manually — if you forget one setter, you have inconsistent state. Combining related state makes the relationship explicit and removes the sync burden. The opposite problem is combining *unrelated* state: `{ count, name, isOpen }` in one object means any change to any field forces you to spread the whole thing and risks accidentally clobbering fields. The rule: group state that changes together, separate state that changes independently.
 
 The trap: Thinking more state variables is always cleaner. Related state grouped in one object is often easier to reason about and harder to corrupt.
 
@@ -364,7 +364,7 @@ The trap: Thinking more state variables is always cleaner. Related state grouped
 
 **Q: Can you derive a value from state without putting it in state?**
 
-Strong answer: Yes — and you should. If a value can be computed from existing state or props, computing it inline is always better than storing a derived copy. Storing derived state means you have two sources of truth for the same information: you must update both simultaneously, and if you ever forget to sync them, they drift apart. Derived values computed inline are always in sync by definition. A common example: if you have `items` in state, `items.length` is not a candidate for state — it's computed for free from the array. If you have `firstName` and `lastName`, `fullName` is derived. Only put data in state that has no other source of truth.
+Answer: Yes — and you should. If a value can be computed from existing state or props, computing it inline is always better than storing a derived copy. Storing derived state means you have two sources of truth for the same information: you must update both simultaneously, and if you ever forget to sync them, they drift apart. Derived values computed inline are always in sync by definition. A common example: if you have `items` in state, `items.length` is not a candidate for state — it's computed for free from the array. If you have `firstName` and `lastName`, `fullName` is derived. Only put data in state that has no other source of truth.
 
 The trap: Not recognizing derived state. The test: "could I delete this state variable and recompute it from other state?" If yes, it's derived — remove the state.
 
@@ -372,7 +372,7 @@ The trap: Not recognizing derived state. The test: "could I delete this state va
 
 **Q: What is Object.is and how does React use it in state comparison?**
 
-Strong answer: `Object.is` is JavaScript's strict equality check with two edge case fixes over `===`: `Object.is(NaN, NaN)` returns `true` (while `NaN === NaN` returns `false`), and `Object.is(+0, -0)` returns `false` (while `+0 === -0` returns `true`). React uses `Object.is` to compare previous and new state after you call a setter. If they're the same by this comparison, React bails out without re-rendering — no DOM update, no child component re-renders. This is the basis for the "mutation breaks things" problem: mutating an object and passing the same reference means `Object.is(old, new)` is `true`, so React skips the re-render.
+Answer: `Object.is` is JavaScript's strict equality check with two edge case fixes over `===`: `Object.is(NaN, NaN)` returns `true` (while `NaN === NaN` returns `false`), and `Object.is(+0, -0)` returns `false` (while `+0 === -0` returns `true`). React uses `Object.is` to compare previous and new state after you call a setter. If they're the same by this comparison, React bails out without re-rendering — no DOM update, no child component re-renders. This is the basis for the "mutation breaks things" problem: mutating an object and passing the same reference means `Object.is(old, new)` is `true`, so React skips the re-render.
 
 The trap: Not knowing React uses `Object.is` and describing the check as just `===`. The NaN and ±0 edge cases rarely matter in practice, but knowing `Object.is` specifically shows you understand the mechanism.
 

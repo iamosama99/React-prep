@@ -285,7 +285,7 @@ This is plain JavaScript behavior, but it surprises people. If your API needs to
 
 **Q: What are props and how are they different from state?**
 
-Strong answer: Props are inputs passed *into* a component from its parent — they are owned by the caller, read-only inside the component, and the mechanism for one-way data flow. State is data *owned by* the component itself — it lives inside the component, can be changed by the component, and causes a re-render when it changes. The key mental model: props are "what you're told," state is "what you remember." A component can read its props freely, but it can never write to them.
+Answer: Props are inputs passed *into* a component from its parent — they are owned by the caller, read-only inside the component, and the mechanism for one-way data flow. State is data *owned by* the component itself — it lives inside the component, can be changed by the component, and causes a re-render when it changes. The key mental model: props are "what you're told," state is "what you remember." A component can read its props freely, but it can never write to them.
 
 The trap: Saying "props are external, state is internal" without explaining *why* props are read-only. The reason is ownership — the parent is the source of truth, and the child modifying that data would break the traceability that one-way flow provides.
 
@@ -293,7 +293,7 @@ The trap: Saying "props are external, state is internal" without explaining *why
 
 **Q: What is props.children and when would you use it?**
 
-Strong answer: `children` is a built-in prop that React populates with whatever is nested between a component's opening and closing tags in JSX. It lets a component act as a wrapper or container without needing to know in advance what content it will hold. You use it for layout components (`Card`, `Modal`, `Section`), context providers (`ThemeProvider`), and any component where the caller should control the inner content. It's what makes components composable like HTML elements.
+Answer: `children` is a built-in prop that React populates with whatever is nested between a component's opening and closing tags in JSX. It lets a component act as a wrapper or container without needing to know in advance what content it will hold. You use it for layout components (`Card`, `Modal`, `Section`), context providers (`ThemeProvider`), and any component where the caller should control the inner content. It's what makes components composable like HTML elements.
 
 The trap: Thinking `children` is special beyond its name. It's an ordinary prop — you can pass it explicitly as `children={...}` — it just has the syntactic convenience that JSX populates it from nested content automatically.
 
@@ -301,7 +301,7 @@ The trap: Thinking `children` is special beyond its name. It's an ordinary prop 
 
 **Q: What is prop drilling, why is it a problem, and how do you solve it?**
 
-Strong answer: Prop drilling is passing data through multiple component layers to reach a deeply nested component, where intermediate components receive and forward props they don't actually use. The problem is maintenance coupling — when the data shape changes, every intermediate component needs to be updated even though they have no interest in the data. It also makes components harder to reuse in isolation because they carry props purely for forwarding. Solutions depend on the cause: Context API for data that many components need (like theme, auth user, locale); composition/children for structural problems where you can restructure the tree; state management libraries for app-wide state.
+Answer: Prop drilling is passing data through multiple component layers to reach a deeply nested component, where intermediate components receive and forward props they don't actually use. The problem is maintenance coupling — when the data shape changes, every intermediate component needs to be updated even though they have no interest in the data. It also makes components harder to reuse in isolation because they carry props purely for forwarding. Solutions depend on the cause: Context API for data that many components need (like theme, auth user, locale); composition/children for structural problems where you can restructure the tree; state management libraries for app-wide state.
 
 The trap: Saying "prop drilling is always bad" or "use Context instead of props." Context has its own performance tradeoffs (every consumer re-renders on any context change). Prop drilling is only a problem when it becomes deep and pervasive. 2-3 levels is usually fine.
 
@@ -309,7 +309,7 @@ The trap: Saying "prop drilling is always bad" or "use Context instead of props.
 
 **Q: What's the difference between `defaultProps` and default parameter values?**
 
-Strong answer: Both define fallback values for missing props, but they operate at different levels. `defaultProps` is a React-level feature — React merges the defaults into the props object before calling the component. Default parameters are a JavaScript-level feature — the runtime substitutes the default when the argument is `undefined`. For function components, default parameters are the modern approach: they're native JavaScript, better supported by TypeScript type inference, and `defaultProps` for function components was deprecated in React 19. `defaultProps` still applies for class components.
+Answer: Both define fallback values for missing props, but they operate at different levels. `defaultProps` is a React-level feature — React merges the defaults into the props object before calling the component. Default parameters are a JavaScript-level feature — the runtime substitutes the default when the argument is `undefined`. For function components, default parameters are the modern approach: they're native JavaScript, better supported by TypeScript type inference, and `defaultProps` for function components was deprecated in React 19. `defaultProps` still applies for class components.
 
 The trap: Not knowing that `defaultProps` is deprecated for function components. Also missing that both approaches only trigger on `undefined` — passing `null` explicitly bypasses both.
 
@@ -317,7 +317,7 @@ The trap: Not knowing that `defaultProps` is deprecated for function components.
 
 **Q: Why are props immutable? What happens if you mutate them?**
 
-Strong answer: Props are immutable by design because the parent is the source of truth. The parent owns the data and passes it down — the child is a consumer, not an owner. If the child could mutate props, you'd have two places writing the same data with no coordination, breaking React's traceability guarantees. In practice, mutating props doesn't throw — JavaScript doesn't prevent it — but it corrupts the parent's state silently, and since React doesn't watch for mutations, the UI won't update. You get inconsistent state with no re-render and no error. If a child needs to trigger a change, it calls a function passed down as a prop.
+Answer: Props are immutable by design because the parent is the source of truth. The parent owns the data and passes it down — the child is a consumer, not an owner. If the child could mutate props, you'd have two places writing the same data with no coordination, breaking React's traceability guarantees. In practice, mutating props doesn't throw — JavaScript doesn't prevent it — but it corrupts the parent's state silently, and since React doesn't watch for mutations, the UI won't update. You get inconsistent state with no re-render and no error. If a child needs to trigger a change, it calls a function passed down as a prop.
 
 The trap: Thinking React throws an error on prop mutation. It doesn't (unless you're in strict mode with a frozen object). The danger is silent corruption, which is harder to debug than a crash.
 
@@ -325,7 +325,7 @@ The trap: Thinking React throws an error on prop mutation. It doesn't (unless yo
 
 **Q: How do you pass data from a child component back up to a parent?**
 
-Strong answer: You can't pass data *up* directly — that would break one-way data flow. Instead, the parent passes a callback function down as a prop, and the child calls it when something happens. The parent's callback runs in the parent's scope, so it has access to the parent's state setter. The data technically flows upward through a function call, but *state* is always updated in the owner. This is the "lifting state up" pattern.
+Answer: You can't pass data *up* directly — that would break one-way data flow. Instead, the parent passes a callback function down as a prop, and the child calls it when something happens. The parent's callback runs in the parent's scope, so it has access to the parent's state setter. The data technically flows upward through a function call, but *state* is always updated in the owner. This is the "lifting state up" pattern.
 
 The trap: Saying "you can't do it at all" or suggesting you'd reach for Context or Redux for this. Callback props are the right tool for parent-child communication. Context and libraries are for non-parent/child relationships or global state — overkill for a simple child-to-parent notification.
 
@@ -333,7 +333,7 @@ The trap: Saying "you can't do it at all" or suggesting you'd reach for Context 
 
 **Q: What does React do with `key` and `ref` props — do they show up in `props` inside the component?**
 
-Strong answer: No. `key` and `ref` are special attributes that React intercepts and uses for its own purposes — `key` for the reconciliation algorithm to identify list items, `ref` for exposing DOM nodes or component imperative handles. React strips both from the props object before passing it to your component. Inside the component, `props.key` and `props.ref` are always `undefined`. If you need to pass a key-like identifier to a component for internal use, you have to pass it as a different prop name (e.g., `id`).
+Answer: No. `key` and `ref` are special attributes that React intercepts and uses for its own purposes — `key` for the reconciliation algorithm to identify list items, `ref` for exposing DOM nodes or component imperative handles. React strips both from the props object before passing it to your component. Inside the component, `props.key` and `props.ref` are always `undefined`. If you need to pass a key-like identifier to a component for internal use, you have to pass it as a different prop name (e.g., `id`).
 
 The trap: Thinking you can read `props.key` inside a component to access the key you set on it from the outside. This never works and surprises people the first time they try it.
 
@@ -341,7 +341,7 @@ The trap: Thinking you can read `props.key` inside a component to access the key
 
 **Q: You have a component used in 20 places and you need to add a new optional prop with a default. What's the safest way to do it?**
 
-Strong answer: Add it with a default value in the function signature: `function MyComponent({ existingProp, newProp = 'defaultValue' })`. Because the default kicks in when the prop is absent (`undefined`), all 20 existing call sites that don't pass the prop will get the default automatically — no changes needed at the call sites. This is the whole value of defaults. If you're in a TypeScript codebase, mark the prop optional in the type: `newProp?: string`. The only risk is if some call sites are explicitly passing `null` and expecting the default behavior — default parameters don't activate on `null`, so you'd need `newProp = undefined` and handle null inside the function, or use `newProp ?? 'defaultValue'` in the body.
+Answer: Add it with a default value in the function signature: `function MyComponent({ existingProp, newProp = 'defaultValue' })`. Because the default kicks in when the prop is absent (`undefined`), all 20 existing call sites that don't pass the prop will get the default automatically — no changes needed at the call sites. This is the whole value of defaults. If you're in a TypeScript codebase, mark the prop optional in the type: `newProp?: string`. The only risk is if some call sites are explicitly passing `null` and expecting the default behavior — default parameters don't activate on `null`, so you'd need `newProp = undefined` and handle null inside the function, or use `newProp ?? 'defaultValue'` in the body.
 
 The trap: Saying you'd add a required prop and update all 20 call sites. That's valid for truly required data, but unnecessary for optional behavior with sensible defaults. The interviewer is testing whether you default-in-the-signature instinctively.
 

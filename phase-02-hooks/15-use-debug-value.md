@@ -1,166 +1,44 @@
 # useDebugValue
 
 ## What Is This?
-
-`useDebugValue` is a hook that adds a label or value to a custom hook in React DevTools. When you inspect a component using a custom hook, DevTools shows the debug value next to the hook's name, making it much easier to see what the hook is doing at a glance.
-
-```javascript
-function useOnlineStatus() {
-  const isOnline = useSyncExternalStore(subscribe, getSnapshot);
-  useDebugValue(isOnline ? 'Online' : 'Offline'); // Shows in DevTools
-  return isOnline;
-}
-```
-
-In React DevTools, when you inspect a component using `useOnlineStatus`, you'll see:
-
-```
-▼ OnlineStatus Component
-  ▼ useOnlineStatus: "Online"
-    isOnline: true
-```
-
-Without `useDebugValue`, you'd just see the raw hook state without the context label.
+useDebugValue is a React hook for displaying a label or formatted value for a custom hook in React DevTools. It does not affect runtime behavior or state.
 
 ## Why Does It Exist?
-
-Custom hooks compose other hooks, which can make them hard to inspect in DevTools. When a component uses `useAuth`, DevTools shows the internals: `useState`, `useEffect`, etc. — but you have to mentally reconstruct what `useAuth` is doing from those raw pieces. `useDebugValue` lets the hook author surface a meaningful summary.
-
-This is a developer experience tool. It has zero impact on production behavior.
+Custom hooks encapsulate reusable logic, but they can become opaque during debugging. useDebugValue provides a way to expose useful information about the hook’s internal state to developers without changing the hook’s public API.
 
 ## How It Works
+Use it inside a custom hook:
 
-```javascript
-useDebugValue(value);
-// or with a formatter:
-useDebugValue(value, formatFn);
-```
-
-React reads the value and displays it in DevTools next to the hook's name. In production builds, `useDebugValue` is a no-op — React strips it.
-
-### The Formatter Function
-
-If computing the debug value is expensive, use the optional second argument: a formatter function that's only called when DevTools is open.
-
-```javascript
-function useComplexHook(userId) {
-  const [data, setData] = useState(null);
-
-  // ❌ formatDate(data) runs on every render, even when DevTools is closed
-  useDebugValue(formatDate(data?.createdAt));
-
-  // ✅ formatDate only runs when DevTools is actually inspecting this hook
-  useDebugValue(data, (d) => d ? formatDate(d.createdAt) : 'No data');
+```js
+function useOnlineStatus() {
+  const [online, setOnline] = useState(true)
+  useDebugValue(online ? 'online' : 'offline')
+  return online
 }
 ```
 
-React passes the first argument to the formatter and uses the formatter's return value as the display value. The formatter is lazy — it runs only when DevTools requests the debug value.
+For formatted values, pass a formatter:
 
-## Practical Examples
-
-### Authentication State
-
-```javascript
-function useAuth() {
-  const { user, loading } = useContext(AuthContext);
-
-  useDebugValue(
-    { user, loading },
-    ({ user, loading }) =>
-      loading ? 'Loading...' : user ? `Authenticated: ${user.email}` : 'Not authenticated'
-  );
-
-  return { user, loading };
-}
+```js
+useDebugValue(user, user => user ? user.name : 'guest')
 ```
 
-### Data Fetching
-
-```javascript
-function useFetch(url) {
-  const [state, dispatch] = useReducer(fetchReducer, initialState);
-
-  useDebugValue(state.status);
-  // Shows: useFetch: "loading" / "success" / "error"
-
-  // ... fetch logic
-  return state;
-}
-```
-
-### Feature Flag
-
-```javascript
-function useFeatureFlag(flagName) {
-  const flags = useContext(FeatureFlagContext);
-  const isEnabled = flags[flagName] ?? false;
-
-  useDebugValue(`${flagName}: ${isEnabled ? 'enabled' : 'disabled'}`);
-
-  return isEnabled;
-}
-```
-
-## When to Use It
-
-Only in **custom hooks** — not regular components. Calling `useDebugValue` in a component body doesn't do anything useful; DevTools already shows component state and props directly.
-
-It's most valuable in:
-- Library hooks that other teams will use (they can't see your internals)
-- Complex hooks with non-obvious state (async status machines, auth states)
-- Hooks in large codebases where debugging common hooks saves time
-
-For simple hooks, it's usually not worth it:
-
-```javascript
-// Not worth it — the state is already obvious
-function useToggle(initial = false) {
-  const [value, setValue] = useState(initial);
-  useDebugValue(value); // Doesn't add much — DevTools shows useState already
-  return [value, setValue];
-}
-```
+DevTools displays the label only when the component tree is inspected.
 
 ## Gotchas
-
-### 1. No-op in production
-
-`useDebugValue` is removed from production builds. Never use it to pass data, trigger effects, or do anything meaningful — it's purely a DevTools annotation.
-
-### 2. Only works in custom hooks
-
-`useDebugValue` is designed to label custom hooks. If you call it inside a component (not a custom hook), React may display it, but there's no semantic meaning to the label placement.
-
-### 3. The formatter argument is the lazy evaluation escape hatch
-
-The common mistake is computing an expensive formatted string directly as the first argument:
-
-```javascript
-// ❌ formatLargeDataStructure runs every render
-useDebugValue(formatLargeDataStructure(data));
-
-// ✅ Only runs when DevTools is open
-useDebugValue(data, formatLargeDataStructure);
-```
-
-If your format computation is cheap (a string template, a ternary), the first form is fine. For anything nontrivial, use the formatter.
+- It only affects DevTools; it does not change behavior or render output.
+- Some versions of React strip debug values in production.
+- It must be called inside a hook, not in plain components.
+- Keep the debug label simple and focused on the hook's key state.
 
 ## Interview Questions
+**Q: What problem does useDebugValue solve?**
+Answer: it makes custom hooks easier to debug in React DevTools by exposing a readable label for the hook’s internal state. It’s for developer ergonomics, not functionality.
+The trap: thinking it changes the hook’s behavior or is needed for production logic.
 
-**Q: What is `useDebugValue` for, and when should you use it?**
-
-Strong answer: It's a DevTools annotation for custom hooks — it attaches a label or formatted value to the hook that appears in the React DevTools component inspector. It's for developer experience only: it helps the person debugging understand what a custom hook is doing without having to read its internals. The right time to add it is when you're authoring a custom hook that other developers will use (especially library authors), when the hook's internal state isn't immediately readable in DevTools without context, or when you're debugging complex hook state and want a summary. It has no effect in production builds.
-
-The trap: Thinking it does anything in production, or using it in components rather than custom hooks.
-
----
-
-**Q: What's the purpose of the second argument to `useDebugValue`?**
-
-Strong answer: It's a lazy formatter — a function that's only called when React DevTools actually renders the debug value (i.e., when someone has the component inspector open). Without the formatter, the first argument is evaluated on every render, even when DevTools isn't open. For expensive transformations (serializing large objects, formatting complex dates), this is wasteful overhead for something that only matters during debugging. Passing `(value) => formatIt(value)` as the second argument ensures the formatting work only happens when it's actually needed.
-
-The trap: Not knowing the second argument exists and inadvertently running expensive formatting on every render in development.
+**Q: When should you use a formatter with useDebugValue?**
+Answer: use a formatter when the raw hook value is complex or not human-friendly, such as an object or nested state. The formatter can convert it into a concise label.
+The trap: overusing it for every hook or using it in plain components.
 
 ---
-
-*Next: [Rules of Hooks](16-rules-of-hooks.md) — Why hooks can only be called at the top level and inside React functions, and what React is actually doing that makes these rules necessary.*
+*Next: Rules of hooks — the foundation for why these hooks must be called consistently.*

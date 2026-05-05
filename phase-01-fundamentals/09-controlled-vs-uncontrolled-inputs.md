@@ -269,7 +269,7 @@ The fix: always pass a defined value for controlled inputs, even if it's an empt
 
 **Q: What is the difference between a controlled and uncontrolled input in React?**
 
-Strong answer: In a controlled input, React owns the input's value — it's stored in state and passed as the `value` prop. Every change goes through `onChange`, which updates state, which causes a re-render, which sets the new value. React is always in sync with what the input displays. In an uncontrolled input, the browser owns the value — React doesn't track it. You use `defaultValue` to seed an initial value and a `ref` to read the value imperatively when needed (typically on submit). Controlled inputs give you real-time access to the value and enable real-time validation and transformation. Uncontrolled inputs are simpler for cases where you only need the value at a specific point in time.
+Answer: In a controlled input, React owns the input's value — it's stored in state and passed as the `value` prop. Every change goes through `onChange`, which updates state, which causes a re-render, which sets the new value. React is always in sync with what the input displays. In an uncontrolled input, the browser owns the value — React doesn't track it. You use `defaultValue` to seed an initial value and a `ref` to read the value imperatively when needed (typically on submit). Controlled inputs give you real-time access to the value and enable real-time validation and transformation. Uncontrolled inputs are simpler for cases where you only need the value at a specific point in time.
 
 The trap: "Controlled inputs are always better." The answer should acknowledge tradeoffs. Uncontrolled inputs are legitimate for simple, submit-only forms.
 
@@ -277,7 +277,7 @@ The trap: "Controlled inputs are always better." The answer should acknowledge t
 
 **Q: What happens if you pass `value` to an input without also passing `onChange`?**
 
-Strong answer: The input becomes read-only — the user can't change it. React will also log a warning about a controlled input without an `onChange` handler. What's happening under the hood: the user types, the DOM temporarily shows the typed character, React re-renders and overwrites the DOM value back to the unchanged state value. The net effect is that the input ignores user input. If you genuinely want a read-only input, be explicit with the `readOnly` HTML attribute. If you want an initial value for an uncontrolled input, use `defaultValue` instead of `value`.
+Answer: The input becomes read-only — the user can't change it. React will also log a warning about a controlled input without an `onChange` handler. What's happening under the hood: the user types, the DOM temporarily shows the typed character, React re-renders and overwrites the DOM value back to the unchanged state value. The net effect is that the input ignores user input. If you genuinely want a read-only input, be explicit with the `readOnly` HTML attribute. If you want an initial value for an uncontrolled input, use `defaultValue` instead of `value`.
 
 The trap: Thinking `value` sets an initial value. It sets the *current* value on every render — it's a fully controlled prop, not a seed.
 
@@ -285,7 +285,7 @@ The trap: Thinking `value` sets an initial value. It sets the *current* value on
 
 **Q: Why is `<input type="file">` always uncontrolled?**
 
-Strong answer: Because the browser enforces this as a security restriction. JavaScript cannot set the `value` of a file input — if it could, a malicious page could silently pre-select a file and steal it. The browser only allows the user to choose the file through the file picker UI. React can't override this — any attempt to pass a `value` prop to a file input is ignored by the browser. You must use a `ref` to read `inputRef.current.files` when the user makes a selection. You can track the file's *name* or *metadata* in state via `onChange`, but you can't control what file is selected.
+Answer: Because the browser enforces this as a security restriction. JavaScript cannot set the `value` of a file input — if it could, a malicious page could silently pre-select a file and steal it. The browser only allows the user to choose the file through the file picker UI. React can't override this — any attempt to pass a `value` prop to a file input is ignored by the browser. You must use a `ref` to read `inputRef.current.files` when the user makes a selection. You can track the file's *name* or *metadata* in state via `onChange`, but you can't control what file is selected.
 
 The trap: Forgetting this exception exists. File inputs are the one case where you must go uncontrolled in React regardless of your preference.
 
@@ -293,7 +293,7 @@ The trap: Forgetting this exception exists. File inputs are the one case where y
 
 **Q: What causes the warning "A component is changing an uncontrolled input to be controlled" and how do you fix it?**
 
-Strong answer: React tracks whether an input is controlled (has a `value` prop) or uncontrolled (no `value` prop) when it first mounts. If you initially pass `value={undefined}` — because the data hasn't loaded yet — React treats it as uncontrolled. When data loads and you pass a real string, React sees a controlled `value` for the first time — it's switching modes, which React doesn't support. The fix is to always pass a defined value: `value={data?.name ?? ''}` ensures the value is always a string (empty or not), keeping the input controlled from the first render.
+Answer: React tracks whether an input is controlled (has a `value` prop) or uncontrolled (no `value` prop) when it first mounts. If you initially pass `value={undefined}` — because the data hasn't loaded yet — React treats it as uncontrolled. When data loads and you pass a real string, React sees a controlled `value` for the first time — it's switching modes, which React doesn't support. The fix is to always pass a defined value: `value={data?.name ?? ''}` ensures the value is always a string (empty or not), keeping the input controlled from the first render.
 
 The trap: Not knowing the fix. The solution — coalesce to an empty string — is simple but non-obvious if you don't understand why the warning fires.
 
@@ -301,7 +301,7 @@ The trap: Not knowing the fix. The solution — coalesce to an empty string — 
 
 **Q: How do you reset a controlled form input to its initial value?**
 
-Strong answer: Call the setter with the initial value. If the form is tracking state, you can reset by calling `setFieldValue('')` or `setFormValues(initialValues)`. For an entire form, if you're tracking all fields in a single state object, you reset by calling `setFormState(initialFormState)`. If you're using uncontrolled inputs, you call `formRef.current.reset()` or force a remount by changing the form's `key` prop. The controlled approach is more explicit: you own the state, you can reset it to whatever value you want at any time by calling the setter.
+Answer: Call the setter with the initial value. If the form is tracking state, you can reset by calling `setFieldValue('')` or `setFormValues(initialValues)`. For an entire form, if you're tracking all fields in a single state object, you reset by calling `setFormState(initialFormState)`. If you're using uncontrolled inputs, you call `formRef.current.reset()` or force a remount by changing the form's `key` prop. The controlled approach is more explicit: you own the state, you can reset it to whatever value you want at any time by calling the setter.
 
 The trap: Suggesting you need to imperatively touch the DOM to reset a controlled form. Controlled forms reset by updating state.
 

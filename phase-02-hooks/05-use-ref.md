@@ -349,7 +349,7 @@ This isn't idiomatic. Use `useMemo` or `useCallback` for memoization. Refs are f
 
 **Q: What's the difference between a ref and a state variable?**
 
-Strong answer: State variables trigger re-renders when they change; refs don't. Both persist across renders. Use state for UI-related values. Use refs for imperative access to the DOM or for storing values that aren't part of the UI.
+Answer: State variables trigger re-renders when they change; refs don't. Both persist across renders. Use state for UI-related values. Use refs for imperative access to the DOM or for storing values that aren't part of the UI.
 
 ```javascript
 // State: changes trigger re-render
@@ -367,7 +367,7 @@ The trap: Beginners use refs for everything, not realizing that refs don't trigg
 
 **Q: How do you pass a ref to a functional component?**
 
-Strong answer: You can't, directly. Functional components don't accept refs by default. You need to use `forwardRef` to forward the ref to an inner DOM element:
+Answer: You can't, directly. Functional components don't accept refs by default. You need to use `forwardRef` to forward the ref to an inner DOM element:
 
 ```javascript
 const MyInput = forwardRef((props, ref) => {
@@ -387,7 +387,7 @@ The trap: Developers forget about `forwardRef` and try to pass refs directly, th
 
 **Q: Why would you store a value in a ref instead of state?**
 
-Strong answer: When the value doesn't affect the UI and changes shouldn't trigger re-renders. Examples:
+Answer: When the value doesn't affect the UI and changes shouldn't trigger re-renders. Examples:
 - Timer/interval IDs (for cleanup later)
 - Previous prop values (for comparing old vs new)
 - DOM measurements (store once, don't need to update)
@@ -409,7 +409,7 @@ The trap: Developers don't think about performance implications and use state fo
 
 **Q: When should you access a ref in an effect vs in an event handler?**
 
-Strong answer: Refs are available in both, but timing matters. In event handlers, the ref is definitely assigned (the component has rendered). In effects, the ref is also assigned (after the commit phase).
+Answer: Refs are available in both, but timing matters. In event handlers, the ref is definitely assigned (the component has rendered). In effects, the ref is also assigned (after the commit phase).
 
 The only scenario where a ref might not be assigned is during the render phase itself (while the component function is executing). Once rendering is done, the ref is available.
 
@@ -438,7 +438,7 @@ The trap: Developers try to access refs during render and get `null`, then assum
 
 **Q: Can you use a ref to store state that affects the UI?**
 
-Strong answer: Technically yes, but you shouldn't. If the value affects the UI, changes to it should trigger re-renders. Use state for that.
+Answer: Technically yes, but you shouldn't. If the value affects the UI, changes to it should trigger re-renders. Use state for that.
 
 ```javascript
 // ❌ Bad: won't update UI
