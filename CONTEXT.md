@@ -173,24 +173,24 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Composition over inheritance | `phase-04-component-patterns/01-composition-over-inheritance.md` | 👉 **Next** |
-| 2 | Compound components | `phase-04-component-patterns/02-compound-components.md` | ⬜ |
-| 3 | Render props | `phase-04-component-patterns/03-render-props.md` | ⬜ |
-| 4 | HOCs | `phase-04-component-patterns/04-hocs.md` | ⬜ |
-| 5 | Custom hooks as the modern pattern | `phase-04-component-patterns/05-custom-hooks-modern-pattern.md` | ⬜ |
-| 6 | Controlled vs uncontrolled component design | `phase-04-component-patterns/06-controlled-vs-uncontrolled-design.md` | ⬜ |
-| 7 | forwardRef | `phase-04-component-patterns/07-forward-ref.md` | ⬜ |
-| 8 | React.Children utilities | `phase-04-component-patterns/08-react-children-utilities.md` | ⬜ |
-| 9 | Portals | `phase-04-component-patterns/09-portals.md` | ⬜ |
-| 10 | StrictMode | `phase-04-component-patterns/10-strict-mode.md` | ⬜ |
-| 11 | Polymorphic components | `phase-04-component-patterns/11-polymorphic-components.md` | ⬜ |
-| 12 | Slot pattern / asChild | `phase-04-component-patterns/12-slot-pattern-as-child.md` | ⬜ |
+| 1 | Composition over inheritance | `phase-04-component-patterns/01-composition-over-inheritance.md` | ✅ |
+| 2 | Compound components | `phase-04-component-patterns/02-compound-components.md` | ✅ |
+| 3 | Render props | `phase-04-component-patterns/03-render-props.md` | ✅ |
+| 4 | HOCs | `phase-04-component-patterns/04-hocs.md` | ✅ |
+| 5 | Custom hooks as the modern pattern | `phase-04-component-patterns/05-custom-hooks-modern-pattern.md` | ✅ |
+| 6 | Controlled vs uncontrolled component design | `phase-04-component-patterns/06-controlled-vs-uncontrolled-design.md` | ✅ |
+| 7 | forwardRef | `phase-04-component-patterns/07-forward-ref.md` | ✅ |
+| 8 | React.Children utilities | `phase-04-component-patterns/08-react-children-utilities.md` | ✅ |
+| 9 | Portals | `phase-04-component-patterns/09-portals.md` | ✅ |
+| 10 | StrictMode | `phase-04-component-patterns/10-strict-mode.md` | ✅ |
+| 11 | Polymorphic components | `phase-04-component-patterns/11-polymorphic-components.md` | ✅ |
+| 12 | Slot pattern / asChild | `phase-04-component-patterns/12-slot-pattern-as-child.md` | ✅ |
 
 ### Phase 5 — Performance & Internals (15 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Virtual DOM & reconciliation | `phase-05-performance/01-virtual-dom-reconciliation.md` | ⬜ |
+| 1 | Virtual DOM & reconciliation | `phase-05-performance/01-virtual-dom-reconciliation.md` | 👉 **Next** |
 | 2 | Fiber architecture | `phase-05-performance/02-fiber-architecture.md` | ⬜ |
 | 3 | Render vs commit phase | `phase-05-performance/03-render-vs-commit-phase.md` | ⬜ |
 | 4 | What causes re-renders | `phase-05-performance/04-what-causes-rerenders.md` | ⬜ |
