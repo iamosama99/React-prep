@@ -140,19 +140,19 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Know tradeoffs, not just one library. Picking the right tool is the actual interview signal.
 
-- [ ] [Context API limitations](phase-06-state-management/01-context-api-limitations.md) — every consumer re-renders on any change
-- [ ] [Context optimization](phase-06-state-management/02-context-optimization.md) — splitting providers, selector libraries
-- [ ] [Redux core](phase-06-state-management/03-redux-core.md) — store, reducers, actions, middleware
-- [ ] [Redux Toolkit](phase-06-state-management/04-redux-toolkit.md) — createSlice, Immer, modern Redux
-- [ ] [RTK Query](phase-06-state-management/05-rtk-query.md) — data fetching with Redux
-- [ ] [Zustand](phase-06-state-management/06-zustand.md) — minimal API, no provider needed
-- [ ] [Jotai / Recoil](phase-06-state-management/07-jotai-recoil.md) — atom-based, granular subscriptions
-- [ ] [Server state vs client state](phase-06-state-management/08-server-state-vs-client-state.md) — why one tool can't do both well
-- [ ] [React Query / TanStack Query](phase-06-state-management/09-react-query-tanstack.md) — caching, refetching, stale-while-revalidate
-- [ ] [SWR](phase-06-state-management/10-swr.md) — alternative to React Query, key differences
-- [ ] [Optimistic updates](phase-06-state-management/11-optimistic-updates.md) — rollback on failure pattern
-- [ ] [Cache invalidation strategies](phase-06-state-management/12-cache-invalidation-strategies.md) — tags, query keys, manual refetch
-- [ ] [State machines (XState)](phase-06-state-management/13-state-machines-xstate.md) — when explicit states beat booleans
+- [x] [Context API limitations](phase-06-state-management/01-context-api-limitations.md) — every consumer re-renders on any change
+- [x] [Context optimization](phase-06-state-management/02-context-optimization.md) — splitting providers, selector libraries
+- [x] [Redux core](phase-06-state-management/03-redux-core.md) — store, reducers, actions, middleware
+- [x] [Redux Toolkit](phase-06-state-management/04-redux-toolkit.md) — createSlice, Immer, modern Redux
+- [x] [RTK Query](phase-06-state-management/05-rtk-query.md) — data fetching with Redux
+- [x] [Zustand](phase-06-state-management/06-zustand.md) — minimal API, no provider needed
+- [x] [Jotai / Recoil](phase-06-state-management/07-jotai-recoil.md) — atom-based, granular subscriptions
+- [x] [Server state vs client state](phase-06-state-management/08-server-state-vs-client-state.md) — why one tool can't do both well
+- [x] [React Query / TanStack Query](phase-06-state-management/09-react-query-tanstack.md) — caching, refetching, stale-while-revalidate
+- [x] [SWR](phase-06-state-management/10-swr.md) — alternative to React Query, key differences
+- [x] [Optimistic updates](phase-06-state-management/11-optimistic-updates.md) — rollback on failure pattern
+- [x] [Cache invalidation strategies](phase-06-state-management/12-cache-invalidation-strategies.md) — tags, query keys, manual refetch
+- [x] [State machines (XState)](phase-06-state-management/13-state-machines-xstate.md) — when explicit states beat booleans
 
 ---
 
