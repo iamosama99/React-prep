@@ -191,26 +191,26 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 | # | Topic | File | Status |
 |---|-------|------|--------|
 | 1 | Virtual DOM & reconciliation | `phase-05-performance/01-virtual-dom-reconciliation.md` | ✅ |
-| 2 | Fiber architecture | `phase-05-performance/02-fiber-architecture.md` | 👉 **Next** |
-| 3 | Render vs commit phase | `phase-05-performance/03-render-vs-commit-phase.md` | ⬜ |
-| 4 | What causes re-renders | `phase-05-performance/04-what-causes-rerenders.md` | ⬜ |
-| 5 | React.memo deep dive | `phase-05-performance/05-react-memo-deep-dive.md` | ⬜ |
-| 6 | Avoiding re-renders without memo | `phase-05-performance/06-avoiding-rerenders-without-memo.md` | ⬜ |
-| 7 | Inline objects/functions in JSX | `phase-05-performance/07-inline-objects-functions-jsx.md` | ⬜ |
-| 8 | Automatic batching (React 18) | `phase-05-performance/08-automatic-batching-react-18.md` | ⬜ |
-| 9 | Code splitting | `phase-05-performance/09-code-splitting.md` | ⬜ |
-| 10 | List virtualization | `phase-05-performance/10-list-virtualization.md` | ⬜ |
-| 11 | Profiler API & DevTools profiler | `phase-05-performance/11-profiler-api-devtools.md` | ⬜ |
-| 12 | Bundle analysis | `phase-05-performance/12-bundle-analysis.md` | ⬜ |
-| 13 | Tree shaking | `phase-05-performance/13-tree-shaking.md` | ⬜ |
-| 14 | Web vitals in React | `phase-05-performance/14-web-vitals-react.md` | ⬜ |
-| 15 | Concurrent rendering | `phase-05-performance/15-concurrent-rendering.md` | ⬜ |
+| 2 | Fiber architecture | `phase-05-performance/02-fiber-architecture.md` | ✅ |
+| 3 | Render vs commit phase | `phase-05-performance/03-render-vs-commit-phase.md` | ✅ |
+| 4 | What causes re-renders | `phase-05-performance/04-what-causes-rerenders.md` | ✅ |
+| 5 | React.memo deep dive | `phase-05-performance/05-react-memo-deep-dive.md` | ✅ |
+| 6 | Avoiding re-renders without memo | `phase-05-performance/06-avoiding-rerenders-without-memo.md` | ✅ |
+| 7 | Inline objects/functions in JSX | `phase-05-performance/07-inline-objects-functions-jsx.md` | ✅ |
+| 8 | Automatic batching (React 18) | `phase-05-performance/08-automatic-batching-react-18.md` | ✅ |
+| 9 | Code splitting | `phase-05-performance/09-code-splitting.md` | ✅ |
+| 10 | List virtualization | `phase-05-performance/10-list-virtualization.md` | ✅ |
+| 11 | Profiler API & DevTools profiler | `phase-05-performance/11-profiler-api-devtools.md` | ✅ |
+| 12 | Bundle analysis | `phase-05-performance/12-bundle-analysis.md` | ✅ |
+| 13 | Tree shaking | `phase-05-performance/13-tree-shaking.md` | ✅ |
+| 14 | Web vitals in React | `phase-05-performance/14-web-vitals-react.md` | ✅ |
+| 15 | Concurrent rendering | `phase-05-performance/15-concurrent-rendering.md` | ✅ |
 
 ### Phase 6 — State Management (13 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Context API limitations | `phase-06-state-management/01-context-api-limitations.md` | ⬜ |
+| 1 | Context API limitations | `phase-06-state-management/01-context-api-limitations.md` | 👉 **Next** |
 | 2 | Context optimization | `phase-06-state-management/02-context-optimization.md` | ⬜ |
 | 3 | Redux core | `phase-06-state-management/03-redux-core.md` | ⬜ |
 | 4 | Redux Toolkit | `phase-06-state-management/04-redux-toolkit.md` | ⬜ |
