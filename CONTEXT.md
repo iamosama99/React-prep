@@ -190,8 +190,8 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Virtual DOM & reconciliation | `phase-05-performance/01-virtual-dom-reconciliation.md` | 👉 **Next** |
-| 2 | Fiber architecture | `phase-05-performance/02-fiber-architecture.md` | ⬜ |
+| 1 | Virtual DOM & reconciliation | `phase-05-performance/01-virtual-dom-reconciliation.md` | ✅ |
+| 2 | Fiber architecture | `phase-05-performance/02-fiber-architecture.md` | 👉 **Next** |
 | 3 | Render vs commit phase | `phase-05-performance/03-render-vs-commit-phase.md` | ⬜ |
 | 4 | What causes re-renders | `phase-05-performance/04-what-causes-rerenders.md` | ⬜ |
 | 5 | React.memo deep dive | `phase-05-performance/05-react-memo-deep-dive.md` | ⬜ |
