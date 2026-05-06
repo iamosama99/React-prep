@@ -35,11 +35,11 @@ const memoized = useMemo(() => fn, deps)
 - useCallback does not preserve closure values; it still recreates the callback when dependencies change.
 
 ## Interview Questions
-**Q: When should you use useCallback?**
+**Q (High): When should you use useCallback?**
 Answer: use it when you need a stable function reference, usually for memoized children or hooks that depend on callback identity. It is not required for every handler and should be reserved for cases where the reference itself affects rendering or effect behavior.
 The trap: saying useCallback is needed for every event handler or that it prevents re-renders by itself.
 
-**Q: Why does useCallback sometimes not help performance?**
+**Q (High): Why does useCallback sometimes not help performance?**
 Answer: because it adds dependency tracking and function recreation costs, and it does not avoid the component’s own render. If children are not memoized or the function is cheap, useCallback can be a net loss.
 The trap: assuming memoizing the function always makes the tree faster.
 

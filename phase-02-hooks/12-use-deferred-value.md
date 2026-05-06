@@ -27,11 +27,11 @@ React updates `deferredQuery` with lower priority than the original `query`. Dur
 - Keep the deferred-dependent render path contained to avoid making the entire component slow.
 
 ## Interview Questions
-**Q: When should you use useDeferredValue instead of useTransition?**
+**Q (High): When should you use useDeferredValue instead of useTransition?**
 Answer: useDeferredValue is ideal when you need a lower-priority version of an already-updating value, especially for expensive derived rendering. useTransition is better when you want to wrap an entire update and track an `isPending` state.
 The trap: thinking they are interchangeable or that useDeferredValue alone handles user input responsiveness.
 
-**Q: What kind of UI problem does useDeferredValue solve?**
+**Q (Medium): What kind of UI problem does useDeferredValue solve?**
 Answer: it solves cases where a fast-changing value, like a text input, causes slow re-renders. By letting the UI keep the immediate value while the derived render uses a deferred value, it improves responsiveness.
 The trap: describing it as a debounce or async state hook.
 

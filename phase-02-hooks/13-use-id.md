@@ -23,11 +23,11 @@ On the server, the ID is generated in a way that can be replayed during client h
 - It is not a replacement for semantic IDs that need to be shared across unrelated components unless they are already in the same render tree.
 
 ## Interview Questions
-**Q: Why is useId better than Math.random for IDs?**
+**Q (Medium): Why is useId better than Math.random for IDs?**
 Answer: Because Math.random generates different values on the server and client, causing hydration mismatch. useId produces deterministic IDs that are stable across SSR and client hydration.
 The trap: saying it only exists to avoid duplicate IDs in the same viewport.
 
-**Q: Can useId be used for list keys?**
+**Q (Low): Can useId be used for list keys?**
 Answer: no, because keys need to be stable across reorders and should be based on stable identity. useId is fine for static element associations but not for dynamic list key semantics.
 The trap: using it to generate keys for array items.
 

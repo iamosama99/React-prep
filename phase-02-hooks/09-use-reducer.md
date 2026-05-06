@@ -57,11 +57,11 @@ That is useful when computing the initial state is expensive.
 - Don’t place side effects inside the reducer; perform them in effects or event handlers.
 
 ## Interview Questions
-**Q: When would you choose useReducer over useState?**
+**Q (High): When would you choose useReducer over useState?**
 Answer: choose useReducer when state transitions are complex, when multiple values update together, or when you want a single place to reason about state changes. useState is better for simple independent values.
 The trap: saying useReducer is only for Redux-style apps or that it should replace useState everywhere.
 
-**Q: Is useReducer the same as Redux?**
+**Q (Medium): Is useReducer the same as Redux?**
 Answer: no. They share a reducer/dispath pattern, but useReducer is local to a component and does not include middleware, action logging, or a global store. Redux is a state management library with additional architecture on top of the reducer concept.
 The trap: equating useReducer with a full Redux implementation.
 

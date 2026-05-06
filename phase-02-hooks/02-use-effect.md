@@ -297,7 +297,7 @@ Or use a library like React Query that handles this pattern.
 
 ## Interview Questions
 
-**Q: When does `useEffect` run relative to rendering?**
+**Q (High): When does `useEffect` run relative to rendering?**
 
 Answer: Effects run *after* the DOM has been committed (painted to screen). React's order is: render phase (compute JSX) → commit phase (update DOM) → effects run. This is why DOM mutations in effects are safe — the DOM is already updated and visible.
 
@@ -307,7 +307,7 @@ The trap: Developers think effects run before renders, or that they're synchrono
 
 ---
 
-**Q: What's the dependency array for, and what happens if you omit it?**
+**Q (High): What's the dependency array for, and what happens if you omit it?**
 
 Answer: The dependency array tells React when to re-run the effect. If a dependency changes, the effect re-runs. If you omit the array, the effect runs after *every* render. If you pass an empty array, it runs once after mount.
 
@@ -323,7 +323,7 @@ The trap: Missing dependencies. If your effect uses `userId` but doesn't list it
 
 ---
 
-**Q: How do you handle race conditions in async effects?**
+**Q (High): How do you handle race conditions in async effects?**
 
 Answer: When you have an async operation (like a fetch), it can complete out of order. If you fetch user 1, then user 2, and user 2's response arrives first, you set state to user 2. Then user 1's response arrives and overwrites it. The UI shows user 1 even though the current props are for user 2.
 
@@ -362,7 +362,7 @@ The trap: Beginners don't realize race conditions exist in their code. They work
 
 ---
 
-**Q: What's the cleanup function for, and when does it run?**
+**Q (High): What's the cleanup function for, and when does it run?**
 
 Answer: The function returned from an effect is the cleanup. React calls it:
 1. Before re-running the effect (if it re-runs)
@@ -385,7 +385,7 @@ The trap: Developers forget to return a cleanup function or return something tha
 
 ---
 
-**Q: What's "double invocation" in StrictMode, and why does React do it?**
+**Q (High): What's "double invocation" in StrictMode, and why does React do it?**
 
 Answer: In development with `<StrictMode>`, React intentionally runs effects twice: mount the effect, run the cleanup, then mount the effect again. It does this to catch bugs where the effect isn't properly idempotent or the cleanup doesn't fully undo the effect.
 
@@ -406,7 +406,7 @@ The trap: Developers see double-invocation in development and panic, thinking th
 
 ---
 
-**Q: Can you make the effect function itself async?**
+**Q (High): Can you make the effect function itself async?**
 
 Answer: No. The effect function must return a cleanup function or nothing. If you make it async, it returns a promise, and React won't use that promise for cleanup.
 
@@ -431,7 +431,7 @@ The trap: Developers see async/await and think they can use it in effects. They 
 
 ---
 
-**Q: You have a component that fetches data on mount. How do you prevent fetching again if the component re-renders but the dependency hasn't changed?**
+**Q (Medium): You have a component that fetches data on mount. How do you prevent fetching again if the component re-renders but the dependency hasn't changed?**
 
 Answer: Use an empty dependency array. This runs the effect only once, on mount:
 

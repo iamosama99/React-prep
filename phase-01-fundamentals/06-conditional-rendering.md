@@ -241,7 +241,7 @@ Which one you want depends on the use case:
 
 ## Interview Questions
 
-**Q: Why can't you use an `if` statement directly inside JSX?**
+**Q (Medium): Why can't you use an `if` statement directly inside JSX?**
 
 Answer: Because JSX curly braces can only contain expressions — code that evaluates to a value. `if` is a statement; it controls flow but doesn't produce a value. Under the hood, JSX compiles to `React.createElement(type, props, children)` function calls, and the children slot is a function argument — it must be an expression. Alternatives that *are* expressions: ternary (`condition ? a : b`), short-circuit (`condition && element`), and IIFE (`(() => { if... })()`) are all expressions and work inside JSX. The `if` itself can still be used — just move it *outside* the JSX, in the function body above the return, and assign the result to a variable.
 
@@ -249,7 +249,7 @@ The trap: Thinking `if` is banned from function components entirely. It's only b
 
 ---
 
-**Q: `{items.length && <List items={items} />}` renders an unintended "0" when items is empty. Why, and how do you fix it?**
+**Q (High): `{items.length && <List items={items} />}` renders an unintended "0" when items is empty. Why, and how do you fix it?**
 
 Answer: Because `0 && anything` short-circuits and returns `0` — the number, not `false`. React renders numbers (including `0`) as text nodes in the DOM. `false`, `null`, and `undefined` render nothing, but `0` renders the character zero. The fix is to coerce the condition to a boolean: `{items.length > 0 && <List />}` or `{!!items.length && <List />}` or `{Boolean(items.length) && <List />}`. The deeper lesson: `&&` in JSX is a conditional expression, not a conditional statement — it returns the actual value of the left operand when falsy. Use `> 0` or `!!` to ensure you're always branching on a boolean.
 
@@ -257,7 +257,7 @@ The trap: Thinking all falsy values in JSX render nothing. Only `false`, `null`,
 
 ---
 
-**Q: What is the difference between conditional rendering and using CSS to hide an element?**
+**Q (Medium): What is the difference between conditional rendering and using CSS to hide an element?**
 
 Answer: Conditional rendering (`{condition && <Component />}`) removes the component from the React tree when the condition is false. The component unmounts — its state is destroyed, effects run their cleanup, and the DOM nodes are removed. When the condition becomes true again, the component remounts fresh. CSS hiding (`display: none`) keeps the component in the tree — it continues to render, its state is preserved, and effects continue running, but it's visually invisible. The choice depends on use case: conditional rendering is appropriate when you want to reset state on close, avoid running effects while hidden, or skip rendering cost for expensive components. CSS hiding is appropriate when you need to preserve state across visibility toggles, or when mounting/unmounting is expensive enough to avoid.
 
@@ -265,7 +265,7 @@ The trap: Conflating "hidden" with "unmounted." They have fundamentally differen
 
 ---
 
-**Q: What is a guard clause pattern in React, and why is it useful?**
+**Q (Medium): What is a guard clause pattern in React, and why is it useful?**
 
 Answer: A guard clause is an early return from the component function before the main render when a precondition isn't met. Instead of wrapping the entire JSX in a conditional, you handle the edge case at the top and return early: `if (!user) return null;`, `if (isLoading) return <Spinner />;`. The main return at the bottom is then clean and focused on the happy path. This mirrors the guard clause pattern in general programming — fail fast, reduce nesting, keep the primary logic readable. It's especially valuable when multiple conditions can each independently change the entire output.
 
@@ -273,7 +273,7 @@ The trap: Writing one deeply nested ternary or a massive `&&` chain instead of e
 
 ---
 
-**Q: How would you render different UI based on a string status value like `'loading'`, `'error'`, `'success'`?**
+**Q (Low): How would you render different UI based on a string status value like `'loading'`, `'error'`, `'success'`?**
 
 Answer: Multiple patterns work, with different tradeoffs. An if/else chain above the return is the simplest. A switch statement works well when each case has logic beyond just returning a JSX element. A lookup object — `const views = { loading: <Spinner />, error: <Error />, success: <Data /> }` — is concise when each case just returns a component with no extra logic. I'd reach for the lookup object for pure display mapping, a switch for cases that need processing, and an if/else chain when conditions are complex or overlapping. The goal is clarity — whichever makes the intent most obvious to a reader.
 

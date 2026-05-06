@@ -38,11 +38,11 @@ React uses the snapshot to determine whether it should re-render and to avoid te
 - avoid side effects inside the subscribe or snapshot functions.
 
 ## Interview Questions
-**Q: Why use useSyncExternalStore instead of useEffect and useState for a store subscription?**
+**Q (Medium): Why use useSyncExternalStore instead of useEffect and useState for a store subscription?**
 Answer: because useSyncExternalStore is designed to avoid tearing and inconsistent renders in concurrent mode. It gives React a consistent way to read external values during render and subscribe to changes safely.
 The trap: saying it is only for performance or only for Redux.
 
-**Q: What are the required arguments to useSyncExternalStore?**
+**Q (Low): What are the required arguments to useSyncExternalStore?**
 Answer: `subscribe` and `getSnapshot` are required; `getServerSnapshot` is optional but needed for SSR when the server snapshot differs from the client.
 The trap: forgetting `getServerSnapshot` when using SSR.
 

@@ -32,11 +32,11 @@ DevTools displays the label only when the component tree is inspected.
 - Keep the debug label simple and focused on the hook's key state.
 
 ## Interview Questions
-**Q: What problem does useDebugValue solve?**
+**Q (Low): What problem does useDebugValue solve?**
 Answer: it makes custom hooks easier to debug in React DevTools by exposing a readable label for the hook’s internal state. It’s for developer ergonomics, not functionality.
 The trap: thinking it changes the hook’s behavior or is needed for production logic.
 
-**Q: When should you use a formatter with useDebugValue?**
+**Q (Low): When should you use a formatter with useDebugValue?**
 Answer: use a formatter when the raw hook value is complex or not human-friendly, such as an object or nested state. The formatter can convert it into a concise label.
 The trap: overusing it for every hook or using it in plain components.
 

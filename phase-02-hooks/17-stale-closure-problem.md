@@ -53,11 +53,11 @@ useEffect(() => {
 - Using refs bypasses reactivity, so it should be used only when you need the latest mutable value without triggering a render.
 
 ## Interview Questions
-**Q: What is a stale closure in React?**
+**Q (High): What is a stale closure in React?**
 Answer: it is when a callback uses a value captured from a previous render, causing it to operate on outdated state or props. This happens because hooks and callbacks are recreated per render, and stale dependencies are not refreshed unless the hook dependencies change.
 The trap: saying it is a React bug rather than a JavaScript closure behavior combined with render semantics.
 
-**Q: How do you fix stale closures in hooks?**
+**Q (High): How do you fix stale closures in hooks?**
 Answer: by including current values in dependency arrays, by using refs to store the latest value, or by using patterns like `useEvent` for stable callbacks that access fresh state. The right fix depends on the exact case.
 The trap: blindly removing dependencies or disabling lint rules.
 

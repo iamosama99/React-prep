@@ -45,11 +45,11 @@ React uses the nearest provider above the consumer in the tree. When the provide
 - Splitting context into smaller providers is often better than one large provider.
 
 ## Interview Questions
-**Q: What are the limitations of useContext?**
+**Q (High): What are the limitations of useContext?**
 Answer: it causes broad re-renders because any update to the provider value re-renders all consumers. It also doesn’t solve component-level memoization or manage asynchronous state; it’s best for relatively stable shared data.
 The trap: saying it is only for global state or that it automatically avoids prop drilling issues.
 
-**Q: How can you avoid unnecessary re-renders with context?**
+**Q (High): How can you avoid unnecessary re-renders with context?**
 Answer: split context into smaller pieces, memoize provider values, and keep context values as primitive or stable references when possible. Use selectors or separate contexts for different concerns.
 The trap: thinking `useMemo` alone solves all context re-render problems.
 

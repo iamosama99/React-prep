@@ -166,7 +166,7 @@ This hook is an implementation detail for library authors, not application code.
 
 ## Interview Questions
 
-**Q: What's `useInsertionEffect` for, and when would you use it?**
+**Q (Medium): What's `useInsertionEffect` for, and when would you use it?**
 
 Answer: `useInsertionEffect` runs before `useLayoutEffect` and `useEffect`. It's designed for CSS-in-JS libraries that need to inject styles before other effects run and measure the DOM.
 
@@ -178,7 +178,7 @@ The trap: Beginners think `useInsertionEffect` is for initialization code. It's 
 
 ---
 
-**Q: Why can't you measure elements in `useInsertionEffect`?**
+**Q (Low): Why can't you measure elements in `useInsertionEffect`?**
 
 Answer: Because the browser hasn't laid out the DOM yet. At the point when `useInsertionEffect` runs, React has inserted DOM nodes, but the browser hasn't calculated their sizes, positions, or styles. So `offsetWidth`, `getBoundingClientRect()`, etc. will return stale or 0 values.
 
@@ -196,7 +196,7 @@ The trap: Developers confuse the effects' purposes and try to measure in `useIns
 
 ---
 
-**Q: How is `useInsertionEffect` different from injecting styles in a `<style>` tag?**
+**Q (Low): How is `useInsertionEffect` different from injecting styles in a `<style>` tag?**
 
 Answer: `useInsertionEffect` injects styles at the exact right moment in React's render cycle — before other effects run. A static `<style>` tag in your HTML always loads, even if you don't need it. Dynamic injection via `useInsertionEffect` lets libraries inject styles on-demand, per-component.
 
@@ -208,7 +208,7 @@ The trap: This is mostly relevant to library code. App developers writing HTML u
 
 ---
 
-**Q: Can you access refs in `useInsertionEffect`?**
+**Q (Low): Can you access refs in `useInsertionEffect`?**
 
 Answer: No. Refs won't be populated yet. `useInsertionEffect` runs at a point in the React lifecycle where DOM nodes have been inserted, but the browser hasn't laid them out, and React's internal state for refs hasn't fully settled.
 

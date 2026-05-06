@@ -46,11 +46,11 @@ The object returned by useImperativeHandle becomes the value of the forwarded re
 - useImperativeHandle has no effect unless the component is wrapped with forwardRef.
 
 ## Interview Questions
-**Q: When should you use useImperativeHandle?**
+**Q (Medium): When should you use useImperativeHandle?**
 Answer: when a component must expose an imperative method or API to its parent, such as `focus()`, `scrollIntoView()`, or `reset()`. It is an escape hatch for cases where declarative props are awkward or impossible.
 The trap: saying it is for every ref use or using it to avoid lifting state.
 
-**Q: What is the role of forwardRef here?**
+**Q (Medium): What is the role of forwardRef here?**
 Answer: forwardRef makes the parent’s ref available to the child function component. Without forwardRef, function components do not receive refs. useImperativeHandle customizes the object assigned to that forwarded ref.
 The trap: confusing forwardRef with useRef or thinking forwardRef alone is enough to expose child methods.
 

@@ -249,7 +249,7 @@ In React 18+, they're still batched. In React 17 and earlier, the second one tri
 
 ## Interview Questions
 
-**Q: What's the difference between `setState(value)` and `setState(prevState => newState)`?**
+**Q (High): What's the difference between `setState(value)` and `setState(prevState => newState)`?**
 
 Answer: The function form (updater function) lets you compute the new state based on the previous state. It's important when you're doing multiple state updates and need to ensure each sees the latest state value, not a stale one. For example, if you call `increment()` three times, using `setCount(c => c + 1)` guarantees you get count + 3, not count + 1 (which you'd get if all three calls closed over the same stale `count` value). The function form also decouples the update logic from when it executes — useful in debouncing or queuing scenarios.
 
@@ -257,7 +257,7 @@ The trap: Beginners think `setState` is synchronous and the state variable updat
 
 ---
 
-**Q: What does lazy initialization do, and when would you use it?**
+**Q (High): What does lazy initialization do, and when would you use it?**
 
 Answer: Lazy initialization means passing a function to `useState` instead of a value. React calls that function only on the first render; on subsequent renders, the function is never called. Use this when the initial state computation is expensive — parsing large JSON from localStorage, running complex calculations, etc. It avoids wasting CPU cycles re-running expensive computations on every render.
 
@@ -267,7 +267,7 @@ The trap: Passing a value by accident instead of a function. If you do `useState
 
 ---
 
-**Q: What is automatic batching, and how did it change in React 18?**
+**Q (High): What is automatic batching, and how did it change in React 18?**
 
 Answer: Batching is when React groups multiple state updates together and does one re-render instead of multiple. Before React 18, batching only happened inside event handlers. If you called setState in a promise, timeout, or other async context, each call triggered a separate re-render.
 
@@ -296,7 +296,7 @@ The trap: Developers don't realize batching changed, so they assume setState is 
 
 ---
 
-**Q: Why does React need `useState` at all? Why can't you just use a regular variable?**
+**Q (High): Why does React need `useState` at all? Why can't you just use a regular variable?**
 
 Answer: Because a regular variable in a function component gets reset on every render. If you did:
 
@@ -315,7 +315,7 @@ The trap: Beginners sometimes think React "remembers" the variable. It doesn't �
 
 ---
 
-**Q: How does React know which `useState` call maps to which state variable?**
+**Q (High): How does React know which `useState` call maps to which state variable?**
 
 Answer: React relies on **call order**. On every render, React calls your component function. Each `useState` call is matched to a stored state value by its position in the render. First `useState` call → first state slot, second `useState` call → second state slot, etc.
 
@@ -344,7 +344,7 @@ The trap: Developers think they can conditionally initialize state to save memor
 
 ---
 
-**Q: What happens when you call `setState` with the same value twice?**
+**Q (Medium): What happens when you call `setState` with the same value twice?**
 
 Answer: React uses `Object.is()` to compare the new value with the current state. If they're equal, React skips the re-render entirely (this is called "bailout").
 
@@ -369,7 +369,7 @@ The trap: Developers create new objects unnecessarily and don't realize they're 
 
 ---
 
-**Q: In a component, you call `setState` then immediately log the state variable. What gets logged?**
+**Q (High): In a component, you call `setState` then immediately log the state variable. What gets logged?**
 
 Answer: The *old* state value, not the new one. `setState` is asynchronous — it schedules a re-render, but doesn't update the variable immediately.
 

@@ -35,11 +35,11 @@ A custom hook is just a function that uses hooks. The rules apply inside custom 
 - The ESLint React Hooks plugin exists to enforce these rules automatically.
 
 ## Interview Questions
-**Q: Why must hooks be called at the top level?**
+**Q (High): Why must hooks be called at the top level?**
 Answer: because React uses call order to track hook state. Top-level calls ensure the same sequence on every render, so state and effects stay matched to the correct hook position.
 The trap: saying it is only a style rule or that it is to make code easier to read.
 
-**Q: Can you call hooks inside a custom hook?**
+**Q (Medium): Can you call hooks inside a custom hook?**
 Answer: yes. Custom hooks are just reusable functions that follow the same rules. They are allowed to call hooks because they are part of the hook call sequence.
 The trap: thinking custom hooks are exempt from the hooks rules.
 

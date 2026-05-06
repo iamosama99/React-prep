@@ -274,7 +274,7 @@ Every effect run updates state, which triggers the effect again.
 
 ## Interview Questions
 
-**Q: When does `useLayoutEffect` run relative to painting?**
+**Q (High): When does `useLayoutEffect` run relative to painting?**
 
 Answer: After React commits DOM mutations but *before* the browser paints the screen. It's synchronous — React waits for the effect to complete before allowing the paint to happen. This is different from `useEffect`, which runs *after* the paint.
 
@@ -284,7 +284,7 @@ The trap: Developers don't know this hook exists or don't understand the timing 
 
 ---
 
-**Q: Give an example where you'd use `useLayoutEffect` instead of `useEffect`.**
+**Q (High): Give an example where you'd use `useLayoutEffect` instead of `useEffect`.**
 
 Answer: Measuring a DOM element and using that measurement to set a style, before the paint happens.
 
@@ -309,7 +309,7 @@ The trap: Overusing `useLayoutEffect`. Most effects should be `useEffect`. Only 
 
 ---
 
-**Q: Why is `useLayoutEffect` bad for performance, and when should you avoid it?**
+**Q (High): Why is `useLayoutEffect` bad for performance, and when should you avoid it?**
 
 Answer: `useLayoutEffect` is synchronous — the browser can't paint until it completes. If your effect is slow, it blocks the UI thread and causes jank.
 
@@ -341,7 +341,7 @@ The trap: Developers put all their logic in `useLayoutEffect` thinking it's the 
 
 ---
 
-**Q: Does `useLayoutEffect` run on the server?**
+**Q (Medium): Does `useLayoutEffect` run on the server?**
 
 Answer: No. It only runs in the browser after hydration. `useLayoutEffect` is inherently a browser API (it deals with DOM measurements and paint timing, which don't exist on the server).
 
@@ -359,7 +359,7 @@ The trap: Code that reads `window` or `document` in `useLayoutEffect` will crash
 
 ---
 
-**Q: What's the cleanup function do in `useLayoutEffect`?**
+**Q (Low): What's the cleanup function do in `useLayoutEffect`?**
 
 Answer: Same as in `useEffect` — it runs before the effect re-runs and before the component unmounts. It lets you undo whatever the effect did.
 

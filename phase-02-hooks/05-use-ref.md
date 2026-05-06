@@ -347,7 +347,7 @@ This isn't idiomatic. Use `useMemo` or `useCallback` for memoization. Refs are f
 
 ## Interview Questions
 
-**Q: What's the difference between a ref and a state variable?**
+**Q (High): What's the difference between a ref and a state variable?**
 
 Answer: State variables trigger re-renders when they change; refs don't. Both persist across renders. Use state for UI-related values. Use refs for imperative access to the DOM or for storing values that aren't part of the UI.
 
@@ -365,7 +365,7 @@ The trap: Beginners use refs for everything, not realizing that refs don't trigg
 
 ---
 
-**Q: How do you pass a ref to a functional component?**
+**Q (High): How do you pass a ref to a functional component?**
 
 Answer: You can't, directly. Functional components don't accept refs by default. You need to use `forwardRef` to forward the ref to an inner DOM element:
 
@@ -385,7 +385,7 @@ The trap: Developers forget about `forwardRef` and try to pass refs directly, th
 
 ---
 
-**Q: Why would you store a value in a ref instead of state?**
+**Q (High): Why would you store a value in a ref instead of state?**
 
 Answer: When the value doesn't affect the UI and changes shouldn't trigger re-renders. Examples:
 - Timer/interval IDs (for cleanup later)
@@ -407,7 +407,7 @@ The trap: Developers don't think about performance implications and use state fo
 
 ---
 
-**Q: When should you access a ref in an effect vs in an event handler?**
+**Q (Medium): When should you access a ref in an effect vs in an event handler?**
 
 Answer: Refs are available in both, but timing matters. In event handlers, the ref is definitely assigned (the component has rendered). In effects, the ref is also assigned (after the commit phase).
 
@@ -436,7 +436,7 @@ The trap: Developers try to access refs during render and get `null`, then assum
 
 ---
 
-**Q: Can you use a ref to store state that affects the UI?**
+**Q (Medium): Can you use a ref to store state that affects the UI?**
 
 Answer: Technically yes, but you shouldn't. If the value affects the UI, changes to it should trigger re-renders. Use state for that.
 

@@ -39,11 +39,11 @@ The update inside startTransition is considered non-urgent. React may postpone i
 - In StrictMode, the transition may be started more than once during development.
 
 ## Interview Questions
-**Q: What is the difference between useTransition and useDeferredValue?**
+**Q (High): What is the difference between useTransition and useDeferredValue?**
 Answer: useTransition marks an update as non-urgent and returns a pending state, while useDeferredValue produces a deferred copy of a value. useTransition is about scheduling state changes, and useDeferredValue is about letting a stale value be used while the new value catches up.
 The trap: conflating the two or thinking useTransition is only for showing spinners.
 
-**Q: When should you use useTransition?**
+**Q (Medium): When should you use useTransition?**
 Answer: use it for heavy renders or UI updates that can lag behind immediate interactions, such as filtering large lists, navigating between views, or rendering a new search result set.
 The trap: using it for every state update or expecting it to fix all performance problems.
 

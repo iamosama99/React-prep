@@ -66,11 +66,11 @@ function useDebounce(value, delay) {
 - useDebugValue can make custom hooks easier to inspect in DevTools.
 
 ## Interview Questions
-**Q: Why create a custom hook instead of a helper function?**
+**Q (High): Why create a custom hook instead of a helper function?**
 Answer: because custom hooks can use React hooks internally and preserve hook rules. Helper functions cannot manage state or effects. Custom hooks encapsulate reusable hook logic while retaining the component model.
 The trap: saying a custom hook is just a normal function or that it is only for code reuse.
 
-**Q: What is a good sign that logic should be extracted into a custom hook?**
+**Q (Medium): What is a good sign that logic should be extracted into a custom hook?**
 Answer: when the same stateful behavior is used by multiple components, or when a component becomes difficult to understand because of repeated hook logic. The hook should improve readability and reduce duplication.
 The trap: extracting logic too early or creating hooks for trivial one-off code.
 

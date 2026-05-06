@@ -34,11 +34,11 @@ Because useMemo is a hint, React may discard the cached value if it chooses. The
 - `useMemo` is not a cache for async data or mutable values.
 
 ## Interview Questions
-**Q: What is the difference between useMemo and useCallback?**
+**Q (High): What is the difference between useMemo and useCallback?**
 Answer: useMemo memoizes a computed value, while useCallback memoizes a function reference. Under the hood, useCallback is essentially the same as `useMemo(() => fn, deps)`. useCallback is useful only when a stable callback identity matters for child props, while useMemo is for expensive derived values.
 The trap: saying they are interchangeable or that both are only for performance without mentioning stable identity versus cached values.
 
-**Q: When should you avoid useMemo?**
+**Q (High): When should you avoid useMemo?**
 Answer: avoid it for cheap calculations and for values that are already inexpensive to create. Overusing useMemo adds complexity and can cost more than it saves. It is not a cure-all for re-renders.
 The trap: thinking useMemo should wrap every object or array literal.
 
