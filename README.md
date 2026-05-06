@@ -14,6 +14,8 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 **Code examples:** Plain JavaScript for Phases 1–8. TypeScript from Phase 9 onwards.
 
+**Interview question labels:** Each question is tagged with its importance for senior React interviews — `High` (core concept, expect it every time), `Medium` (common but less universal), `Low` (edge case, rarely tested).
+
 ---
 
 ## Progress
@@ -84,12 +86,12 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Still asked in 2026. Many codebases haven't fully migrated.
 
-- [ ] [Lifecycle methods](phase-03-class-legacy/01-lifecycle-methods.md) — mount/update/unmount phases
-- [ ] [getDerivedStateFromProps](phase-03-class-legacy/02-get-derived-state-from-props.md) — why it replaced componentWillReceiveProps
-- [ ] [shouldComponentUpdate](phase-03-class-legacy/03-should-component-update.md) — manual render skipping
-- [ ] [PureComponent vs React.memo](phase-03-class-legacy/04-pure-component-vs-react-memo.md) — shallow comparison
-- [ ] [componentDidCatch & error boundaries](phase-03-class-legacy/05-component-did-catch-error-boundaries.md) — why must be class, where to place
-- [ ] [this binding in class methods](phase-03-class-legacy/06-this-binding-class-methods.md) — arrow methods vs constructor binding
+- [x] [Lifecycle methods](phase-03-class-legacy/01-lifecycle-methods.md) — mount/update/unmount phases
+- [x] [getDerivedStateFromProps](phase-03-class-legacy/02-get-derived-state-from-props.md) — why it replaced componentWillReceiveProps
+- [x] [shouldComponentUpdate](phase-03-class-legacy/03-should-component-update.md) — manual render skipping
+- [x] [PureComponent vs React.memo](phase-03-class-legacy/04-pure-component-vs-react-memo.md) — shallow comparison
+- [x] [componentDidCatch & error boundaries](phase-03-class-legacy/05-component-did-catch-error-boundaries.md) — why must be class, where to place
+- [x] [this binding in class methods](phase-03-class-legacy/06-this-binding-class-methods.md) — arrow methods vs constructor binding
 
 ---
 

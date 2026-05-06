@@ -63,7 +63,9 @@ No padding. If there are two, write two. If there are six, write six.
 
 ## Interview Questions
 
-**Q: [Question text]**
+Each question has an importance label: `High` (core concept, asked in almost every senior interview on this topic), `Medium` (common but less universal), or `Low` (edge case, rarely tested in typical senior interviews).
+
+**Q (High): [Question text]**
 
 Answer: [What a senior engineer would say. Be complete — this is the reference answer.]
 
@@ -160,18 +162,18 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Lifecycle methods | `phase-03-class-legacy/01-lifecycle-methods.md` | 👉 **Next** |
-| 2 | getDerivedStateFromProps | `phase-03-class-legacy/02-get-derived-state-from-props.md` | ⬜ |
-| 3 | shouldComponentUpdate | `phase-03-class-legacy/03-should-component-update.md` | ⬜ |
-| 4 | PureComponent vs React.memo | `phase-03-class-legacy/04-pure-component-vs-react-memo.md` | ⬜ |
-| 5 | componentDidCatch & error boundaries | `phase-03-class-legacy/05-component-did-catch-error-boundaries.md` | ⬜ |
-| 6 | this binding in class methods | `phase-03-class-legacy/06-this-binding-class-methods.md` | ⬜ |
+| 1 | Lifecycle methods | `phase-03-class-legacy/01-lifecycle-methods.md` | ✅ |
+| 2 | getDerivedStateFromProps | `phase-03-class-legacy/02-get-derived-state-from-props.md` | ✅ |
+| 3 | shouldComponentUpdate | `phase-03-class-legacy/03-should-component-update.md` | ✅ |
+| 4 | PureComponent vs React.memo | `phase-03-class-legacy/04-pure-component-vs-react-memo.md` | ✅ |
+| 5 | componentDidCatch & error boundaries | `phase-03-class-legacy/05-component-did-catch-error-boundaries.md` | ✅ |
+| 6 | this binding in class methods | `phase-03-class-legacy/06-this-binding-class-methods.md` | ✅ |
 
 ### Phase 4 — Component Patterns (12 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Composition over inheritance | `phase-04-component-patterns/01-composition-over-inheritance.md` | ⬜ |
+| 1 | Composition over inheritance | `phase-04-component-patterns/01-composition-over-inheritance.md` | 👉 **Next** |
 | 2 | Compound components | `phase-04-component-patterns/02-compound-components.md` | ⬜ |
 | 3 | Render props | `phase-04-component-patterns/03-render-props.md` | ⬜ |
 | 4 | HOCs | `phase-04-component-patterns/04-hocs.md` | ⬜ |
