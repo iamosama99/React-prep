@@ -1,5 +1,14 @@
 # Optimistic Updates
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Snapshot → Apply → Confirm/Rollback | The 4-step pattern every optimistic update follows | Structures the implementation so rollback is always possible |
+| `cancelQueries` before applying | Cancels in-flight refetches before setting optimistic state | Prevents a concurrent refetch from overwriting your optimistic update |
+| `onSettled` refetch | Invalidates the query after success or failure | Ensures eventual consistency even when your prediction was wrong |
+| Concurrent mutations | Multiple optimistic updates before any complete can have interfering snapshots | Rollbacks can undo each other; `onSettled` is safer than relying solely on rollback |
+
 ## What They Are
 
 An optimistic update is when the UI reflects a change immediately — before the server has confirmed it — on the assumption (optimism) that the request will succeed. If the request fails, the UI rolls back to the previous state. If it succeeds, the UI stays as-is or syncs with the server response.
@@ -29,6 +38,8 @@ function handleLike(postId) {
 ```
 
 ---
+
+> **Check yourself:** What are the four steps of the optimistic update pattern? What triggers step 4's "rollback" branch vs the "confirm" branch?
 
 ## With React Query (useMutation + onMutate)
 
@@ -184,6 +195,8 @@ Optimistically reordering a list then discovering the server rejected the move r
 
 ---
 
+> **Check yourself:** Why does React Query's `onMutate` call `cancelQueries` before applying the optimistic update? What specific failure mode does this prevent?
+
 ## When Not to Use Optimistic Updates
 
 - High-value or high-stakes operations: payments, deletes, permission changes. The cost of showing a false positive (the action appeared to succeed then rolled back) exceeds the benefit of responsiveness. Show a confirmation dialog instead.
@@ -196,21 +209,37 @@ The right question: "Is a rollback more surprising than a brief loading spinner?
 
 ## Interview Questions
 
+
+
 **Q (High): Describe the full optimistic update pattern in React Query with rollback.**
 
 Answer: In `useMutation`'s `onMutate` callback: (1) cancel any in-flight queries for the affected keys so a concurrent refetch doesn't overwrite the optimistic update; (2) snapshot the current cache value with `getQueryData`; (3) apply the predicted result with `setQueryData`; (4) return the snapshot as context. In `onError`, use the context to restore the snapshot with `setQueryData`. In `onSettled` (runs on both success and failure), call `invalidateQueries` to trigger a fresh server fetch and ensure eventual consistency. The reason for canceling in-flight queries: without it, a background refetch that completes after your optimistic update could overwrite the UI change, making the action appear to undo itself.
 
 ---
 
+
+
 **Q (High): Why do you refetch in `onSettled` even when the mutation succeeded?**
 
 Answer: An optimistic update is a prediction. The server may produce a different outcome: a timestamp the client doesn't know, a server-computed field, a business rule that partially changes the data, or a race condition where another user modified the same resource concurrently. If you only rely on the optimistic update and never re-sync with the server, the UI can permanently diverge from the actual server state. `onSettled` invalidates the query regardless of outcome, triggering a refetch. Since stale-while-revalidate applies, the user sees the optimistic update immediately and the screen silently corrects to the server truth when the refetch completes — usually with no visible change if your prediction was correct.
+
 
 ---
 
 **Q (Medium): What can go wrong with concurrent optimistic updates on the same resource?**
 
 Answer: Each `onMutate` snapshots the current state and returns it as context. If two mutations fire before either completes, the second mutation's snapshot is the post-first-optimistic state, not the true server state. If the first mutation fails and rolls back, it restores its snapshot — overwriting the second mutation's changes. If the second then fails, it restores its snapshot — which was the "first mutation applied" state, which was just undone. The snapshots reference different points in time and rollbacks interfere with each other. Solutions: serialize mutations (don't let the user trigger another until the first completes), or rely on `onSettled` to always refetch the definitive server state rather than relying solely on rollbacks.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can name the four steps of the optimistic update pattern and explain what each one does
+- [ ] Can write the React Query `useMutation` optimistic pattern from memory, including `onMutate`, `onError`, and `onSettled`
+- [ ] Can explain why `cancelQueries` is called before applying the optimistic update — what specific race condition it prevents
+- [ ] Can explain why `onSettled` refetches even on success
+- [ ] Can name at least two operation types where optimistic updates should NOT be used, and why
 
 ---
 

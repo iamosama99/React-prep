@@ -1,5 +1,14 @@
 # Polymorphic Components
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `as` prop | Prop that controls the rendered element type (`"a"`, `"button"`, `Link`) | One component, multiple semantic elements — no style duplication |
+| Destructure as `Component` | Capitalize `as` when destructuring so JSX treats it as a component reference | `<component>` (lowercase) is a DOM tag; `<Component>` is a React element |
+| `ComponentPropsWithoutRef<E>` | TypeScript utility that returns the correct prop interface for element type `E` | Makes `href` valid when `as="a"` and an error when `as="button"` |
+| `asChild` alternative | Caller renders the element as a child; component merges props onto it | Simpler TypeScript — no generics needed on the component |
+
 ## What Is This?
 
 A polymorphic component can render as different HTML elements or React components depending on a prop — typically called `as`. The component's styles, behavior, and accessibility semantics come from the component, but the underlying element is determined by the caller.
@@ -24,6 +33,8 @@ The `Button` component provides visual and behavioral consistency. The `as` prop
 **The design system problem.** Design systems define tokens — text sizes, spacing, color roles. A `<Text>` component might need to render as `h1`, `h2`, `p`, `span`, `label`, or `li`. Creating `<H1>`, `<H2>`, `<Paragraph>`, `<Span>`, `<Label>` components separately means duplicating all the typography logic.
 
 Polymorphic components solve both: one component, multiple element targets, the caller decides which.
+
+> **Check yourself:** Without polymorphic components, how would you handle a Button that sometimes navigates (needs `<a>`) and sometimes triggers an action (needs `<button>`)? What are the downsides of that approach?
 
 ## How It Works (JavaScript)
 
@@ -66,6 +77,8 @@ const Button = React.forwardRef(function Button(
   );
 });
 ```
+
+> **Check yourself:** Why do you capitalize `as` when destructuring it as `Component`? What goes wrong if you use it lowercase?
 
 ## TypeScript: Where It Gets Interesting
 
@@ -142,11 +155,17 @@ When *not* to use them: when you only have one or two variations — just build 
 
 ## Interview Questions
 
+
+
 **Q (High): What is a polymorphic component and what problem does it solve?**
 
 Answer: A polymorphic component renders as different HTML elements or components depending on an `as` prop, while providing consistent styling and behavior. It solves the problem of semantic HTML variation — a "button" component should render as `<button>` for actions, `<a>` for navigation, and a router's `<Link>` for client-side navigation. Without polymorphism, you'd duplicate the button styles and API across multiple components. With `as`, one component covers all cases and the caller picks the appropriate semantic element.
 
 The trap: Framing it only as a styling convenience. The semantic HTML and accessibility implications are the real reason it matters.
+
+---
+
+
 
 **Q (High): Why is typing a polymorphic component in TypeScript difficult?**
 
@@ -154,9 +173,24 @@ Answer: The available props depend on which element `as` points to — when `as=
 
 The trap: Just saying "it uses generics" — explain specifically why it's hard and what the solution is.
 
+
+---
+
 **Q (Medium): What's the difference between the `as` pattern and Radix's `asChild` pattern?**
 
 Answer: With `as`, the component internally renders `<Component {...props} />` where `Component` is the value of `as`. The prop types are derived from `as` via TypeScript generics. With `asChild`, the caller renders the actual element as a child (`<Button asChild><a href="...">text</a></Button>`), and the component merges its props onto that child element using `cloneElement` or a Slot primitive. The `asChild` pattern makes TypeScript easier (the child's type is known from the JSX), makes the rendered element visible at the call site, but requires an extra element in the JSX and a Slot implementation. Both patterns achieve the same result; `asChild` trades some JSX verbosity for type safety.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can write a minimal polymorphic Button component in JavaScript from memory, including the capitalization convention for `as`
+- [ ] Can explain why `ComponentPropsWithoutRef<E>` is needed in the TypeScript version, and what it gives you
+- [ ] Can name the accessibility gotcha when using `<Button as="a">` — what changes for keyboard and screen reader users
+- [ ] Can explain the trade-off between the `as` pattern and the `asChild` pattern in one or two sentences
+- [ ] Can name a scenario where you should NOT use polymorphic components
 
 ---
+
 *Next: Slot Pattern / asChild — diving deep into the implementation behind Radix's `asChild`, how Slot merges props, and why it's becoming the dominant pattern in modern component libraries.*

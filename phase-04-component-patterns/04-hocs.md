@@ -1,5 +1,15 @@
 # Higher-Order Components (HOCs)
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| HOC | A function that takes a component and returns an enhanced one | Adds behavior at definition time without modifying the original |
+| `displayName` | A string set on the returned component for DevTools | Without it, DevTools shows unhelpful generic names |
+| `forwardRef` in HOCs | Wrapping the HOC return in `React.forwardRef` | Without it, refs attach to the wrapper, not the inner component |
+| `hoist-non-react-statics` | A library that copies static methods to the HOC wrapper | HOCs silently drop static methods otherwise |
+| Prop collision | Two HOCs injecting the same prop name | One silently overwrites the other; hooks avoid this entirely |
+
 ## What Is This?
 
 A Higher-Order Component is a function that takes a component and returns a new, enhanced component. It's the component equivalent of a higher-order function.
@@ -31,6 +41,8 @@ The problem they solve: before hooks, there was no way to share stateful logic b
 HOCs solved this by treating components as first-class values you could transform. You could write `connect()` once and apply it to any component that needed Redux store access. You could write `withErrorBoundary()` and wrap anything in it. The pattern became ubiquitous: Redux's `connect`, React Router's `withRouter`, Relay's `createFragmentContainer`.
 
 They're now largely replaced by hooks for logic sharing, but they still serve a specific role: **cross-cutting concerns that need to wrap arbitrary components at the module level**.
+
+> **Check yourself:** What were the three pre-HOC options for sharing logic in class components, and what was wrong with each?
 
 ## How It Works
 
@@ -123,6 +135,8 @@ function withAuth(WrappedComponent) {
   };
 }
 ```
+
+> **Check yourself:** Why are error boundaries still implemented as class-component HOCs today, even in fully hooks-based codebases?
 
 ## HOCs vs Hooks — The Real Trade-Off
 
@@ -223,6 +237,18 @@ The trap: Saying "just use `...props` and it will pass through." `ref` is not in
 Answer: A HOC takes a component that expects props `A & B` (where `B` is the injected prop) and returns a component that expects only `A` (since the HOC provides `B`). Expressing this in TypeScript — that the HOC "removes" certain props from the outer interface — requires `Omit`, conditional types, and careful generic constraints. The types are correct but complex. With a hook, you just call it and get back a value with a straightforward type; the consuming component's props never include the hook's internal state. TypeScript's inference works naturally.
 
 The trap: Only saying "HOCs are hard to type" without explaining why.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can write a minimal correct HOC from memory, including `displayName` and `{...props}` pass-through
+- [ ] Can explain all four main failure modes of HOCs (prop collision, refs, static methods, HOC inside render)
+- [ ] Can name the three remaining legitimate use cases for HOCs in a hooks-first codebase
+- [ ] Can explain why `ref` doesn't pass through `{...props}` and what the fix is
+- [ ] Can articulate why typing a HOC in TypeScript is genuinely harder than typing a hook
 
 ---
 *Next: Custom Hooks as the Modern Pattern — why hooks subsume both render props and HOCs for most logic-sharing use cases, and how to think about the design of a good custom hook.*

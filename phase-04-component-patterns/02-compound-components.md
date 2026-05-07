@@ -1,5 +1,15 @@
 # Compound Components
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Compound components | A group of components sharing implicit state via Context | Caller gets layout control; parent keeps state encapsulated |
+| Inversion of control | Caller arranges sub-components however they like | No longer limited to combinations the author anticipated |
+| Context-based sharing | Sub-components read shared state from a Provider | Works at any nesting depth; no prop threading |
+| Controlled + uncontrolled | Supporting both `value` and `defaultValue` modes | Makes components reusable in simple and complex scenarios |
+| Dot notation | Exposing sub-components as `Parent.Child` | Communicates family membership; single import |
+
 ## What Is This?
 
 Compound components are a pattern where a group of components work together, sharing implicit state, to form a single cohesive UI element. The canonical examples are `<select>` and `<option>` — `<option>` has no meaning outside `<select>`, and `<select>` needs its children to know which options are available. They're two separate elements but they form one logical component.
@@ -35,6 +45,8 @@ The naive way to build a `Tabs` component is to accept an array of `{ label, con
 This works until the caller needs to customize the tab list structure — put an icon next to one label, render a badge on another, conditionally render one tab, or rearrange them. Every customization becomes a new prop. The API grows without bound, and the caller still can't express things the component author didn't anticipate.
 
 Compound components flip this: the parent owns the state; the caller owns the structure. The caller gets complete layout control, and the sub-components get access to shared state without any prop threading. You get flexibility *and* encapsulation simultaneously.
+
+> **Check yourself:** What is the specific problem with the array-of-configs API that compound components solve? What can a caller do with compound components that they can't do with config props?
 
 ## How It Works
 
@@ -128,6 +140,8 @@ function Tabs({ children, defaultValue }) {
 
 This has significant problems: it only works one level deep (grandchildren don't get the injected props), it breaks with non-element children (strings, nulls), it requires sub-components to accept those props explicitly, and it's unpredictable when children are wrapped in fragments or other components. **Context is strictly better** for all new code.
 
+> **Check yourself:** Why does the `React.cloneElement` approach break at depth, and how does Context solve that specific problem?
+
 ## Naming Sub-components
 
 There are two conventional ways to expose sub-components:
@@ -198,6 +212,18 @@ The trap: Thinking dot notation has runtime implications. Both approaches use th
 Answer: The internal `useContext` call returns `null` (or whatever your default is). You add a guard that throws a descriptive error: `if (!ctx) throw new Error('<Tabs.Trigger> must be rendered inside <Tabs>')`. This converts a subtle, confusing runtime failure (undefined reads, silent wrong behavior) into an immediate, actionable error message.
 
 The trap: Using `createContext(someDefault)` with a non-null default to avoid the check. This means misuse fails silently — the sub-component renders but with no real state backing it. Always use `createContext(null)` and throw explicitly.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the inversion-of-control problem that compound components solve, using a specific example like Tabs
+- [ ] Can write the Context-based compound component structure from memory (Provider, guard hook, sub-components as dot properties)
+- [ ] Can explain why `React.cloneElement` fails at depth and what specific limitation Context overcomes
+- [ ] Can implement the controlled/uncontrolled dual-mode pattern in a compound component root
+- [ ] Can name at least two real-world libraries that use compound components and one gotcha specific to this pattern
 
 ---
 *Next: Render Props — an older but still relevant pattern for sharing behavior without hooks, and still found throughout the ecosystem.*

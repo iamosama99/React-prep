@@ -1,5 +1,15 @@
 # Render Props
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Render prop | A function prop the component calls to get its JSX | Separates behavior (component) from rendering (caller) |
+| Children as function | Using `children` as the render prop function | More ergonomic call site; same mechanism |
+| Inversion of control | Component calls you with data; you decide what to render | Caller has full rendering flexibility |
+| Performance trap | Inline arrow functions re-create on every render | Child always sees new props; unnecessary re-renders |
+| Callback hell | Nesting multiple render prop components | The problem hooks solved by allowing sequential composition |
+
 ## What Is This?
 
 A render prop is a function prop that a component calls to get what it should render. Instead of rendering its own JSX, the component passes its internal data to the function and renders whatever that function returns.
@@ -78,6 +88,8 @@ function Mouse({ children }) {
 
 The data flows down from `Mouse` into the render function, and the JSX returned flows back up as the rendered output. The component doesn't know or care what `children` does with the position data.
 
+> **Check yourself:** What is the precise difference between a render prop and a prop that accepts JSX (a `ReactNode` prop)? Why does this distinction matter?
+
 ## Render Props vs HOCs
 
 They solve the same problem — sharing behavior — with different trade-offs:
@@ -127,6 +139,8 @@ Render props still win when:
 - You need to share *rendering* behavior, not just data/logic
 - The consumer component receives the JSX from the provider (like `react-table`'s slot system)
 - The library must work without hooks (rare now)
+
+> **Check yourself:** When combining three behaviors (e.g., mouse position + scroll position + window size), what does the code look like with render props versus hooks? Why is one noticeably better?
 
 ## Real Patterns in the Wild
 
@@ -221,6 +235,18 @@ The trap: "Hooks always win." Understanding the rendering-vs-logic distinction s
 Answer: A HOC enhances a component at definition time — you wrap it once and the wrapped component always has the extra props. A render prop operates at render time — the behavior component renders first, then calls your function, then renders your result. HOCs compose at the module level and their data source is invisible at the call site. Render props make the data source explicit in JSX. HOCs work better for capabilities that should be transparent to the caller; render props work better when the caller needs to react to the data the provider exposes.
 
 The trap: Saying "they're the same, just different syntax." The composition model, data flow visibility, and DevTools representation are all different.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the precise definition of a render prop (what makes it different from a ReactNode prop)
+- [ ] Can write a render-prop component from memory — one version with a named prop, one with `children` as a function
+- [ ] Can describe the callback-hell problem and explain exactly how hooks eliminate it
+- [ ] Can name the main performance gotcha with inline render functions and state the two fixes
+- [ ] Can name at least two real-world APIs (library or framework) that still use render props today
 
 ---
 *Next: Higher-Order Components (HOCs) — the other pre-hooks pattern for sharing logic, still found throughout the ecosystem and important to understand deeply.*

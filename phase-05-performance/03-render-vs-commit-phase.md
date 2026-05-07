@@ -1,10 +1,21 @@
 # Render vs Commit Phase
 
+## Quick Reference
+
+| Phase | When it runs | Interruptible? | What happens |
+|---|---|---|---|
+| Render | On every state/prop/context change | Yes (concurrent mode) | Component functions called, WIP fiber tree built, flags set |
+| Commit — mutation | After render completes | No | DOM updated, refs attached |
+| Commit — layout | Immediately after mutation | No | `useLayoutEffect` fires synchronously before paint |
+| Passive effects | After browser paints | N/A | `useEffect` fires asynchronously |
+
 ## What Is This?
 
 React's work is divided into two distinct phases: the **render phase** and the **commit phase**. They run sequentially and have fundamentally different properties — one is interruptible and pure, the other is synchronous and effectful.
 
 Understanding where your code runs in this pipeline explains why effects fire when they do, why reading the DOM in a render function is wrong, and why `useLayoutEffect` blocks the paint but `useEffect` does not.
+
+> **Check yourself:** What makes the render phase safe to interrupt, and what makes interrupting the commit phase dangerous?
 
 ---
 
@@ -86,6 +97,8 @@ useEffect(() => {
   subscribeToSocket();
 }, [dep]);
 ```
+
+> **Check yourself:** In the sequence render → commit → paint → useEffect, at which point does `useLayoutEffect` fire and what can you safely do there that you cannot do in `useEffect`?
 
 ---
 
@@ -189,6 +202,7 @@ Effect cleanup order: old cleanup → new setup. Both happen in the same phase. 
 
 ## Interview Questions
 
+
 **Q (High): What's the difference between `useEffect` and `useLayoutEffect`? When would you choose one over the other?**
 
 Answer: Both run after a commit, but at different points. `useLayoutEffect` fires synchronously after React has mutated the DOM but before the browser paints. `useEffect` fires asynchronously after the browser has painted. The practical consequence: `useLayoutEffect` can read layout (getBoundingClientRect, scrollTop) and make DOM adjustments before the user sees anything — preventing a flash of wrong state. `useEffect` is non-blocking and is the correct choice for data fetching, subscriptions, timers, and anything that doesn't need to read or mutate the DOM immediately after render. Default to `useEffect`. Switch to `useLayoutEffect` only when you observe a visual flash that happens because the effect runs too late.
@@ -218,7 +232,6 @@ The trap: Some candidates suggest moving the positioning logic to CSS or a resiz
 Answer: React synchronously re-renders the component before the browser paints. The sequence is: commit → `useLayoutEffect` fires → setState → synchronous re-render → commit again → browser finally paints. The user sees the result of the *second* render, never the intermediate state. This can be intentional — measure DOM, compute derived value, setState — but it doubles the work before paint. If the second render is expensive, you've blocked paint for the combined cost of both. It's a valid pattern when you genuinely need to avoid a flash, but it's frequently overused.
 
 ---
-
 **Q (Low): In what order do effects clean up and run when a dependency changes?**
 
 Answer: React processes effects in a predictable order within each phase. When dependencies change after a commit:
@@ -226,6 +239,21 @@ Answer: React processes effects in a predictable order within each phase. When d
 - `useEffect` cleanup (old) → `useEffect` setup (new) — asynchronous, after paint
 
 Cleanup always runs before the new setup for the same effect. For multiple effects in the same component, they run in declaration order — top to bottom.
+
+---
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can recite the full sequence: render phase → commit sub-phases → paint → passive effects
+- [ ] Can explain why `useLayoutEffect` blocks paint and when that is actually desirable
+- [ ] Can name what is and isn't safe to do during the render phase
+- [ ] Can describe the cleanup ordering: old cleanup runs before new setup, in the same phase
+- [ ] Can explain why calling `setState` in the render body causes an infinite loop
+- [ ] Can describe the tooltip flicker scenario and fix it correctly with `useLayoutEffect`
 
 ---
 

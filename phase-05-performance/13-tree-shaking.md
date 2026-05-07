@@ -1,5 +1,15 @@
 # Tree Shaking
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Tree shaking | Bundler eliminates unused exports from the final bundle | Only the code actually reachable from entry points ships to users |
+| ES Modules requirement | Tree shaking only works with static `import`/`export` syntax | CommonJS `require()` is dynamic — bundlers can't safely eliminate anything |
+| `"sideEffects": false` | Library author declares no files have module-level side effects | Enables file-level elimination, not just export-level |
+| Dead code elimination | Minifier removes unreachable code inside functions | Different from tree shaking — operates within a module, not across the graph |
+| Barrel file | An `index.js` that re-exports many modules | Can defeat tree shaking in older setups; use sub-path imports as a workaround |
+
 ## What Is This?
 
 Tree shaking is a bundler optimization that removes unused code from the final bundle. The name comes from the metaphor: shake the dependency tree hard enough and the dead leaves (unused exports) fall out. The result is a bundle that contains only the code that's actually reachable from your application's entry points.
@@ -100,6 +110,8 @@ Or, more precisely:
 
 This says: only these files have side effects. Everything else is safe to shake.
 
+> **Check yourself:** Why does tree shaking require ES modules? What property of CommonJS `require()` makes static analysis impossible?
+
 ---
 
 ## What Defeats Tree Shaking
@@ -161,6 +173,8 @@ export { fetchUser } from './api';
 ```
 
 If a bundler can statically trace which re-exports are used, this is fine. But some bundler configurations or older tools treat barrel imports as "include everything." Large barrel files in component libraries (where `import { Button } from 'ui-lib'` pulls in all 200 components) are a known tree-shaking problem — one reason Tailwind, Shadcn, and others moved toward copy-paste component models.
+
+> **Check yourself:** Your colleague imports `import * as utils from './utils'` and uses `utils[dynamicKey]`. Why does this defeat tree shaking? What's the rewrite that enables it?
 
 ---
 
@@ -226,6 +240,7 @@ webpack only tree-shakes in production mode (where `optimization.usedExports: tr
 
 ## Interview Questions
 
+
 **Q (High): What is tree shaking and why does it require ES modules?**
 
 Answer: Tree shaking is a bundler optimization that statically analyzes the import/export graph and eliminates any exported code that isn't reachable from the application's entry point. It requires ES modules because ES module imports are static binding declarations, resolved at parse time before any code executes. The bundler can trace the entire dependency graph — which modules are imported, which exports are used — without running any code. CommonJS `require()` is dynamic: the module path can be a runtime expression, and the exported shape isn't statically knowable. Bundlers can't safely eliminate anything from a CommonJS module without risk of breaking runtime behavior.
@@ -245,10 +260,21 @@ Answer: Classic lodash uses CommonJS. Bundlers can't tree-shake CJS — the enti
 Answer: `"sideEffects": false` is a library author's declaration that no file in the package has module-level side effects — global mutations, ambient declarations, polyfills. Without it, bundlers conservatively include any file that appears in an import chain, even if none of its exports are imported, because evaluating the file might be necessary. With `"sideEffects": false`, bundlers know it's safe to skip any file whose exports are unused. You can also specify an array — `"sideEffects": ["*.css", "./polyfills.js"]` — to declare that specific files do have side effects while the rest don't. App authors can work around missing declarations by using sub-path imports instead of barrel-file imports.
 
 ---
-
 **Q (Low): What's wrong with barrel files from a tree-shaking perspective?**
 
 Answer: A barrel file (`index.js` that re-exports from many modules) concentrates the entire library surface into one import. Some bundler configurations, particularly webpack with certain settings, can't always trace which specific re-exports from a barrel are actually used — so they include the full barrel graph. This is the reason large component libraries (hundreds of components) can inflate a bundle significantly even when you only import one component. Modern bundlers (webpack 5, Rollup, Vite) handle barrel files better with `"sideEffects": false`, but the problem persists with older setups or complex re-export patterns. The modern trend toward direct sub-path imports or copy-paste component patterns (Shadcn, Radix primitives) avoids barrel files entirely.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why tree shaking requires ES modules and specifically why CommonJS defeats it
+- [ ] Can distinguish tree shaking (export-level, bundler) from dead code elimination (expression-level, minifier)
+- [ ] Can name four patterns that defeat tree shaking (CommonJS, namespace import, missing sideEffects, default object export)
+- [ ] Can explain what `"sideEffects": false` does and give an example of a file that genuinely has side effects
+- [ ] Can fix the lodash tree-shaking problem using both the `lodash-es` approach and the sub-path approach
 
 ---
 

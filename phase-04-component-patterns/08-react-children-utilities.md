@@ -1,5 +1,15 @@
 # React.Children Utilities
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `React.Children.map` | Safe map over children of any type | Direct `.map()` on `children` crashes on undefined, strings, single elements |
+| `React.Children.toArray` | Flattens children (incl. fragments) into a keyed array | Safe for slicing, sorting, or limiting; auto-generates stable keys |
+| `React.Children.only` | Asserts exactly one child element | Gives an early, actionable error for components that require a single child |
+| `React.cloneElement` | Clones an element and merges new props | The mechanism behind the legacy compound-component pattern |
+| Depth limitation | `cloneElement` only reaches one level deep | The key reason Context replaced this pattern for compound components |
+
 ## What Is This?
 
 `React.Children` is a set of utility functions for working with the opaque `children` prop. Since `children` can be a single element, an array, a string, null, undefined, or a mix — `React.Children` gives you a consistent interface to iterate, count, and map over them regardless of the actual shape.
@@ -32,6 +42,8 @@ If you tried to call `.map()` directly on `children`:
 - `singleElement.map` → crash (elements aren't arrays)
 
 `React.Children.map` handles all of these: it returns `null` for null/undefined, returns an array for a single element, and flattens fragments. It's the safe, predictable way to process children.
+
+> **Check yourself:** What are three concrete types that `children` can be, where calling `.map()` directly would throw an error?
 
 ## How It Works
 
@@ -142,6 +154,8 @@ const clone = React.cloneElement(child, { color: 'red', onClick: handler });
 
 **Context is strictly better for this use case.** The compound components pattern (Phase 4, Topic 2) solves the same problem with zero depth limitations and no prop injection. Use Context + compound components; use `React.Children` utilities only when you must.
 
+> **Check yourself:** Why does `React.Children.map` + `React.cloneElement` fail when the caller wraps children in a `<div>`? Be specific about what receives the injected props.
+
 ## Legitimate Use Cases
 
 Despite the caveats, there are places `React.Children` utilities are still the right tool:
@@ -201,11 +215,18 @@ This is how some older component libraries validated that they received the righ
 
 ## Interview Questions
 
+
+
 **Q (High): Why can't you just call `.map()` directly on `children`, and what does `React.Children.map` do differently?**
 
 Answer: The `children` prop has a dynamic type — it can be `undefined`, `null`, a string, a single ReactElement, or an array. Calling `.map()` directly on `undefined` or a string would throw. `React.Children.map` handles all these cases: it returns null for nullish children, wraps a single element in an array, and handles arrays and fragments. It also adds stable keys to the output, which matters for React's reconciliation.
 
 The trap: "You can always do `[].concat(children).map(...)` to normalize it." This handles some cases but not all — fragments and nested arrays still aren't normalized, and this is exactly what `toArray` is for.
+
+
+---
+
+
 
 **Q (Medium): What's the main limitation of the `React.Children.map` + `React.cloneElement` pattern, and what replaced it?**
 
@@ -213,9 +234,22 @@ Answer: It only works one level deep. If children are nested inside a wrapping e
 
 The trap: Only knowing "Context replaced it" without knowing *why* Context is better (the depth limitation).
 
+---
+
 **Q (Low): What does `React.Children.toArray` do to keys?**
 
 Answer: It generates synthetic keys in the form `.0`, `.1`, etc. (prefixed with the child's original key if it had one, like `.$originalKey`). This ensures stable keys for the flattened array, which React needs for reconciliation. As a side effect, the original keys you may have set on children are modified. This is important to know when you're slicing, reversing, or sorting the toArray output — React will see new keys after the transformation.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can name all five `React.Children` utilities and describe what each does in one sentence
+- [ ] Can explain why `.map()` directly on `children` is unsafe and list three types where it would crash
+- [ ] Can explain the depth limitation of `cloneElement` with a concrete example of where injected props are lost
+- [ ] Can list the three legitimate remaining use cases for `React.Children` utilities
+- [ ] Can explain what `React.isValidElement` checks for and when you'd use it alongside `React.Children.map`
 
 ---
 *Next: Portals — how React renders into a different part of the DOM while keeping the component tree intact, essential for modals, tooltips, and dropdowns.*

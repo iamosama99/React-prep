@@ -1,5 +1,14 @@
 # Conditional Rendering
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Expression-only JSX | JSX curly braces accept expressions, not statements | Explains why `if` can't be used inline — only ternaries, `&&`, IIFEs |
+| `&&` short-circuit | Renders the right side when left is truthy, renders nothing on `false`/`null`/`undefined` | The `0` gotcha: numbers render visibly, so coerce to boolean |
+| Early return | Returning early from the component function before the main JSX | Cleanest pattern for whole-component conditions; keeps happy-path JSX uncluttered |
+| Mount vs hide | Conditional render destroys/recreates; CSS `display:none` preserves state | Choose based on whether you want state reset or state preservation |
+
 ## What Is This?
 
 Conditional rendering is how you control what a component shows based on state, props, or any other runtime value. In React, you don't have a special directive like `v-if` or `ng-if` — you use plain JavaScript to decide what JSX to return. The patterns are idiomatic JavaScript expressions, not framework-specific syntax.
@@ -15,6 +24,8 @@ Because JSX compiles to `React.createElement(...)` function calls, and function 
 This is the single rule behind all conditional rendering patterns. Every technique described below is just a different expression that produces either a React element (render something) or a falsy non-renderable value (render nothing).
 
 React renders `false`, `null`, `undefined` as nothing. Everything else — elements, strings, numbers — renders. That's the foundation.
+
+> **Check yourself:** Why can't you write `{if (isLoading) return <Spinner />}` inside JSX, and what does that constraint tell you about the patterns that do work?
 
 ---
 
@@ -197,6 +208,8 @@ function ComplexList({ items, filterType }) {
 
 The `(() => { ... })()` is a function defined and immediately called. The return value of the function is what gets rendered. This is the JSX equivalent of "I need statements inside an expression context." Usually, extracting to a separate function is cleaner.
 
+> **Check yourself:** Given `{count && <Counter />}` where `count` starts at `0`, what does React render and why? What's the one-character fix?
+
 ---
 
 ## Showing and Hiding vs Mounting and Unmounting
@@ -223,6 +236,8 @@ Which one you want depends on the use case:
 
 - Use CSS hiding when you need to preserve state across open/close (a half-filled form), when mounting/unmounting is visually jarring, or when the component has expensive setup (like a canvas or WebGL context) you don't want to pay repeatedly.
 
+> **Check yourself:** You have a modal with a multi-step form. When the user closes and reopens it, should they see the form reset or resume where they left off? Which approach — conditional rendering or CSS hide — implements each behavior?
+
 ---
 
 ## Gotchas
@@ -241,19 +256,20 @@ Which one you want depends on the use case:
 
 ## Interview Questions
 
-**Q (Medium): Why can't you use an `if` statement directly inside JSX?**
-
-Answer: Because JSX curly braces can only contain expressions — code that evaluates to a value. `if` is a statement; it controls flow but doesn't produce a value. Under the hood, JSX compiles to `React.createElement(type, props, children)` function calls, and the children slot is a function argument — it must be an expression. Alternatives that *are* expressions: ternary (`condition ? a : b`), short-circuit (`condition && element`), and IIFE (`(() => { if... })()`) are all expressions and work inside JSX. The `if` itself can still be used — just move it *outside* the JSX, in the function body above the return, and assign the result to a variable.
-
-The trap: Thinking `if` is banned from function components entirely. It's only banned inside the JSX markup itself. Outside of the return statement, `if` is perfectly valid.
-
----
 
 **Q (High): `{items.length && <List items={items} />}` renders an unintended "0" when items is empty. Why, and how do you fix it?**
 
 Answer: Because `0 && anything` short-circuits and returns `0` — the number, not `false`. React renders numbers (including `0`) as text nodes in the DOM. `false`, `null`, and `undefined` render nothing, but `0` renders the character zero. The fix is to coerce the condition to a boolean: `{items.length > 0 && <List />}` or `{!!items.length && <List />}` or `{Boolean(items.length) && <List />}`. The deeper lesson: `&&` in JSX is a conditional expression, not a conditional statement — it returns the actual value of the left operand when falsy. Use `> 0` or `!!` to ensure you're always branching on a boolean.
 
 The trap: Thinking all falsy values in JSX render nothing. Only `false`, `null`, `undefined`, and empty string (`''`) render nothing. The number `0` renders visibly.
+
+---
+
+**Q (Medium): Why can't you use an `if` statement directly inside JSX?**
+
+Answer: Because JSX curly braces can only contain expressions — code that evaluates to a value. `if` is a statement; it controls flow but doesn't produce a value. Under the hood, JSX compiles to `React.createElement(type, props, children)` function calls, and the children slot is a function argument — it must be an expression. Alternatives that *are* expressions: ternary (`condition ? a : b`), short-circuit (`condition && element`), and IIFE (`(() => { if... })()`) are all expressions and work inside JSX. The `if` itself can still be used — just move it *outside* the JSX, in the function body above the return, and assign the result to a variable.
+
+The trap: Thinking `if` is banned from function components entirely. It's only banned inside the JSX markup itself. Outside of the return statement, `if` is perfectly valid.
 
 ---
 
@@ -272,12 +288,23 @@ Answer: A guard clause is an early return from the component function before the
 The trap: Writing one deeply nested ternary or a massive `&&` chain instead of early returns. Interviewers appreciate seeing guard clauses because they signal familiarity with readable conditional logic.
 
 ---
-
 **Q (Low): How would you render different UI based on a string status value like `'loading'`, `'error'`, `'success'`?**
 
 Answer: Multiple patterns work, with different tradeoffs. An if/else chain above the return is the simplest. A switch statement works well when each case has logic beyond just returning a JSX element. A lookup object — `const views = { loading: <Spinner />, error: <Error />, success: <Data /> }` — is concise when each case just returns a component with no extra logic. I'd reach for the lookup object for pure display mapping, a switch for cases that need processing, and an if/else chain when conditions are complex or overlapping. The goal is clarity — whichever makes the intent most obvious to a reader.
 
 The trap: Hard-coding a solution without acknowledging tradeoffs. The question is testing whether you know multiple approaches and can reason about when to use each.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why `if` statements can't appear inside JSX curly braces, and name three patterns that can
+- [ ] Can reproduce the `&&` with `0` bug from memory and write the corrected version without notes
+- [ ] Can explain the difference between conditional rendering and CSS `display:none` in terms of state lifecycle
+- [ ] Can write a guard-clause component from scratch — early returns first, happy path last
+- [ ] Can choose between ternary, `&&`, early return, and lookup object for a given scenario and justify the choice
 
 ---
 

@@ -1,10 +1,22 @@
 # Fiber Architecture
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Fiber node | JS object representing one unit of work | Replaces the call stack; enables pausing between nodes |
+| Double buffering | Current tree + work-in-progress tree | Renders can be aborted without touching the screen |
+| Render phase | Interruptible computation — builds WIP tree | Can yield to browser between fiber nodes |
+| Commit phase | Synchronous DOM mutation | Must be atomic; can never be interrupted |
+| Lanes | Priority bitmask on every update | Enables preemption — high-priority work jumps the queue |
+
 ## What Is This?
 
 Fiber is React's internal reconciliation engine — a complete rewrite of the original stack-based reconciler, shipped in React 16. Where the old reconciler walked the component tree recursively and couldn't stop mid-way, Fiber breaks work into small units that can be paused, resumed, prioritized, and aborted.
 
 Each "fiber" is a plain JavaScript object that represents one unit of work — essentially an augmented virtual DOM node that carries not just the element description but also scheduling metadata, effect state, and a pointer to its work-in-progress twin.
+
+> **Check yourself:** What was the core problem with the stack-based reconciler that Fiber was designed to fix?
 
 ---
 
@@ -132,6 +144,8 @@ When a high-priority update arrives during a low-priority render, React can inte
 
 This is called **lane-based preemption** — the mechanism behind `useTransition` keeping the UI responsive while expensive renders are in flight.
 
+> **Check yourself:** Why is the commit phase always synchronous even though the render phase can be interrupted? What would go wrong if you paused mid-commit?
+
 ---
 
 ## Fiber vs Stack Reconciler
@@ -172,6 +186,7 @@ When a component throws a Promise (Suspense), React doesn't discard the WIP tree
 
 ## Interview Questions
 
+
 **Q (High): What problem does Fiber solve that the old stack reconciler couldn't?**
 
 Answer: The stack reconciler was a synchronous, non-interruptible recursive traversal. Once a render started, it owned the main thread until completion. For large trees, this blocked the browser for tens or hundreds of milliseconds — input events were queued, animations stuttered, the UI felt unresponsive. Fiber replaces the call stack with an explicit linked list of work units. The work loop processes one fiber at a time and checks between each unit whether the browser needs the thread back. If it does, React yields and resumes later. This makes the render phase interruptible, which is the prerequisite for all concurrent features: transitions, deferred values, streaming SSR, selective hydration.
@@ -211,10 +226,24 @@ Answer: In concurrent mode, React can interrupt and restart renders. If a higher
 The trap: Candidates familiar only with legacy mode (where renders run once) are caught off-guard. A good answer acknowledges that StrictMode's double-invocation is a deliberate diagnostic, not a bug.
 
 ---
-
 **Q (Low): A colleague says "Fiber makes React's virtual DOM faster." How would you correct that?**
 
 Answer: Fiber doesn't speed up the reconciliation algorithm itself — the diff heuristics are largely unchanged from React 15. What Fiber changes is the execution model: it converts the synchronous recursive traversal into an iterative work loop over a linked list of fiber nodes. This makes the render phase interruptible and allows React to yield the main thread between fiber nodes. The performance benefit isn't faster diffing — it's avoiding long tasks that block user input and animations. For raw throughput (total CPU time to reconcile a tree), Fiber may actually be slightly *slower* due to the overhead of the work loop and scheduler. The win is responsiveness and the enabling of concurrent features, not throughput.
+
+---
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why the stack reconciler caused UI freezes and what Fiber changed structurally
+- [ ] Can describe what a fiber node is and name at least four fields it contains
+- [ ] Can explain the double-buffering model and why it allows safe render aborts
+- [ ] Can name the three sub-phases of the commit phase in order
+- [ ] Can explain why the render phase is interruptible but the commit phase is not
+- [ ] Can describe what lanes are and how they enable `useTransition` to keep the UI responsive
 
 ---
 

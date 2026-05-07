@@ -1,5 +1,14 @@
 # Context API Limitations
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| All-or-nothing subscription | Every `useContext` consumer re-renders on any value change | No built-in way to subscribe to only part of a context |
+| Object reference problem | Inline object literals in `value` prop create new references on every render | All consumers re-render even when logical content is unchanged |
+| `React.memo` bypass | Context changes skip memo's prop-change interception entirely | Wrapping a consumer in memo does not prevent context-triggered re-renders |
+| No selectors | Context has no equivalent to `useSelector` — you get the whole value | Fine-grained subscriptions require splitting contexts or a selector library |
+
 ## What Context Actually Is
 
 React Context is a broadcast mechanism, not a state management solution. It lets a value — any value — skip the component tree and land directly in any descendant that subscribes to it. What it is not is a store, a selector system, or a cache. The conflation of "Context" with "state management" is the source of most Context-related performance bugs.
@@ -53,6 +62,8 @@ function UserAvatar() {
 
 `UserAvatar` only uses `user`, but it re-renders whenever `theme` changes because the context value object is a new reference. There is no concept of "I only care about this key" — Context is all-or-nothing per subscription.
 
+> **Check yourself:** A component calls `useContext(AppContext)` and only reads `ctx.user`. The provider updates `ctx.theme`. Does the component re-render? Why?
+
 ---
 
 ## The Value Object Reference Problem
@@ -84,6 +95,8 @@ const MemoChild = React.memo(function Child() {
 ```
 
 `React.memo` only intercepts renders propagated from a parent through props. Context bypasses that interception entirely — it's a separate subscription channel. A context change is like an invisible prop change that memo never sees.
+
+> **Check yourself:** You wrap a context consumer in `React.memo` and all its props are stable. The context value changes. Does the component re-render?
 
 ---
 
@@ -125,9 +138,12 @@ When a context value changes, React walks the tree from the Provider downward an
 
 This is different from how Redux (with `react-redux`) works: `useSelector` subscribers only re-render when the selected slice of state changes, using a per-component equality check.
 
+> **Check yourself:** An app has 50 components subscribed to one context that updates on every keystroke. How many re-renders occur per keystroke, and what is the equivalent behavior in Redux?
+
 ---
 
 ## Interview Questions
+
 
 **Q (High): Why is React Context not a replacement for Redux?**
 
@@ -140,7 +156,6 @@ Answer: Context is a broadcast mechanism — it propagates a value to all subscr
 Answer: The context value is a single object. When either `user` or `theme` changes, the entire object is a new reference, and every subscriber — regardless of which key it uses — re-renders because `Object.is` sees a new value. The fixes: (1) Split into two separate contexts — `UserContext` and `ThemeContext` — so changes to one don't affect subscribers of the other. (2) Keep one context but memoize the value object so it only creates a new reference when one of its contents actually changes. (3) Use a selector library like `use-context-selector` to add `useSelector`-style subscriptions to Context. Splitting contexts is usually the simplest and most maintainable fix.
 
 ---
-
 **Q (Medium): Does wrapping a context consumer in `React.memo` prevent re-renders caused by context changes?**
 
 Answer: No. `React.memo` intercepts renders that propagate from parent to child through props. Context subscriptions bypass that path — they're a direct subscription channel between the consumer and the provider. When a context value changes, React marks all subscribers for re-render directly, and memo never sees the signal. The component will re-render regardless of memo. To prevent unnecessary re-renders from context, you need to either split contexts, memoize the context value, or use a selector library.
@@ -150,6 +165,18 @@ Answer: No. `React.memo` intercepts renders that propagate from parent to child 
 **Q (Medium): What happens when you put a new object literal directly in a Context Provider's `value` prop?**
 
 Answer: A new object is created on every render of the component that owns the Provider. Since `Object.is` sees a new reference on every render, all consumers re-render on every render of that parent — even if the logical contents haven't changed. Fix: memoize the value with `useMemo` so a new object is only created when the underlying data changes.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why `React.memo` does not prevent context-triggered re-renders
+- [ ] Can explain the object reference problem and write the `useMemo` fix from memory
+- [ ] Can state the two conditions under which Context is the right tool vs the wrong tool
+- [ ] Can describe what "all-or-nothing subscription" means and why it causes unnecessary re-renders
+- [ ] Can explain how Redux's `useSelector` differs from Context subscriptions in terms of re-render granularity
 
 ---
 

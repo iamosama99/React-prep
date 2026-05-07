@@ -1,5 +1,13 @@
 # Web Vitals in React
 
+## Quick Reference
+
+| Metric | What it measures | Good threshold | React connection |
+|---|---|---|---|
+| LCP | Render time of the largest visible content element | ≤ 2.5s | Bundle size, hydration delays, fetch waterfalls |
+| CLS | Total unexpected layout shift across page lifetime | ≤ 0.1 | Images without dimensions, dynamic content insertion |
+| INP | Latency from interaction to next paint (98th percentile) | ≤ 200ms | Expensive synchronous renders triggered by events |
+
 ## What Is This?
 
 Core Web Vitals are Google's standardized metrics for measuring real-user page experience. They quantify what users actually feel — loading speed, visual stability, and interactivity responsiveness — rather than synthetic benchmarks. Google uses them as ranking signals in search.
@@ -18,6 +26,8 @@ Plus supporting metrics: FCP (First Contentful Paint), TTFB (Time to First Byte)
 Before Core Web Vitals, performance benchmarks were lab-based and developer-centric: Lighthouse scores, synthetic load times, DOMContentLoaded. These didn't correlate well with what users experienced in the field. Two pages with the same Lighthouse score could feel very different depending on how content loaded, whether things jumped around, and how long clicks took to register.
 
 Core Web Vitals are measured from real users' browsers via the Chrome User Experience Report (CrUX). They represent the 75th percentile of field data — if 25% of your real users have a poor experience, you fail the metric. This shifts the focus from "how fast is it in my lab" to "how fast is it for my users."
+
+> **Check yourself:** What does "75th percentile" mean for Core Web Vitals? If your LCP is "good", what does that guarantee about your users' actual experience?
 
 ---
 
@@ -199,6 +209,8 @@ INP is the metric most affected by React-specific decisions. React renders synch
 
 A page with poor INP is often one where an event handler triggers an expensive synchronous React render. The fix is usually one of: virtualization (fewer nodes to render), memoization (fewer components to re-render), or `useTransition` (interruptible rendering of the expensive part).
 
+> **Check yourself:** Which Core Web Vital is most directly impacted by React render performance, and which React 18 APIs were specifically designed to improve it?
+
 ---
 
 ## Gotchas
@@ -223,6 +235,7 @@ React DevTools shows render duration (React-side). Web Vitals measure browser-si
 
 ## Interview Questions
 
+
 **Q (High): What are Core Web Vitals and which one is most affected by React-specific code?**
 
 Answer: Core Web Vitals are Google's three user-experience metrics: LCP (how fast the largest content loads), CLS (how stable the layout is), and INP (how quickly the page responds to interactions). INP is most directly affected by React decisions. It measures the latency from user interaction to the next paint — in React, this means the cost of the event handler plus the re-render triggered by it. An expensive synchronous React render in response to a click directly lengthens INP. The React 18 concurrent features (`useTransition`, `useDeferredValue`) were built precisely to address this: they allow expensive renders to be interruptible, so the browser can paint a response frame quickly while the heavy computation continues in the background.
@@ -240,10 +253,21 @@ Answer: Poor INP usually means interactions trigger expensive synchronous work o
 Answer: Three main causes. First, images and media without explicit dimensions — the browser doesn't know how much space to reserve, so when the image loads it shifts everything below it. Fix: always set `width` and `height` on images, or use CSS `aspect-ratio`. Second, dynamically injected content — a notification banner or cookie consent that appears above the fold pushes content down. Fix: reserve space with `min-height` or animate content in a way that doesn't affect layout (transform-based animations don't cause CLS). Third, skeleton loading screens with wrong dimensions — if the skeleton is a different height than the real content, content jumps when data loads. Fix: match skeleton dimensions exactly to the expected content. CLS is also reported as a cumulative score across the page's lifetime — late-loading ads are a persistent source.
 
 ---
-
 **Q (Medium): What is the difference between FID and INP? Why did INP replace FID?**
 
 Answer: FID (First Input Delay) measured only the delay before the browser started processing the first user interaction on the page — not the full response time, and only the first interaction. A page that was slow on every interaction after the first had a perfect FID. INP (Interaction to Next Paint) measures the full latency — from input to paint — for all interactions throughout the page's lifetime, then reports the worst one at the 98th percentile. INP is a more complete and honest measurement of interactivity. A page that feels sluggish on every button click but loads fast registers that sluggishness in INP; FID would have reported it as fine. React apps with expensive renders are specifically affected because INP measures the render time, not just the input delay.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can state the three Core Web Vitals, what each measures, and its "good" threshold from memory
+- [ ] Can explain why INP replaced FID and what INP measures that FID didn't
+- [ ] Can name three React-specific causes of poor INP and a fix for each
+- [ ] Can name three React-specific causes of poor CLS and a fix for each
+- [ ] Can explain why a fast React render (good DevTools Profiler numbers) can still produce a poor INP score
 
 ---
 

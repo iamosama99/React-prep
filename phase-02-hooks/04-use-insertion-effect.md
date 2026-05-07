@@ -1,5 +1,14 @@
 # useInsertionEffect
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Runs first of all effects | Fires before `useLayoutEffect` and `useEffect` | Styles are injected before any effect reads the DOM |
+| No DOM access | Browser hasn't laid out yet; refs are null | Cannot measure elements — wrong timing for that |
+| CSS-in-JS only | Designed for style injection, not app logic | Library authors' tool; app devs should never need it |
+| Effect order | `useInsertionEffect` → `useLayoutEffect` → `useEffect` | Guarantees styles exist when measurements happen |
+
 ## What Is This?
 
 `useInsertionEffect` is the most specialized effect in React. It runs *before* all other effects, at the exact moment when React inserts DOM nodes into the page, *before* `useLayoutEffect` and `useEffect`.
@@ -12,6 +21,8 @@ useInsertionEffect(() => {
 ```
 
 It's meant for one specific use case: **CSS-in-JS libraries** that need to inject styles before any effects read the DOM or measure elements. You probably won't use this directly unless you're building a design system or CSS-in-JS library.
+
+> **Check yourself:** Why does a CSS-in-JS library need styles injected before `useLayoutEffect` runs? What goes wrong if the order is reversed?
 
 ## Why Does It Exist?
 
@@ -166,6 +177,7 @@ This hook is an implementation detail for library authors, not application code.
 
 ## Interview Questions
 
+
 **Q (Medium): What's `useInsertionEffect` for, and when would you use it?**
 
 Answer: `useInsertionEffect` runs before `useLayoutEffect` and `useEffect`. It's designed for CSS-in-JS libraries that need to inject styles before other effects run and measure the DOM.
@@ -177,7 +189,6 @@ Most developers won't use this directly. It's a library author's tool. If you're
 The trap: Beginners think `useInsertionEffect` is for initialization code. It's not — it's specifically for CSS injection. Also, they try to access the DOM or read refs inside it, which doesn't work because the browser hasn't laid out the DOM yet.
 
 ---
-
 **Q (Low): Why can't you measure elements in `useInsertionEffect`?**
 
 Answer: Because the browser hasn't laid out the DOM yet. At the point when `useInsertionEffect` runs, React has inserted DOM nodes, but the browser hasn't calculated their sizes, positions, or styles. So `offsetWidth`, `getBoundingClientRect()`, etc. will return stale or 0 values.
@@ -215,6 +226,17 @@ Answer: No. Refs won't be populated yet. `useInsertionEffect` runs at a point in
 Use `useLayoutEffect` or `useEffect` to access refs.
 
 The trap: Developers new to `useInsertionEffect` try to access refs and get confused when they're null or undefined.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can state the full effect execution order: `useInsertionEffect` → `useLayoutEffect` → `useEffect`
+- [ ] Can explain in one sentence why CSS-in-JS libraries need `useInsertionEffect` rather than `useLayoutEffect`
+- [ ] Can name two things you cannot do inside `useInsertionEffect` (and why)
+- [ ] Can confidently say whether a regular app developer should ever reach for this hook
 
 ---
 

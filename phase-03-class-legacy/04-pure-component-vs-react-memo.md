@@ -1,5 +1,15 @@
 # PureComponent vs React.memo
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `PureComponent` | Class base class with built-in shallow comparison of props AND state | Automatic optimization for class components without writing SCU manually |
+| `React.memo` | HOC that wraps function components; shallow-compares props only | The function-component equivalent of PureComponent |
+| Shallow equality | `===` check on each top-level key — no recursion into nested objects | New object/array/function references always fail the check and trigger re-renders |
+| Inline prop problem | Object/array/function literals in JSX create new references every render | Defeats memo/PureComponent; fix with useMemo, useCallback, or lifting constants out |
+| Context bypass | Both PureComponent and React.memo re-render on context changes regardless of props | Memo only guards prop-driven re-renders |
+
 ## What Is This?
 
 Both `PureComponent` and `React.memo` are tools for skipping unnecessary re-renders by doing a shallow comparison of props. The difference is where they live: `PureComponent` is a base class for class components; `React.memo` is a higher-order component that wraps function components.
@@ -39,6 +49,10 @@ function Parent() {
 ```
 
 `ExpensiveChild` receives the same props on every render but still re-renders because its parent did. `React.memo` (or `PureComponent` for classes) breaks this chain: if the props are the same as last time, the child skips its render entirely.
+
+---
+
+> **Check yourself:** What is the default re-render behavior in React when a parent re-renders, and how do PureComponent and React.memo change that behavior?
 
 ---
 
@@ -111,6 +125,10 @@ const MemoizedComponent = React.memo(MyComponent, (prevProps, nextProps) => {
 ```
 
 The custom comparator is useful when you want to use something other than shallow equality — for example, comparing array contents rather than references.
+
+---
+
+> **Check yourself:** React.memo's custom comparator returns `true` to skip a re-render. `shouldComponentUpdate` returns `false` to skip a re-render. Why are these inverted, and what does each boolean actually mean semantically?
 
 ---
 
@@ -205,6 +223,7 @@ This is why `useMemo` and `useCallback` are often paired with `React.memo` — m
 
 ## Interview Questions
 
+
 **Q (High): What is the difference between `PureComponent` and `React.memo`?**
 
 Answer: They solve the same problem for different component types. `PureComponent` is a base class for class components — it implements `shouldComponentUpdate` with a shallow comparison of both props and state. `React.memo` is a higher-order component that wraps function components and does a shallow comparison of props only. Both skip re-rendering when their comparison indicates nothing changed. The key behavioral difference is that `PureComponent` also compares state, while `React.memo` only looks at props (function components manage state internally via hooks, and state changes always trigger renders — memo can't intercept that).
@@ -228,10 +247,21 @@ Answer: Three main reasons. First, the component consumes a context value — co
 Answer: When the default shallow comparison is either too conservative or too liberal. Too conservative: a prop is an array of IDs — a new array with the same contents would trigger a re-render under shallow comparison, but if the contents are the same the output is the same. A custom comparator can deep-compare just that one prop. Too liberal: a prop is an object where only a subset of fields affects the render — the default compares all fields, but you only care about a few. The risk of a custom comparator is returning `true` (equal) when something actually changed, which causes stale output. The risk of returning `false` too often is just unnecessary re-renders (a performance issue, not a correctness issue).
 
 ---
-
 **Q (Low): Does `React.memo` do a deep comparison?**
 
 Answer: No. The default is shallow — it checks each top-level prop with `===`. Deep comparison would be prohibitively expensive at scale and would defeat the purpose (if the comparison takes longer than the render, you've gained nothing). You can opt into deeper comparison with a custom comparator, but you're responsible for writing it correctly and efficiently. In practice, the better solution to deep-equality problems is to restructure props so that memoized data is passed at the level of granularity you need — passing a primitive ID instead of a whole user object, for instance.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can state the key difference between PureComponent and React.memo (what each compares)
+- [ ] Can explain why inline objects/arrays/functions in JSX defeat memoization, with a concrete example
+- [ ] Can name the three tools used to stabilize prop references for memo to work correctly
+- [ ] Can explain the boolean inversion between SCU (`false` = skip) and React.memo comparator (`true` = skip)
+- [ ] Can name two situations where memo adds cost without benefit
 
 ---
 

@@ -1,5 +1,15 @@
 # componentDidCatch & Error Boundaries
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Error boundary | A class component that catches render errors in its child subtree | Prevents one broken component from crashing the entire app |
+| `getDerivedStateFromError` | Static method; fires in render phase when a descendant throws; returns fallback state | Triggers the fallback UI synchronously before the browser paints |
+| `componentDidCatch` | Instance method; fires in commit phase after fallback renders | The right place to log errors to monitoring services |
+| What it cannot catch | Event handler errors, async errors, SSR errors, its own errors | These must be handled with explicit try/catch |
+| Must be a class | No hook equivalent exists for render-phase error interception | Even in 2026, error boundaries require a class component |
+
 ## What Is This?
 
 An **error boundary** is a class component that catches JavaScript errors thrown anywhere in its child component tree during rendering, in lifecycle methods, and in constructors — and displays a fallback UI instead of crashing the whole app.
@@ -45,6 +55,10 @@ Before error boundaries (pre-React 16), an unhandled error thrown in a component
 React 16 introduced a deliberate design decision: **an unhandled error in the render phase unmounts the entire tree**. The reasoning is that a corrupted UI is worse than no UI — showing an incorrect payment amount or broken account data is more dangerous than showing a crash screen. So React now aggressively unmounts everything.
 
 Error boundaries are the opt-in recovery mechanism. They contain the crash to a subtree, allowing the rest of the app to continue functioning. Think of them like try/catch for render: the error propagates up through the component tree until it hits the nearest boundary, which contains it.
+
+---
+
+> **Check yourself:** Why did React 16 change the behavior so that an unhandled render error unmounts the entire tree? What was the argument for this being safer than the previous behavior?
 
 ---
 
@@ -139,6 +153,10 @@ function Button() {
   return <button onClick={handleClick}>Click</button>;
 }
 ```
+
+---
+
+> **Check yourself:** Name the four categories of errors that error boundaries cannot catch. For event handler errors specifically, what is the correct pattern to show an error UI?
 
 ---
 
@@ -261,6 +279,7 @@ When the user clicks "Try again," the boundary resets its state and attempts to 
 
 ## Interview Questions
 
+
 **Q (High): What is an error boundary in React, and why must it be a class component?**
 
 Answer: An error boundary is a React component that catches errors in its child subtree during render, in lifecycle methods, and in constructors — and renders a fallback UI instead of crashing. It's implemented by overriding `getDerivedStateFromError` (to update state during the render phase) and/or `componentDidCatch` (to log errors during the commit phase). It must be a class component because React has never provided hook equivalents for these methods — the error handling mechanism needs to intercept and redirect a failed render synchronously, which doesn't fit the asynchronous, scheduled nature of hooks. In 2026, this remains the one category of React functionality that hooks cannot replace.
@@ -286,10 +305,22 @@ Answer: Add a reset mechanism to the boundary's state. The fallback UI renders a
 Answer: It depends on the desired isolation. One boundary at the root is the minimum viable safety net — it prevents total white-screens but takes down the entire UI on any render error. The better pattern is per major section: wrap dashboard, sidebar, and header in separate boundaries so a broken widget doesn't take down navigation. In widget-heavy UIs (feeds, dashboards), per-widget boundaries give maximum isolation. The guiding question is: "If this subtree breaks, what else should still work?" Everything that should remain functional needs to live outside the failing boundary.
 
 ---
-
 **Q (Low): What is the `info` object passed to `componentDidCatch`, and what does it contain?**
 
 Answer: It's an object with one field: `componentStack` — a string representation of the component tree at the point of the error. It looks like a stack trace but shows component names and their source file/line (in development). It's invaluable for debugging because it tells you exactly which component in which tree threw the error, which the JavaScript error stack alone doesn't tell you. This is what you pass to error monitoring services like Sentry or Datadog alongside the error itself.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can write a minimal error boundary class from memory with both `getDerivedStateFromError` and `componentDidCatch`
+- [ ] Can explain why `getDerivedStateFromError` is static and `componentDidCatch` is not
+- [ ] Can list four categories of errors that error boundaries cannot catch
+- [ ] Can explain why React has never provided a hook equivalent for error boundaries
+- [ ] Can describe the three granularity levels for error boundary placement and when to use each
+- [ ] Can implement a "Try again" reset mechanism on an error boundary
 
 ---
 

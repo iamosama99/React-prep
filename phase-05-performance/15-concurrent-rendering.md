@@ -1,5 +1,15 @@
 # Concurrent Rendering
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Concurrent rendering | React interleaves render work with browser tasks via time-slicing | Urgent interactions are never blocked by in-progress background renders |
+| Lanes | Priority tags on every state update in the scheduler | Determines which work runs first when multiple updates are queued |
+| `useTransition` | Marks a `setState` call as non-urgent | Input stays responsive; expensive re-render can be interrupted and restarted |
+| `useDeferredValue` | Defers reacting to a value until urgent renders settle | Same effect as `useTransition` but for values you receive, not state you own |
+| Selective hydration | Hydrates clicked components first before finishing the rest of the tree | Page becomes interactive faster for what the user is actually touching |
+
 ## What Is This?
 
 Concurrent rendering is React's ability to prepare multiple versions of the UI simultaneously, interrupt in-progress renders, and prioritize certain updates over others — all without blocking the browser's main thread between each unit of work.
@@ -28,6 +38,8 @@ The two categories of work:
 In synchronous React, all state updates are treated as equally urgent. A state update triggered by a keypress has the same priority as a state update triggered by a background data sync. They queue together, run together, block together.
 
 Concurrent rendering lets React treat these categories differently.
+
+> **Check yourself:** In synchronous React, what happens to a queued keystroke when a 200ms render is already running? How does concurrent rendering change this?
 
 ---
 
@@ -154,6 +166,8 @@ function App() {
 
 In synchronous React, a Suspense boundary inside an SSR render blocked the entire render until the suspended component resolved. In concurrent mode, the boundary is sent with its fallback immediately, and the resolved content is streamed later.
 
+> **Check yourself:** When should you use `useTransition` vs `useDeferredValue`? Give a concrete example where each is the right choice.
+
 ---
 
 ## What Concurrent Rendering Is Not
@@ -218,6 +232,7 @@ Libraries that rely on synchronous renders, direct DOM manipulation during rende
 
 ## Interview Questions
 
+
 **Q (High): What is concurrent rendering in React and how does it improve user experience?**
 
 Answer: Concurrent rendering is React's ability to interrupt in-progress renders, prioritize urgent updates over non-urgent ones, and prepare multiple UI versions simultaneously — all while yielding the main thread between units of work so the browser can handle input and painting. It improves UX in two ways. First, urgent interactions (keystrokes, clicks) are never blocked by background renders — they're processed in a higher-priority lane and preempt lower-priority work. Second, non-urgent renders can be progressive: Suspense boundaries resolve independently, streaming SSR sends content progressively, and selective hydration prioritizes what the user interacted with. The practical entry points are `useTransition` and `useDeferredValue`, which let you explicitly mark expensive renders as interruptible.
@@ -237,7 +252,6 @@ Answer: Both defer a render to a lower-priority lane, but the entry point differ
 Answer: In concurrent mode, a render can be interrupted and restarted. React abandons the work-in-progress tree and begins again from the root of the interrupted subtree. Any component function that was called during the abandoned render runs again. Additionally, `StrictMode` intentionally double-invokes renders in development to surface this. The implication: component functions must be pure — they can compute and return, but any side effect (network requests, external writes, global mutations) that runs during render may fire multiple times before a single commit occurs. Side effects belong exclusively in `useEffect`, `useLayoutEffect`, or event handlers — where React guarantees they fire once per committed render.
 
 ---
-
 **Q (Medium): What is selective hydration and how does it relate to concurrent rendering?**
 
 Answer: Selective hydration is a React 18 SSR feature that uses concurrent rendering to prioritize hydrating interactive components. In traditional SSR, the browser receives fully-rendered HTML immediately but the page isn't interactive until React finishes hydrating the entire tree. If the page is large, the user sees content but can't interact for several seconds. With selective hydration, React starts hydrating from the top of the tree. If the user clicks an element that hasn't been hydrated yet, React immediately prioritizes that component — it jumps the queue and hydrates it first, making it interactive before finishing the rest of the tree. This is only possible because concurrent rendering can interrupt the in-progress hydration (a low-priority render) and handle the urgent user interaction first.
@@ -247,6 +261,19 @@ Answer: Selective hydration is a React 18 SSR feature that uses concurrent rende
 **Q (Medium): Can `startTransition` wrap an async function?**
 
 Answer: No — not correctly. `startTransition` marks a synchronous `setState` call as non-urgent. The transition ends when the synchronous block exits. If you `await` inside `startTransition`, the Promise suspension exits the transition scope immediately — the code after `await` runs outside the transition, as a normal-priority update. The correct pattern is to `await` the async work first, then call `startTransition` around the state setter. The transition affects the render triggered by `setState`, not the data fetching that precedes it. This is a common source of confusion — `startTransition` is about render priority, not async flow control.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the difference between concurrent rendering and multi-threading
+- [ ] Can describe the double-buffer model and how React abandons a low-priority WIP tree when a high-priority update arrives
+- [ ] Can explain `useTransition` vs `useDeferredValue`: what each does, and when to use one vs the other
+- [ ] Can explain why `startTransition` does not work correctly when wrapped around an `async` function
+- [ ] Can articulate what the render → commit contract means in concurrent mode and why component purity is a hard requirement, not a preference
+- [ ] Can name which React API is required for subscribing to external state safely in concurrent mode
 
 ---
 

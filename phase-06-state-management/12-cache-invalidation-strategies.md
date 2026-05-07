@@ -1,5 +1,16 @@
 # Cache Invalidation Strategies
 
+## Quick Reference
+
+| Strategy | When to use | Key mechanism |
+|---|---|---|
+| Invalidate after mutation | User mutated data and you know which queries are affected | `invalidateQueries({ queryKey: ['posts'] })` in `onSuccess` |
+| Tag-based invalidation (RTK Query) | Declarative relationship between queries and mutations | `providesTags` on queries, `invalidatesTags` on mutations |
+| `setQueryData` | Mutation returns the full updated resource | Write directly to cache, skip the refetch round trip |
+| `staleTime` | Data rarely changes or you can tolerate eventual consistency | Age-based expiry; `Infinity` for truly static data |
+| Polling | Data changes on its own, independent of user actions | `refetchInterval` — stop when a terminal condition is met |
+| WebSocket / SSE | Real-time data that must appear immediately | Push event calls `setQueryData` or `invalidateQueries` |
+
 ## The Problem
 
 A cache is only useful if it reflects reality. When server data changes — because the user mutated it, another user mutated it, or a background process modified it — the cached copy becomes stale. Leaving stale data in the cache is a correctness bug. Invalidating too aggressively means fetching data you didn't need to, hurting performance.
@@ -35,6 +46,8 @@ queryClient.invalidateQueries({ queryKey: ['posts', 1], exact: true });
 ```
 
 ---
+
+> **Check yourself:** What is the difference between `invalidateQueries({ queryKey: ['posts'] })` and `invalidateQueries({ queryKey: ['posts'], exact: true })`? What happens to queries with no active subscribers when they are invalidated?
 
 ## Strategy 2: Tag-Based Invalidation (RTK Query)
 
@@ -129,6 +142,8 @@ This is most efficient when:
 
 ---
 
+> **Check yourself:** When should you use `setQueryData` instead of `invalidateQueries`? Why would you often do both in the same `onSuccess` handler?
+
 ## Strategy 5: Polling
 
 Background refetch on an interval for data that changes independently of user actions:
@@ -201,21 +216,37 @@ React Query doesn't know about WebSockets — it just provides `setQueryData` an
 
 ## Interview Questions
 
+
+
 **Q (High): How does tag-based invalidation in RTK Query work? How is it different from React Query's approach?**
 
 Answer: RTK Query uses a declarative tag system. Queries annotate their results with `providesTags` — a list of typed tags describing what data they return. Mutations annotate with `invalidatesTags` — a list of tags describing what they changed. When a mutation completes, RTK Query automatically finds every cache entry whose `providesTags` intersects with the mutation's `invalidatesTags` and refetches them. React Query doesn't have a tag system — invalidation is key-based. You call `queryClient.invalidateQueries({ queryKey: ['posts'] })` manually in the mutation's `onSuccess` callback, and React Query matches by key prefix. Both achieve the same outcome; RTK Query is more declarative and automatic, React Query gives you imperative control.
 
 ---
 
+
+
 **Q (High): When should you use `setQueryData` instead of `invalidateQueries`?**
 
 Answer: Use `setQueryData` when the mutation returns the full updated resource and you want to update the cache without an extra network round trip. If you update a post and the server returns the complete updated post, write it directly to the cache — the data is already there, no refetch needed. Use `invalidateQueries` when you don't have the new data (e.g., a delete mutation doesn't return the updated list), or when the mutation affects queries that you can't update directly (e.g., a list that derives summary data). Often you do both: `setQueryData` for the specific resource, `invalidateQueries` for any list queries that might include it.
+
 
 ---
 
 **Q (Medium): What's the difference between marking a query as stale and removing it from the cache?**
 
 Answer: Marking as stale (via `invalidateQueries` or because `staleTime` expired) means: the next time a component mounts with this key, or a revalidation trigger fires, a background fetch will run. The cached data stays in memory and is returned immediately while the fetch is in progress — the stale-while-revalidate pattern. Removing from the cache (via `removeQueries` or `gcTime` expiry) means the entry is gone. The next mount shows a loading state with no data until the fetch completes. Stale = outdated but usable. Removed = gone entirely.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can name all six invalidation strategies and give a one-sentence description of each
+- [ ] Can explain the `LIST` sentinel tag pattern in RTK Query and why it exists
+- [ ] Can explain the difference between a stale cache entry and a removed cache entry, and how each affects the UI on next mount
+- [ ] Can explain when to use `setQueryData` vs `invalidateQueries`, and when you'd use both together
+- [ ] Can explain why React Query's `cancelQueries` is needed before an optimistic update (links strategies 1 and 4 from the previous topic)
 
 ---
 

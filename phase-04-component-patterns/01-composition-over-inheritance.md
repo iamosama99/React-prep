@@ -1,5 +1,15 @@
 # Composition Over Inheritance
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Composition | Building UI by combining components via props/children | Avoids tight coupling and deep class hierarchies |
+| Containment | Passing unknown content through `children` | Components own structure; callers own content |
+| Specialization | Creating variants by configuring, not extending | Zero extra logic — just presets on the base component |
+| Named slots | Passing multiple content areas as separate props | Explicit layout control when one `children` isn't enough |
+| Behavior composition | Sharing logic via custom hooks, not base classes | Logic is reusable without adding anything to the component tree |
+
 ## What Is This?
 
 Composition over inheritance means building reusable behavior by *combining* components rather than extending from base classes. Instead of a `BaseButton` that `PrimaryButton` inherits from, you pass behavior and UI through props, children, and hooks — assembling the result from parts.
@@ -21,6 +31,8 @@ function FancyDialog() {
   );
 }
 ```
+
+> **Check yourself:** What is the core difference between the inheritance mindset and the composition mindset as shown in the code above — specifically, what does each approach control?
 
 ## Why Does It Exist?
 
@@ -133,6 +145,8 @@ function AdminUserList() {
 
 The hook *composes in* the behavior without either component knowing about the other.
 
+> **Check yourself:** When would you choose named slot props over a single `children` prop? What is the signal that you've reached the limit of named slots?
+
 ## Inheritance vs Composition — Side by Side
 
 | | Inheritance | Composition |
@@ -178,6 +192,18 @@ The trap: Describing hooks as "replacing HOCs" — that's partially true, but th
 Answer: Composition via `children` handles structure well but not cross-cutting concerns — things like analytics tracking, authentication guards, or error boundaries that need to wrap arbitrary components. A HOC is still appropriate when you want to add behavior to a component you don't own or can't modify. Render props still appear in libraries that must support React < 16.8. But in greenfield code, a custom hook almost always replaces both for logic concerns.
 
 The trap: Saying "you'd never use them" — HOCs are still common in older codebases and in some library APIs.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why inheritance is a poor fit for React UI components (in terms of coupling and unidirectional data flow)
+- [ ] Can write a containment component using `children` and a specialization component using props from memory
+- [ ] Can name the four compositional mechanisms in React and give a one-sentence description of each
+- [ ] Can explain when to switch from `children` to named slot props, and when named slots become unwieldy
+- [ ] Can explain how custom hooks replace inheritance for logic reuse, and what the pre-hooks alternative was
 
 ---
 *Next: Compound Components — how to take composition further when you need related components to share implicit state without prop drilling.*

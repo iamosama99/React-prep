@@ -1,5 +1,15 @@
 # Context Optimization
 
+## Quick Reference
+
+| Strategy | What it does | Best for |
+|---|---|---|
+| `useMemo` on value | Prevents new object reference when contents unchanged | Parent re-renders for unrelated reasons |
+| Split contexts | One context per concern — subscribers only hear relevant changes | Different components care about different parts |
+| State/dispatch split | Dispatch is stable; separate it so action-only components never re-render | `useReducer` patterns |
+| `use-context-selector` | Adds selector-based subscriptions like `useSelector` | Fine-grained subscriptions without splitting |
+| Children-as-props | Stable `children` prop prevents expensive subtree from re-rendering | Expensive children that don't depend on parent state |
+
 ## The Problem to Solve
 
 The core limitation of Context is all-or-nothing subscriptions. Any component calling `useContext(X)` re-renders when `X`'s value changes, whether or not the part of the value it cares about changed. Optimization strategies all reduce to one of three approaches: (1) reduce how often the value changes, (2) split the value so fewer components are subscribed to any given change, or (3) add a selection layer that compares results before triggering a re-render.
@@ -22,6 +32,8 @@ function AppProvider({ children }) {
 ```
 
 This prevents the "parent re-renders for unrelated reason, context object gets new reference, all consumers re-render" problem. But it doesn't help when `user` changes and a component that only cares about `theme` subscribes — both are in the same object, so any change to either triggers a re-render for all subscribers.
+
+> **Check yourself:** After memoizing the context value with `useMemo`, a component subscribed to `ctx.theme` still re-renders when `ctx.user` changes. Why doesn't `useMemo` fix this?
 
 ---
 
@@ -128,6 +140,8 @@ The selector function runs on every context value change and the component only 
 
 Limitation: it relies on `unstable_batchedUpdates` and undocumented React internals. It works, but carries some risk of breakage across React versions.
 
+> **Check yourself:** When would you reach for `use-context-selector` instead of just splitting the context into two separate contexts?
+
 ---
 
 ## Strategy 5: Children as Props (Structural)
@@ -183,6 +197,7 @@ The last row is the real answer. Context optimization has a ceiling. When you're
 
 ## Interview Questions
 
+
 **Q (High): You have a single large Context with user, theme, and cart data. Components that only care about cart are re-rendering when the user logs out. How do you fix it?**
 
 Answer: Split the context into separate concerns: `UserContext`, `ThemeContext`, `CartContext`. Each provider wraps independently; components subscribe only to the context they actually need. A change to user state only re-renders `UserContext` subscribers. If splitting alone isn't enough (e.g., components need a subset of one context), `useMemo` the value objects to minimize unnecessary reference changes, or use `use-context-selector` to add selector-based subscriptions. The cleanest fix is always structural: one context per logical concern.
@@ -200,10 +215,21 @@ Answer: `useReducer` returns a stable dispatch function — it never changes acr
 Answer: `useContext` is all-or-nothing — subscribe to the context, re-render when any part of the value changes. `use-context-selector` accepts a selector function and only triggers a re-render if the selector's return value changed. It's the same model as `useSelector` in react-redux. Internally it uses React's `unstable_batchedUpdates` and subscription tracking to defer re-renders until after the selector has been checked. The tradeoff: it uses undocumented React internals and carries a risk of breakage across React versions.
 
 ---
-
 **Q (Low): How does passing a component as `children` prevent it from re-rendering when the parent's state changes?**
 
 Answer: When a parent component passes JSX as `children`, the React element is created in the parent's parent — the component that renders the parent. The parent receiving `children` doesn't own that React element; it just renders whatever it received. From the parent's perspective, `children` is a stable prop (same object reference) across its own state changes. Since `React.createElement` wasn't called again for the child, no new element is created, and React reuses the previous render output for that subtree.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can name all five optimization strategies and the scenario each one addresses
+- [ ] Can explain why splitting state and dispatch into separate contexts gives free performance with `useReducer`
+- [ ] Can write the children-as-props pattern from memory and explain why it works
+- [ ] Can explain the ceiling of Context optimization and when to switch to a dedicated library
+- [ ] Can describe `use-context-selector`'s approach and its main risk
 
 ---
 

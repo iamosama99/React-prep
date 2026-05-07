@@ -1,8 +1,20 @@
 # What Causes Re-renders
 
+## Quick Reference
+
+| Trigger | Causes re-render? | Notes |
+|---|---|---|
+| Own state change (`setState`) | Yes | Bails out if new value `Object.is` equal to old |
+| Parent re-renders | Yes (default) | Regardless of whether props changed — use `React.memo` to opt out |
+| Context value changes | Yes | All-or-nothing; no selector mechanism in built-in context |
+| Changed props (without memo) | No — parent re-render causes it | Prop comparison only matters with `React.memo` |
+| Ref mutation (`ref.current = x`) | No | Refs are intentionally outside the reactivity system |
+
 ## What Is This?
 
 A re-render is React calling your component function again to produce a new virtual tree. Understanding exactly what triggers re-renders — and what doesn't — is the foundation of React performance work. Most performance bugs boil down to components re-rendering more often than they need to.
+
+> **Check yourself:** A component has no state and its parent re-renders. Does the component re-render? Does it matter whether its props changed?
 
 ---
 
@@ -104,6 +116,8 @@ function Component() {
 **Changed refs do not cause re-renders.** `ref.current` is a mutable box intentionally outside React's reactivity system. Writing to it never triggers a render. Reading it during render always returns the current value without subscribing to changes.
 
 **Re-render does not mean DOM update.** A re-render is React calling your function and diffing the output. If the output is identical to the previous render, the commit phase produces zero DOM mutations. Re-renders are cheap (CPU, not DOM). The goal of optimization is to avoid *expensive* re-renders and *unnecessary* DOM mutations — not to eliminate all re-renders.
+
+> **Check yourself:** A developer wraps a child component in `React.memo` but the parent still passes the same props. Will the child re-render? Now answer the same question without `React.memo` — does the answer change?
 
 ---
 
@@ -207,6 +221,7 @@ Re-render: component function called again, state preserved, refs preserved. Re-
 
 ## Interview Questions
 
+
 **Q (High): What are the things that cause a React component to re-render?**
 
 Answer: Four things: (1) The component's own state changes via `setState` or `dispatch`. (2) The parent component re-renders — React re-renders all children by default, regardless of whether props changed. (3) A consumed context value changes — any component calling `useContext` re-renders when the context value changes, even if the component only uses a portion of that value. (4) A custom hook's internal state changes — the component that calls the hook re-renders.
@@ -230,7 +245,6 @@ Answer: It depends on cost. A re-render is React calling your function — if th
 The trap: Candidates who say "any re-render is bad" optimize prematurely and add memoization that actually slows things down (memo has its own overhead).
 
 ---
-
 **Q (Medium): Why do context consumers re-render even when the part of the context they use hasn't changed?**
 
 Answer: React's context system doesn't have a subscription-per-key model. When the provider's value changes (by reference), React re-renders all consumers that called `useContext` with that context — there's no way to say "only re-render if the `theme` key changed." The comparison is on the value object as a whole, using `Object.is`. Two common fixes: (1) Split contexts — one context per slice of state that changes independently. (2) Use a state manager that provides selector-based subscriptions (Zustand, Redux with `useSelector`), where components only re-render when their selected slice changes.
@@ -242,6 +256,21 @@ Answer: React's context system doesn't have a subscription-per-key model. When t
 Answer: Wrap the child in `React.memo`. `React.memo` does a shallow prop comparison before rendering. If all props pass `Object.is` equality, it skips the render entirely. The child must receive stable prop references — if the parent passes a new function or object literal on every render, memo will see them as changed and render anyway. Combine `React.memo` on the child with `useCallback` / `useMemo` in the parent to produce stable references.
 
 Alternatively, restructure to push state down into the parent's own isolated subtree, keeping the child as a sibling rather than a descendant. Then the child is simply never in the re-render propagation path.
+
+---
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can name all four causes of re-renders without notes
+- [ ] Can explain why "props changed" is NOT a direct cause of re-renders (and when it matters)
+- [ ] Can explain why a context consumer re-renders even when the specific field it uses hasn't changed
+- [ ] Can describe the `Object.is` bailout and why `setItems([...items])` still triggers a re-render
+- [ ] Can explain the difference between re-rendering and re-mounting
+- [ ] Can write a ref-based render counter that doesn't itself cause re-renders
 
 ---
 

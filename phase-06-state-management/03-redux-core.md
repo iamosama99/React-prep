@@ -1,5 +1,14 @@
 # Redux Core
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Unidirectional flow | UI → dispatch(action) → reducer → new state → re-render | Every state change is traceable and reproducible |
+| Pure reducer | `(state, action) => newState` with no side effects or mutation | Enables time-travel debugging and trivial unit tests |
+| Middleware | Sits between `dispatch` and the reducer; can inspect, delay, or transform actions | Enables async (thunk), logging, and custom side effects |
+| `useSelector` | Subscribes a component to a slice of the store; re-renders only when that slice changes | Fine-grained subscriptions unlike Context |
+
 ## The Mental Model
 
 Redux is a predictable state container built on three constraints: (1) the entire app state lives in a single store, (2) state is read-only — you change it by dispatching an action, (3) changes happen through pure reducer functions. These aren't arbitrary rules; they're what makes every state transition traceable, testable, and replayable.
@@ -91,6 +100,8 @@ const rootReducer = combineReducers({
 ```
 
 Each slice reducer receives only its own slice of state, not the whole store. `combineReducers` handles the composition.
+
+> **Check yourself:** What are the two rules every reducer must follow, and what happens at the `default` case if you return `undefined`?
 
 ---
 
@@ -201,6 +212,8 @@ function Counter() {
 }
 ```
 
+> **Check yourself:** You write `useSelector(state => ({ name: state.user.name, email: state.user.email }))`. Does this cause unnecessary re-renders? How do you fix it?
+
 ---
 
 ## Why the Architecture
@@ -219,6 +232,7 @@ For small apps, this is overhead. For large teams or complex flows (multi-step w
 
 ## Interview Questions
 
+
 **Q (High): Explain the Redux data flow. Why is it unidirectional?**
 
 Answer: The flow: component dispatches an action → middleware processes it (logging, async, etc.) → the action reaches the reducer → reducer returns new state → store updates → subscribed components re-render via `useSelector`. It's unidirectional because state only flows one way: from store to component. Components can't mutate state directly; they can only describe intent via actions. This makes state transitions traceable (every change comes from a dispatched action), testable (reducers are pure functions), and debuggable (serializable actions enable time-travel DevTools).
@@ -236,7 +250,6 @@ Answer: A pure function has no side effects and returns the same output for the 
 Answer: By default, `store.dispatch` only accepts plain objects. Thunk is middleware that intercepts the dispatch call before it reaches the reducer. If the dispatched value is a function, Thunk calls it with `(dispatch, getState)` instead of passing it to the reducer. If it's a plain object, Thunk passes it through unchanged. This solves async operations: you dispatch a function that starts an async process, then dispatches real actions when the async work completes. The component doesn't know or care about the async details — it just calls `dispatch(fetchUser(id))` like any other action.
 
 ---
-
 **Q (Medium): `useSelector` triggers a re-render. When does it not, and when does it unnecessarily?**
 
 Answer: `useSelector` re-renders when its return value changes by strict equality (`Object.is`). It does not re-render if the same primitive value is returned or if the same object reference is returned. It unnecessarily re-renders when the selector creates a new object or array on every call — e.g., `state => state.ids.filter(...)` — because `filter` always returns a new array. Fixes: use `shallowEqual` as the second argument, memoize the selector with `createSelector` from Reselect (which caches the result and only recomputes when inputs change), or write selectors that return primitives or stable references.
@@ -246,6 +259,18 @@ Answer: `useSelector` re-renders when its return value changes by strict equalit
 **Q (Medium): What does `combineReducers` actually do?**
 
 Answer: It creates a root reducer that calls each slice reducer with its own slice of state and the action, then assembles the results back into the full state object. Each slice reducer only ever sees its own piece of state — it can't read other slices. This enforces domain isolation. On initialization (first dispatch with `undefined` state), each slice reducer falls through to its default parameter and returns its initial state. `combineReducers` then assembles those into the initial full state.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can draw the Redux unidirectional data flow from memory (UI → dispatch → middleware → reducer → store → re-render)
+- [ ] Can write a minimal reducer with `switch`, correct `default`, and no state mutation
+- [ ] Can explain what Redux Thunk intercepts and what it enables
+- [ ] Can explain why `useSelector` with an object return causes unnecessary re-renders and name two fixes
+- [ ] Can state the three core Redux constraints and the debugging benefit each one enables
 
 ---
 

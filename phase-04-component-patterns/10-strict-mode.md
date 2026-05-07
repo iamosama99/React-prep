@@ -1,5 +1,14 @@
 # StrictMode
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Double-invoke renders | Component function runs twice in dev; only second result is committed | Catches side effects inside render (mutations, logging external state) |
+| Effect mount/unmount/remount | Every effect runs, cleans up, then runs again in dev | Reveals missing cleanup functions before production |
+| Deprecated API warnings | Warns on `findDOMNode`, string refs, legacy Context, unsafe lifecycles | Keeps you off the concurrent-mode deprecation path |
+| Production behavior | All StrictMode behavior is stripped at build time | Zero performance cost in production |
+
 ## What Is This?
 
 `React.StrictMode` is a development-only tool that activates extra checks and warnings for its descendant components. It renders nothing in the DOM — it's a wrapper that tells React to run in a stricter mode for catching bugs.
@@ -24,6 +33,8 @@ React's concurrent mode (React 18+) changed how React can render: renders can be
 StrictMode simulates these concurrent behaviors in development to surface bugs *before* you turn on real concurrent features. Think of it as a stress test: if your code breaks under StrictMode, it will break in production under concurrent rendering.
 
 The specific behaviors it enables are designed to catch the most common categories of concurrent-mode bugs.
+
+> **Check yourself:** Why was it safe to assume renders run exactly once in React 16, but not in React 18?
 
 ## What StrictMode Does
 
@@ -116,6 +127,8 @@ After the first invocation completes and cleanup sets `cancelled = true`, the se
 
 If you're using React Query or SWR, they handle deduplication and cancellation internally — you don't need to worry about it.
 
+> **Check yourself:** An effect fires an API call with no cleanup. What does StrictMode do, and what does the correct fix look like?
+
 ## What StrictMode Does NOT Do
 
 - It does not affect production behavior
@@ -143,6 +156,8 @@ The bugs StrictMode catches are exactly the bugs that cause subtle, hard-to-repr
 
 Turn it off only as a temporary debugging tool — "is this bug caused by StrictMode behavior?" — not as a permanent decision.
 
+> **Check yourself:** A third-party animation library breaks under StrictMode. Is the right fix to remove StrictMode? What does the break tell you about the library?
+
 ## Gotchas
 
 **StrictMode's double-invocation only applies in React 18.** In React 16 and 17, StrictMode double-invokes renders but not effects. The effect double-invocation was added in React 18.
@@ -169,11 +184,17 @@ This works but defeats the purpose of StrictMode. If `expensiveOneTimeSetup` isn
 
 ## Interview Questions
 
+
+
 **Q (High): What does StrictMode actually do in React 18, and why?**
 
 Answer: In React 18, StrictMode does three main things in development: it double-invokes component render functions (to catch side effects in render); it runs effects through a full mount/unmount/remount cycle (to reveal missing cleanup and simulate concurrent React's ability to unmount and remount components); and it warns about deprecated APIs. All of this is stripped in production. The reason is concurrent rendering — React 18 introduced features where components can render multiple times and effects can be torn down and re-run. StrictMode simulates these behaviors in development to surface bugs that would otherwise only appear in production under concurrent features.
 
 The trap: Saying "it catches bugs" without explaining *what kind* of bugs or *why* the double-invocation specifically catches them.
+
+---
+
+
 
 **Q (High): My API call fires twice in development. What's happening and what should I do?**
 
@@ -181,15 +202,34 @@ Answer: StrictMode is double-invoking the effect to simulate concurrent React's 
 
 The trap: "Remove StrictMode" or "use a ref to track first render." Both suppress the symptom without fixing the underlying issue.
 
+
+---
+
+
+
 **Q (Medium): Does StrictMode affect class components and hooks differently in React 18?**
 
 Answer: In React 18, the effect double-invocation only applies to function components (useEffect, useLayoutEffect). Class component lifecycle methods (`componentDidMount`, `componentDidUpdate`, `componentWillUnmount`) are not double-invoked. However, class component render methods are still double-invoked (a behavior from earlier StrictMode versions). This is partly because class components with proper lifecycle implementation are already expected to handle mount/unmount gracefully, and partly because effects are the primary mechanism in the concurrent world.
 
 The trap: Assuming StrictMode behaves identically for class and function components.
 
+---
+
 **Q (Low): Is StrictMode useful in a project that doesn't use React 18's concurrent features?**
 
 Answer: Yes. Even without explicitly using `startTransition`, `useDeferredValue`, or Suspense, React 18's rendering can use concurrent scheduling under the hood. More importantly, StrictMode catches incorrect patterns that will matter more as you adopt more React 18 features and as the ecosystem moves toward concurrent-safe code. The warnings about deprecated APIs are also valuable regardless of concurrent mode usage. Running StrictMode from day one means these bugs never accumulate in the first place.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can list the three main things StrictMode does in React 18 development, and explain why each one catches bugs
+- [ ] Can write the correct pattern for an effect that fires an API call, including the cleanup that prevents the double-fire from causing issues
+- [ ] Can explain why the double render is "phantom" — what gets committed and what gets discarded
+- [ ] Can name the difference in StrictMode behavior between function components and class components in React 18
+- [ ] Can explain why using a `useRef` flag to skip the second invocation defeats the purpose of StrictMode
 
 ---
+
 *Next: Polymorphic Components — building components that can render as different HTML elements or other components, a key pattern in design system work.*

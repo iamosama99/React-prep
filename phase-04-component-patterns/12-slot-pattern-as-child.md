@@ -1,5 +1,14 @@
 # Slot Pattern / asChild
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `asChild` | Boolean prop; component merges its props onto the single child element instead of rendering its own | Lets callers control the rendered element without TypeScript generics |
+| `Slot` | Implementation primitive that uses `cloneElement` to merge props onto the child | The mechanism behind every `asChild` implementation |
+| Event handler chaining | Both Slot and child handlers are called; child fires first | Prevents one handler silently overwriting the other |
+| Ref merging | Both Slot's ref and the child's ref receive the DOM node | Required when both parent and child need access to the same element |
+
 ## What Is This?
 
 The slot pattern is a mechanism for merging a component's behavior and props onto a child element instead of rendering its own wrapper element. When a component has `asChild` mode, it doesn't render its own DOM element — it takes the single child you pass it and merges its props, event handlers, and ref onto that child.
@@ -39,6 +48,8 @@ The element is hidden inside a prop value. With `asChild`:
 The element is visible as JSX. You immediately see the rendered element.
 
 The pattern was introduced by Radix UI around 2022 and has rapidly become the standard approach in the React design system ecosystem.
+
+> **Check yourself:** What TypeScript problem does `asChild` solve that the `as` prop cannot easily avoid?
 
 ## How It Works
 
@@ -159,6 +170,8 @@ function Trigger({ asChild = false, onClick, children, ...rest }) {
 // Both onClick handlers fire (href is from the child, onClick from Trigger)
 ```
 
+> **Check yourself:** Both a `Slot` and its child have an `onClick`. What happens if you naively spread `{ ...childProps, ...slotProps }`? What does the correct implementation do instead?
+
 ## The Real Radix Implementation
 
 Radix UI's `@radix-ui/react-slot` package is more complete — it handles:
@@ -216,6 +229,8 @@ The `asChild` version's type only covers `HTMLButtonElement` props. When the cal
 
 This last one is interesting: `Dialog.Trigger` renders a button by default, but with `asChild` it merges onto your custom `<Button>` — which itself might render a `<button>`. Radix handles this double-application of slot behavior with its `SlotClone` mechanism.
 
+> **Check yourself:** In `<Dialog.Trigger asChild><Button>Edit</Button></Dialog.Trigger>`, what does Radix's Slot need to handle specially compared to a naive `cloneElement` implementation?
+
 ## Gotchas
 
 **`asChild` requires exactly one child element.** If you pass zero children, a string, or multiple children, the Slot implementation doesn't know what to merge onto. Most implementations throw in this case. The error message matters — make it clear.
@@ -230,11 +245,17 @@ This last one is interesting: `Dialog.Trigger` renders a button by default, but 
 
 ## Interview Questions
 
+
+
 **Q (High): What is the `asChild` pattern and how does it differ from the `as` polymorphic prop?**
 
 Answer: Both let callers control the rendered element. With `as`, the caller passes the element type as a prop (`as={Link}`), and the component renders it internally with the correct props. With `asChild`, the caller renders the element themselves as a child, and the component merges its props onto that child using a `Slot` primitive. `asChild` is simpler to type in TypeScript — no generics needed, since the element type is known from the caller's JSX — and makes the rendered element visible at the call site. The trade-off is that `asChild` requires exactly one element child and needs a Slot implementation that correctly merges props, event handlers, refs, and classNames.
 
 The trap: Describing them as identical. The merging mechanism and TypeScript story are meaningfully different.
+
+---
+
+
 
 **Q (High): Why do event handlers need special merging logic in a Slot implementation?**
 
@@ -242,15 +263,34 @@ Answer: Both the parent component (Slot provider) and the child element can have
 
 The trap: Not knowing that naive spreading drops handlers — this is the most common bug in ad-hoc Slot implementations.
 
+
+---
+
+
+
 **Q (Medium): What happens when you use `asChild` and the child element is itself a component that uses `asChild`?**
 
 Answer: The outer Slot clones the child component element, merging in its props. The child component then renders with those merged props and internally creates another Slot that clones *its* child. This works if both Slot implementations are compatible — specifically, if the inner Slot sees the merged props from the outer Slot plus its own props and merges them all together. Radix handles this with a `SlotClone` mechanism that detects nested slots and chains the prop merging. A naive `cloneElement` implementation won't — the outer slot's props will be lost when the inner Slot does its own merge.
 
 The trap: Assuming it just works. Nesting asChild requires explicit support in the Slot implementation.
 
+---
+
 **Q (Low): How does `className` merging work in Slot, and what problem does this cause with Tailwind?**
 
 Answer: Slot typically merges classNames by concatenating them with a space: `[slotClass, childClass].filter(Boolean).join(' ')`. In plain CSS this is fine — both sets of classes apply. In Tailwind, conflicting utility classes (e.g., `text-sm` from the slot and `text-lg` from the child) are both present in the output, and whichever appears later in Tailwind's generated CSS wins — regardless of JSX order. This is unpredictable. The solution is `tailwind-merge` (`twMerge`), which detects conflicting Tailwind utilities and keeps only the last one in DOM order. This is why shadcn/ui's `cn()` utility is `clsx` + `tailwind-merge` rather than just string concatenation.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can write a minimal `Slot` component from memory using `cloneElement`, including the event handler chaining logic
+- [ ] Can explain why event handlers need to be chained rather than overwritten, and which fires first in Radix's convention
+- [ ] Can explain the TypeScript advantage of `asChild` over `as` without referring to notes
+- [ ] Can name the gotcha with deeply nested `asChild` usage and what Radix does to handle it
+- [ ] Can explain the Tailwind `className` conflict problem and the fix (`tailwind-merge`)
 
 ---
+
 *Next: Phase 5 — Performance & Internals. Starting with Virtual DOM & Reconciliation — the mechanism that makes everything we've built so far work efficiently.*

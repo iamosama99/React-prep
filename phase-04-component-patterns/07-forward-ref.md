@@ -1,5 +1,15 @@
 # forwardRef
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `forwardRef` | Wrapper that passes a caller's `ref` as a second arg to the render function | Without it, refs on function components silently do nothing (pre-React 19) |
+| `ref` is not a prop | React intercepts `ref` before the component function runs | Explains why `props.ref` is always `undefined` in `forwardRef` render |
+| `useImperativeHandle` | Replaces what `.current` points to with a custom object | Lets you expose a curated API instead of the raw DOM node |
+| `displayName` | A string set on the `forwardRef` wrapper for DevTools | Without it DevTools shows the generic `ForwardRef` label |
+| React 19 change | `ref` becomes a normal prop in React 19 | `forwardRef` is deprecated for function components but still works |
+
 ## What Is This?
 
 `React.forwardRef` lets a component accept a `ref` and pass it to a DOM element or child component inside it. Without it, refs attached to function components point to nothing — function components don't have instances, so there's nowhere for the ref to attach.
@@ -110,6 +120,8 @@ function withLogging(WrappedComponent) {
 
 Without this, a `ref` on `<LoggedInput>` would be lost.
 
+> **Check yourself:** If a HOC wraps a `forwardRef` component but the HOC itself does NOT use `forwardRef`, what happens to a `ref` placed on the HOC-wrapped component?
+
 ## Callback Refs
 
 `ref` doesn't have to be a `useRef` object. It can be a callback function — `forwardRef` handles both:
@@ -149,6 +161,8 @@ function Input({ ref, ...props }) {
 
 You'll see `forwardRef` throughout existing codebases for years to come — it's not going away immediately — but new code in React 19+ can skip it.
 
+> **Check yourself:** What exactly changes in React 19 regarding `ref`? Is `forwardRef` removed, deprecated, or unchanged?
+
 ## Gotchas
 
 **`ref` is not in `props` inside `forwardRef`.** If you try to read `props.ref`, it will be undefined. The ref is the second argument. This trips up developers who expect it to behave like a prop.
@@ -163,11 +177,17 @@ You'll see `forwardRef` throughout existing codebases for years to come — it's
 
 ## Interview Questions
 
+
+
 **Q (High): Why do function components require `forwardRef` to accept a `ref` prop (in React < 19)?**
 
 Answer: React intercepts the `ref` prop before the component function runs. Function components don't have instances — unlike class components, there's no object for the ref to point to by default. `forwardRef` creates a special component type that React recognizes, causing the reconciler to pass the `ref` as a second argument to the render function rather than trying to attach it to the component boundary. Without `forwardRef`, the ref is silently dropped. In React 19, `ref` becomes a normal prop and `forwardRef` is no longer needed.
 
 The trap: "Just put ref in the props destructuring." That doesn't work pre-React 19 — `ref` won't be there.
+
+---
+
+
 
 **Q (High): What happens to a ref when a component using `forwardRef` is wrapped in a HOC that doesn't use `forwardRef`?**
 
@@ -175,17 +195,35 @@ Answer: The ref is lost. It attaches to the HOC wrapper component, which is a fu
 
 The trap: Assuming `{...props}` passes the ref. It doesn't — ref is not in props.
 
+
+---
+
 **Q (Medium): When would you use `forwardRef` together with `useImperativeHandle`?**
 
 Answer: When you want to expose a curated imperative API on the ref rather than the raw DOM node. For example, a `VideoPlayer` component might expose `{ play, pause, seek }` instead of the raw `<video>` element. `forwardRef` receives the caller's ref; `useImperativeHandle` replaces what `.current` points to with your custom object. This is the right pattern when the component's implementation details (which DOM elements it uses internally) should be hidden from callers. You give callers just enough imperative control without exposing the internal structure.
 
 The trap: Always forwarding the raw DOM ref. Sometimes the abstraction should stay intact — expose a capability, not an element.
 
+---
+
+
+
 **Q (Medium): How does `forwardRef` change in React 19?**
 
 Answer: In React 19, `ref` is passed as a regular prop to function components, so `forwardRef` is unnecessary — you just destructure `ref` from props and pass it wherever you want. `forwardRef` still works (it's not removed) but is deprecated for function components. Class components are unaffected since they have instances. The practical impact: new code can be simpler, but existing codebases will still have `forwardRef` everywhere for the foreseeable future, so you need to understand both APIs.
 
 The trap: Saying "forwardRef is being removed." It's deprecated for new function component code, not removed.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why `ref` is not a prop and what happens to it without `forwardRef` (pre-React 19)
+- [ ] Can write a `forwardRef` component from memory with correct named-function syntax and `displayName`
+- [ ] Can explain when `useImperativeHandle` is the right pairing with `forwardRef` and what it changes about `.current`
+- [ ] Can explain the React 19 change precisely — deprecated vs removed, what changes at the call site
+- [ ] Can explain why a HOC that doesn't use `forwardRef` breaks refs on its wrapped component
 
 ---
 *Next: React.Children Utilities — the API for introspecting and manipulating `children` programmatically, often paired with compound components and the cloneElement pattern.*

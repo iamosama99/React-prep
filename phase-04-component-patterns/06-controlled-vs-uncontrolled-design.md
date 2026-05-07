@@ -1,5 +1,15 @@
 # Controlled vs Uncontrolled Component Design
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Controlled component | State owned by the caller (via `value` + `onChange`) | Integrates with external state management, URL, form libraries |
+| Uncontrolled component | State managed internally (via `defaultValue`) | Simpler call sites when the component is self-contained |
+| Dual-mode pattern | Supporting both modes simultaneously | The gold standard — callers pick what fits their use case |
+| `useControllable` hook | Extracted logic for the dual-mode pattern | Reusable across every component that needs dual-mode |
+| Mode-switching warning | Dev warning when controlled/uncontrolled swaps at runtime | Catches the common bug of accidentally passing `undefined` for `value` |
+
 ## What Is This?
 
 In Phase 1 we covered controlled vs uncontrolled *inputs* — whether React or the DOM owns the value of a form element. This topic extends that same principle to the design of your own React components.
@@ -30,6 +40,8 @@ If you only support controlled mode: simple callers have to maintain state they 
 If you only support uncontrolled mode: complex callers can't integrate the component into their state management.
 
 Supporting both is the mark of a well-designed component.
+
+> **Check yourself:** What is the key boolean check that determines whether a component is in controlled mode vs uncontrolled mode? Why is checking for `undefined` more correct than checking for falsiness?
 
 ## How It Works
 
@@ -127,6 +139,8 @@ function useControllable(controlledValue, onChange, defaultValue) {
 }
 ```
 
+> **Check yourself:** Why is calling `onChange` (or `onOpenChange`) required even in controlled mode? What breaks if you skip it?
+
 ## Naming Conventions
 
 Follow the same convention as HTML inputs and React's own APIs:
@@ -175,11 +189,17 @@ This causes a render cycle: props update → effect fires → state updates → 
 
 ## Interview Questions
 
+
+
 **Q (High): What does it mean for a component to be controlled vs uncontrolled, at the component design level (not just for inputs)?**
 
 Answer: A controlled component has its visible state owned by the caller — the caller passes the current value and a setter callback, and the component renders whatever it's given. An uncontrolled component manages its own state internally — the caller provides an initial value and can listen to changes, but doesn't drive the state. The distinction matters for composability: controlled components integrate cleanly into external state management (Redux, URL state, form libraries), while uncontrolled components are simpler to use in isolation. A well-designed component supports both.
 
 The trap: Limiting the answer to form inputs. The interviewer wants to see that you understand this as a general component design principle.
+
+---
+
+
 
 **Q (High): How do you implement dual-mode (controlled + uncontrolled) in a custom component?**
 
@@ -187,15 +207,33 @@ Answer: You determine whether the component is controlled by checking if the `va
 
 The trap: Using a `useEffect` to sync props into state. That causes double renders and is the wrong model.
 
+
+---
+
 **Q (Medium): Why should you always call `onChange` even when in controlled mode?**
 
 Answer: In controlled mode, the component can't update its own value — only the caller can, via their state setter. If the user interacts with the component and the component doesn't call `onChange`, the caller never learns that the user tried to do something. They can't update their state. The interaction appears to do nothing. The `onChange` callback is the mechanism by which the component tells the caller "the user wants this value" — whether the caller acts on it or not is up to them (they might validate, transform, or reject the change).
 
 The trap: "The caller already knows if they're in controlled mode." They know they're controlling it, but they don't know what value to set unless the component tells them.
 
+---
+
+
+
 **Q (Medium): How do you detect the controlled-to-uncontrolled switching bug?**
 
 Answer: Track whether the component was controlled on mount using a ref, and compare it against the current mode on each render. If the mode changes, warn in development. React's native inputs do this. The ref persists across renders without causing re-renders and gives you a stable comparison point. You should also warn in the reverse direction (uncontrolled → controlled). This catches the common bug where a prop that was always provided accidentally becomes `undefined` — often because the caller forgot to handle a loading state and passed `user?.preferences?.theme` when `user` is still null.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the dual-mode pattern and why `undefined` (not falsiness) is the correct check for controlled mode
+- [ ] Can write the `useControllable` hook from memory with the correct `isControlled` logic
+- [ ] Can explain why syncing controlled props into state with `useEffect` is wrong, and what the correct approach is
+- [ ] Can name the standard naming convention for controlled/uncontrolled prop pairs (value/defaultValue pattern)
+- [ ] Can explain the mode-switching warning, how to implement it with `useRef`, and what bug it catches
 
 ---
 *Next: forwardRef — how refs propagate through component boundaries, and why it's a prerequisite for building composable, accessible component libraries.*

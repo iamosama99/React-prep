@@ -1,5 +1,14 @@
 # useRef
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `ref.current` | Mutable container that persists across renders | Changing it never triggers a re-render |
+| DOM access | Pass ref to JSX `ref=` prop; React sets `.current` to the node | Needed for imperative methods: `focus()`, `play()`, `getBoundingClientRect()` |
+| Non-UI storage | Store timer IDs, previous values, abort controllers | Avoids wasted re-renders for values the UI doesn't display |
+| `forwardRef` | Required to pass a ref through a functional component | Without it, the `ref` prop is silently ignored |
+
 ## What Is This?
 
 `useRef` is a hook that gives you a mutable container that persists across renders. It has two main uses:
@@ -17,6 +26,8 @@ inputRef.current.focus();
 const countRef = useRef(0);
 countRef.current++; // Doesn't trigger re-render
 ```
+
+> **Check yourself:** What is the difference between storing a value in a ref versus storing it in state? When would you choose each?
 
 ## Why Does It Exist?
 
@@ -220,6 +231,8 @@ You store the timeout ID so you can clear it when the user types again.
 | **Access** | Synchronous variable | `.current` property |
 | **Use for** | UI state | DOM access, non-UI values |
 
+> **Check yourself:** If you store data in a ref and render `{ref.current}` in JSX, will the UI update when you mutate the ref? Why or why not?
+
 ## Refs and Functional Components (forwardRef)
 
 By default, you can't pass a ref to a functional component:
@@ -347,6 +360,7 @@ This isn't idiomatic. Use `useMemo` or `useCallback` for memoization. Refs are f
 
 ## Interview Questions
 
+
 **Q (High): What's the difference between a ref and a state variable?**
 
 Answer: State variables trigger re-renders when they change; refs don't. Both persist across renders. Use state for UI-related values. Use refs for imperative access to the DOM or for storing values that aren't part of the UI.
@@ -406,7 +420,6 @@ const intervalRef = useRef(null);
 The trap: Developers don't think about performance implications and use state for everything. Conversely, they try to use refs for values that *do* affect the UI, then wonder why the UI doesn't update.
 
 ---
-
 **Q (Medium): When should you access a ref in an effect vs in an event handler?**
 
 Answer: Refs are available in both, but timing matters. In event handlers, the ref is definitely assigned (the component has rendered). In effects, the ref is also assigned (after the commit phase).
@@ -455,6 +468,18 @@ return <div>{count}</div>; // Updates
 If you find yourself storing UI-related data in a ref, you're probably solving the problem wrong. Reconsider whether you need state instead.
 
 The trap: Beginners store everything in refs and don't understand why the UI doesn't update. Understanding that refs don't trigger re-renders is fundamental.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the two distinct use cases for `useRef` (DOM access vs mutable storage)
+- [ ] Can write a stopwatch that stores its interval ID in a ref and properly clears it on stop
+- [ ] Can state definitively: does mutating `ref.current` trigger a re-render?
+- [ ] Can explain why you need `forwardRef` to pass a ref to a functional component
+- [ ] Can identify when a developer has incorrectly chosen a ref over state (storing display data)
 
 ---
 

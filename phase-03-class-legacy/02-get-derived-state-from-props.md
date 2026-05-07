@@ -1,5 +1,14 @@
 # getDerivedStateFromProps
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `getDerivedStateFromProps` | Static method called before every render; returns state update or null | Replaces the unsafe `componentWillReceiveProps` |
+| Static by design | No `this`, no `setState`, no side effects allowed | Forces purity so it's safe to call multiple times in concurrent mode |
+| Storing prev props in state | The only way to compare incoming props against previous props | Required pattern because the method has no access to previous props |
+| "Almost never needed" | The React team's own framing | A `key` prop or `componentDidUpdate` usually solves the same problem more simply |
+
 ## What Is This?
 
 `getDerivedStateFromProps` is a static lifecycle method that React calls before every render — both on mount and on every update. It receives the current props and current state, and returns either an object to merge into state or `null` to leave state unchanged.
@@ -57,6 +66,10 @@ The name "getDerived**State**FromProps" is literal: its only job is to derive st
 
 ---
 
+> **Check yourself:** Why is `getDerivedStateFromProps` a static method? What does making it static prevent you from doing, and why does that matter in concurrent mode?
+
+---
+
 ## How It Works
 
 React calls it on every render cycle, before `render()` is called. The sequence is:
@@ -99,6 +112,10 @@ This is a bit ugly — storing "prevValue" in state feels wrong. The React team 
 3. **Do you need to perform a side effect when props change?** That belongs in `componentDidUpdate`, not `getDerivedStateFromProps`.
 
 The cases where `getDerivedStateFromProps` is genuinely warranted: controlled components with internal state that needs to be overridable by props (e.g., an input that can be both controlled and partially uncontrolled). Even then, there are often better designs.
+
+---
+
+> **Check yourself:** A developer wants to fetch new data whenever the `userId` prop changes. They reach for `getDerivedStateFromProps`. What's wrong with this, and where should the side effect actually go?
 
 ---
 
@@ -179,6 +196,7 @@ React allows `setState` calls during render as long as they're conditional — t
 
 ## Interview Questions
 
+
 **Q (High): What problem does `getDerivedStateFromProps` solve, and why is it static?**
 
 Answer: It replaced `componentWillReceiveProps`, which was unsafe in concurrent mode because it ran in the render phase where React can interrupt and restart work. The static design is deliberate: by removing `this`, React makes it impossible to call `setState`, trigger subscriptions, or cause other side effects. The method can only read props and state and return new state — which makes it safe to call multiple times per commit. The trade-off is that you lose access to previous props and must store them in state if you need to compare.
@@ -212,10 +230,21 @@ static getDerivedStateFromProps(props, state) {
 The trap: returning `{ value: props.value }` unconditionally, which overwrites user edits on every parent re-render.
 
 ---
-
 **Q (Low): Can `getDerivedStateFromProps` cause a re-render by itself?**
 
 Answer: Yes — returning a non-null object triggers a state merge, which causes a re-render. But it won't cause infinite loops on its own because the returned state is merged before `render()` runs, not after — so it doesn't trigger another cycle. The danger is if you return a new object reference every time (e.g., `return { options: [...props.options] }`), and some downstream check uses reference equality — that can cause unnecessary re-renders but not infinite loops.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why `getDerivedStateFromProps` is static and what that prevents
+- [ ] Can describe the "store prevProps in state" pattern and why it's necessary
+- [ ] Can name the three alternatives to reach for before using `getDerivedStateFromProps`
+- [ ] Can explain the unconditional-mirroring antipattern and why it breaks user input
+- [ ] Can articulate the difference between using `key` vs. `getDerivedStateFromProps` to reset state
 
 ---
 

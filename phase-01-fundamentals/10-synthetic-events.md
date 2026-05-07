@@ -1,5 +1,14 @@
 # Synthetic Events
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| SyntheticEvent | React's cross-browser wrapper around native DOM events | Normalizes the event API; same interface regardless of browser |
+| Event delegation | React attaches one root listener, not per-element listeners | Efficient at scale; React controls the full event lifecycle |
+| Event pooling | Pre-React 17: event properties nullified after handler returned | Historical gotcha — `event.persist()` was the fix; now removed |
+| React 17 delegation change | Moved from `document` to the React root container | Enables multiple React versions on one page; changes `stopPropagation` interaction |
+
 ## What Is This?
 
 When a user clicks a button, types in an input, or submits a form, the browser fires a native DOM event. React doesn't pass that raw native event to your handler — it wraps it in a **SyntheticEvent**: a cross-browser-consistent wrapper that normalizes the native event's API across different browsers.
@@ -20,6 +29,8 @@ function Button() {
 ```
 
 The SyntheticEvent has the same interface as the native event — same properties, same methods — so in most cases you don't think about the distinction. It's a transparent wrapper. But understanding why it exists and how it works explains some behaviors that otherwise seem surprising.
+
+> **Check yourself:** If SyntheticEvent looks identical to a native event, what are the two main reasons React has its own event system at all? Name them before reading on.
 
 ---
 
@@ -80,6 +91,8 @@ function handleChange(event) {
 **React 17 removed event pooling entirely.** Synthetic events are now regular objects — they're garbage collected like any other JavaScript object when they go out of scope. `event.persist()` still exists (as a no-op) to avoid breaking old code, but you don't need it anymore.
 
 If you see `event.persist()` in a codebase, it was written for React 16 or earlier. In React 17+, it does nothing.
+
+> **Check yourself:** What was the symptom of event pooling when reading `e.target.value` inside a `setTimeout`? Why did it fail? What removed the need for `event.persist()`, and in which React version?
 
 ---
 
@@ -207,11 +220,20 @@ Capture phase handlers are rarely needed in application code — they're more co
 
 ## Interview Questions
 
+
 **Q (High): What is a SyntheticEvent in React?**
 
 Answer: A SyntheticEvent is React's cross-browser wrapper around native DOM events. It normalizes browser inconsistencies so you get a consistent interface regardless of the browser. The SyntheticEvent has the same API as native events — `e.target`, `e.preventDefault()`, `e.stopPropagation()`, etc. — so in most cases you don't notice the difference. React creates one for each handled event and passes it to your handler. You can always access the underlying native event via `e.nativeEvent` if you need something React doesn't expose.
 
 The trap: Saying "it's just a native event." The distinction matters because the synthetic event layer is how React normalizes browser inconsistencies and how it integrates with its delegation model. Also, not knowing `e.nativeEvent` gives you the underlying native event.
+
+---
+
+**Q (High): Why doesn't `return false` prevent default behavior in React event handlers?**
+
+Answer: In vanilla JavaScript, returning `false` from an inline HTML handler (like `<button onclick="return false">`) was a shortcut that called `preventDefault()` and `stopPropagation()`. React doesn't support this convention — event handlers in React are regular JavaScript functions called by React, not inline HTML attributes evaluated by the browser. Returning `false` from a React handler just discards the return value; React doesn't interpret it. You must explicitly call `e.preventDefault()` to prevent default behavior and `e.stopPropagation()` to stop bubbling.
+
+The trap: Thinking `return false` works in React handlers because it works in vanilla JS. This produces silent failures — the default behavior isn't prevented and the developer wonders why.
 
 ---
 
@@ -238,20 +260,23 @@ Answer: The native `change` event fires when the element loses focus and its val
 The trap: Assuming React's `onChange` is identical to native `change`. The frequency difference matters — it affects when validation runs and when state updates.
 
 ---
-
-**Q (High): Why doesn't `return false` prevent default behavior in React event handlers?**
-
-Answer: In vanilla JavaScript, returning `false` from an inline HTML handler (like `<button onclick="return false">`) was a shortcut that called `preventDefault()` and `stopPropagation()`. React doesn't support this convention — event handlers in React are regular JavaScript functions called by React, not inline HTML attributes evaluated by the browser. Returning `false` from a React handler just discards the return value; React doesn't interpret it. You must explicitly call `e.preventDefault()` to prevent default behavior and `e.stopPropagation()` to stop bubbling.
-
-The trap: Thinking `return false` works in React handlers because it works in vanilla JS. This produces silent failures — the default behavior isn't prevented and the developer wonders why.
-
----
-
 **Q (Low): How do you handle a `touchmove` event and call `preventDefault()` in React?**
 
 Answer: You can't do it from a React synthetic event handler, because React registers touch event handlers as passive by default (a browser optimization for scroll performance). Calling `e.preventDefault()` on a passive listener is silently ignored by the browser. To actually prevent the default scroll behavior during a drag or gesture, you must attach a native event listener directly to the DOM node via `useEffect`, with `{ passive: false }`: `element.addEventListener('touchmove', handler, { passive: false })`. Remember to remove it in the effect's cleanup. This is one of the few cases where you need to bypass React's event system and attach a native listener directly.
 
 The trap: Not knowing this limitation exists. Trying to `e.preventDefault()` in a React `onTouchMove` handler and wondering why scrolling still happens.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain what a SyntheticEvent is and name the two original reasons React built its own event system
+- [ ] Can describe event delegation — what it is, where React attaches the listener (React 17+), and why it is better than per-element listeners
+- [ ] Can explain what event pooling was, what symptom it caused in async code, and which React version removed it
+- [ ] Can explain why `return false` doesn't work in React handlers and what you must call instead
+- [ ] Can describe the passive listener limitation for `touchmove` and the correct workaround using `useEffect`
 
 ---
 

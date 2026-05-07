@@ -1,5 +1,15 @@
 # `this` Binding in Class Methods
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Dynamic `this` | In JS, `this` is set at call time by the receiver, not at definition time | Detaching a method from its object loses `this` — the root of the problem |
+| Constructor binding | `this.handleClick = this.handleClick.bind(this)` in constructor | Binds once at instantiation; zero runtime cost per render |
+| Class field arrow function | `handleClick = () => { ... }` as a class property | Lexically captures `this`; no explicit bind; most common modern pattern |
+| Inline arrow in JSX | `onClick={() => this.handleClick()}` | Works, but creates a new function every render — breaks PureComponent |
+| `.bind` return value | `.bind` returns a new function; it does not mutate the original | Forgetting to assign the result is a silent bug |
+
 ## What Is This?
 
 In JavaScript, the value of `this` inside a function depends on how that function is called — not where it's defined. In React class components, event handlers are almost always called without the component instance as the receiver, so `this` is `undefined` (in strict mode) or the global object. The result: `this.setState`, `this.props`, and any instance properties are inaccessible.
@@ -46,6 +56,10 @@ fn();                  // undefined — called without receiver (strict mode)
 When you write `onClick={this.handleClick}`, you're passing a reference to the method, detached from the class instance. When the browser fires the click event, it calls that function without a receiver — so `this` is `undefined`.
 
 React uses strict mode, which means unbound method calls give you `undefined` instead of the global object. The result is a `TypeError` the moment you try to access `this.setState`.
+
+---
+
+> **Check yourself:** When you write `onClick={this.handleClick}` in JSX, what happens to the `this` context when the browser actually calls that function on a click event? Why is it `undefined` and not the class instance?
 
 ---
 
@@ -150,6 +164,10 @@ The arrow function is created fresh on every render. Since it's an arrow functio
 
 ---
 
+> **Check yourself:** You have a component that uses `PureComponent` and passes `onClick={this.handleClick}` to a child. A teammate suggests changing it to `onClick={() => this.handleClick()}` for convenience. What does this change break and why?
+
+---
+
 ## The Memory and Performance Reality
 
 | Approach | Where the function lives | Created per | Memory |
@@ -212,6 +230,7 @@ constructor(props) {
 
 ## Interview Questions
 
+
 **Q (High): Why do you need to bind `this` in React class component event handlers?**
 
 Answer: JavaScript's `this` is determined at call time by the receiver of the function call, not at definition time. When you pass `this.handleClick` to an `onClick` prop, you're passing a reference to the method detached from the instance. When the browser calls it later, there's no receiver — so `this` is `undefined` in strict mode. Inside the handler, `this.setState` then throws because you're accessing `.setState` on `undefined`. Binding — either with `.bind(this)` in the constructor or by using an arrow function as a class field — permanently attaches the instance as `this` regardless of how the function is later called.
@@ -237,10 +256,21 @@ Answer: Inline arrow functions in JSX are recreated on every render. `PureCompon
 Answer: No. Functional components have no `this` at all — they're just functions. State setters from `useState` are stable references across renders. When you define an event handler inside a functional component, it closes over the values it needs directly. There's no receiver involved in calling the function — closures, not `this`, are the mechanism. The only related issue in functional components is stale closures (where a handler captures an outdated value of a variable), but that's a different problem solved by functional updates or `useRef`. The `this` binding problem is purely a class component concern.
 
 ---
-
 **Q (Low): If you forget to bind a method and the component seems to work in development, why might it fail in production?**
 
 Answer: Strict mode behavior matters here. In development, React wraps everything in strict mode (double-invokes certain things). But the `this` issue isn't strict-mode specific — calling an unbound method without a receiver gives `undefined` for `this` in strict mode in both development and production. If it seems to work in development, it's likely that the handler isn't actually being triggered in the test flow, or the code path that uses `this` is conditional and never reached in the test. The more insidious scenario: the handler fires but doesn't use `this` (e.g., a simple `console.log`), so no error surfaces. The `this` access only fails when you actually call `this.setState` or `this.props`.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain in one sentence why `this` is `undefined` inside a class method used as an event handler
+- [ ] Can write all three binding solutions from memory and name a pro and con of each
+- [ ] Can explain why `onClick={() => this.handleClick()}` breaks PureComponent optimization
+- [ ] Can name the silent bug that happens when you call `.bind()` without assigning the return value
+- [ ] Can explain why functional components don't have this problem at all
 
 ---
 

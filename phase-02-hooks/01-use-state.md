@@ -1,5 +1,15 @@
 # useState
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `useState(initial)` | Returns `[value, setter]` pair stored in the fiber | Functional components can remember values across renders |
+| Functional updater `setState(prev => next)` | Passes a function to get the most recent state | Prevents stale-value bugs when multiple updates queue |
+| Lazy initialization `useState(() => expr)` | Passes a function so initial value runs once | Avoids expensive computation on every render |
+| Automatic batching (React 18) | Multiple `setState` calls → one re-render | Fewer DOM updates; changes behavior from React 17 |
+| `Object.is` bailout | React skips re-render if new value equals current | Reference equality matters for objects/arrays |
+
 ## What Is This?
 
 `useState` is a hook that lets a functional component track local state. You call it with an initial value (or initializer function), and it returns a tuple: the current state value and a function to update it.
@@ -10,6 +20,8 @@ const [name, setName] = useState(() => computeExpensiveInitialName());
 ```
 
 It's the foundational hook — the one you reach for first when a component needs to remember something between renders.
+
+> **Check yourself:** After calling `setCount(5)`, what does `console.log(count)` show on the very next line, and why?
 
 ## Why Does It Exist?
 
@@ -118,6 +130,8 @@ Without the initializer function:
 const [state, setState] = useState(JSON.parse(localStorage.getItem('state')));
 ```
 
+> **Check yourself:** If you call `increment()` three times synchronously using `setCount(count + 1)`, what is the final count and why? How does using `setCount(c => c + 1)` change the result?
+
 ## State is Per-Render
 
 A critical mental model: when React calls your component function, it passes the *latest state* into that render. The state value you see is specific to that render. Old renders had old state values.
@@ -159,6 +173,8 @@ setState({ name: 'Alice' });
 ```
 
 This is why you must use spread or structuredClone to update state objects (see [State & Immutability](../phase-01-fundamentals/04-state-and-immutability.md)).
+
+> **Check yourself:** You call `setState({ name: 'Alice' })` twice in a row. How many re-renders happen, and what comparison does React use to decide?
 
 ## Gotchas
 
@@ -344,6 +360,25 @@ The trap: Developers think they can conditionally initialize state to save memor
 
 ---
 
+**Q (High): In a component, you call `setState` then immediately log the state variable. What gets logged?**
+
+Answer: The *old* state value, not the new one. `setState` is asynchronous — it schedules a re-render, but doesn't update the variable immediately.
+
+```javascript
+const [count, setCount] = useState(0);
+
+const handleClick = () => {
+  setCount(1);
+  console.log(count); // Logs 0, not 1
+};
+```
+
+The new `count` value (1) won't be visible until the next render completes. This trips up a lot of developers who expect synchronous state updates like in Vue or plain JavaScript.
+
+The trap: Developers try to access the updated state immediately after calling setState and get confused when they see the old value. They sometimes try workarounds like `setTimeout(() => console.log(count), 0)` or other anti-patterns instead of understanding the async nature of React.
+
+---
+
 **Q (Medium): What happens when you call `setState` with the same value twice?**
 
 Answer: React uses `Object.is()` to compare the new value with the current state. If they're equal, React skips the re-render entirely (this is called "bailout").
@@ -369,22 +404,16 @@ The trap: Developers create new objects unnecessarily and don't realize they're 
 
 ---
 
-**Q (High): In a component, you call `setState` then immediately log the state variable. What gets logged?**
+## Self-Assessment
 
-Answer: The *old* state value, not the new one. `setState` is asynchronous — it schedules a re-render, but doesn't update the variable immediately.
+Before moving on, check off each item you can answer WITHOUT looking at the file.
 
-```javascript
-const [count, setCount] = useState(0);
-
-const handleClick = () => {
-  setCount(1);
-  console.log(count); // Logs 0, not 1
-};
-```
-
-The new `count` value (1) won't be visible until the next render completes. This trips up a lot of developers who expect synchronous state updates like in Vue or plain JavaScript.
-
-The trap: Developers try to access the updated state immediately after calling setState and get confused when they see the old value. They sometimes try workarounds like `setTimeout(() => console.log(count), 0)` or other anti-patterns instead of understanding the async nature of React.
+- [ ] Can explain why a regular `let` variable cannot serve as component state
+- [ ] Can write a functional updater (`setState(prev => next)`) from memory and explain when to prefer it over direct value
+- [ ] Can explain lazy initialization syntax and why it matters for expensive computations
+- [ ] Can describe what React 18 automatic batching changed versus React 17
+- [ ] Can name the `Object.is` bailout behavior and explain why it matters for objects vs primitives
+- [ ] Can explain the stale-closure gotcha: why `console.log(count)` right after `setCount` prints the old value
 
 ---
 

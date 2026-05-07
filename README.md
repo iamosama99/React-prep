@@ -14,7 +14,16 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 **Code examples:** Plain JavaScript for Phases 1–8. TypeScript from Phase 9 onwards.
 
-**Interview question labels:** Each question is tagged with its importance for senior React interviews — `High` (core concept, expect it every time), `Medium` (common but less universal), `Low` (edge case, rarely tested).
+**Interview question labels:** Each question is tagged with its importance for senior React interviews — `High` (core concept, expect it every time), `Medium` (common but less universal), `Low` (edge case, rarely tested). Questions are ordered High → Medium → Low within each file — most important first.
+
+### Every topic file contains
+
+| Section | Purpose |
+|---|---|
+| **Quick Reference** | 2–5 row table at the top — re-anchor in 10 seconds after weeks away |
+| **Check yourself prompts** | Inline active recall questions after major sections — 2–3 per file |
+| **Self-Assessment checklist** | End-of-file checklist — marks what you own vs. what you'd still need to look up |
+| **Interview Q&A** | Full reference answers + the interviewer trap, ordered easy → hard |
 
 ---
 

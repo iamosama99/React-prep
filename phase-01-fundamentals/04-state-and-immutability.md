@@ -1,5 +1,15 @@
 # State & Immutability
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| State | Data a component owns and can change; triggers re-render when updated | Unlike props, the component controls it; lives in React's fiber outside the function |
+| Immutability rule | Never mutate state in place — always produce a new reference | React uses `===` (reference equality) to detect changes; same reference = no re-render |
+| Snapshot model | `count` in a render is frozen to that render's value, not a live reference | Explains why calling `setCount(count + 1)` three times only increments once |
+| Functional update form | `setCount(prev => prev + 1)` instead of `setCount(count + 1)` | Use when next state depends on previous state, especially across async/batch updates |
+| Lazy initialization | `useState(() => expensive())` instead of `useState(expensive())` | The function form runs only once; the value form runs on every render |
+
 ## What Is This?
 
 **State** is data that a component owns and can change. When state changes, React re-renders the component — recalculates what the UI should look like with the new data and updates the screen accordingly.
@@ -70,6 +80,8 @@ setUser({ ...user, name: 'Ali' }); // new object, new reference → React sees a
 
 Spread creates a new object. The references are different. React detects the change. Re-render happens. UI updates.
 
+> **Check yourself:** If you do `user.name = 'Ali'` and then call `setUser(user)`, why does React not re-render? Now explain what you'd need to change to make React detect this as a state change.
+
 ---
 
 ## How useState Works Under the Hood
@@ -124,6 +136,8 @@ setCount(prev => prev + 1);
 Each function receives the most recent committed (or pending) value, not the snapshot. React queues these and applies them in sequence: 0 → 1 → 2 → 3. You get an increment of 3.
 
 The rule: **if the new state depends on the previous state, always use the functional form.**
+
+> **Check yourself:** Without looking, explain why calling `setCount(count + 1)` three times in a single click handler only increments the count by 1, not 3. Then write the version that correctly increments by 3.
 
 ---
 
@@ -298,6 +312,7 @@ The new value appears in the *next render*. If you need to use the new value imm
 
 ## Interview Questions
 
+
 **Q (High): What is state in React, and how is it different from props?**
 
 Answer: State is data that a component owns and can change over time. Props are data passed in from a parent — read-only inside the component, owned by the caller. The key distinction is *ownership*: props are what you're given, state is what you hold. When state changes, React re-renders the component. When props change (parent re-renders with new values), the component also re-renders — but the component can't initiate that change itself. State is for internal, mutable data; props are for external, immutable data.
@@ -330,14 +345,6 @@ The trap: Doing `setUser({ name: 'Ali' })` and wondering why role and other fiel
 
 ---
 
-**Q (Medium): What is lazy initialization in `useState`, and why does it matter?**
-
-Answer: `useState` accepts either a value or a function as its argument. If you pass a function — `useState(() => expensiveComputation())` — React calls it only on the first render to get the initial value. If you pass a value directly — `useState(expensiveComputation())` — the computation runs on *every render*, even though React only uses the result on the first. For lightweight computations, this is harmless. For something expensive — reading from localStorage, parsing large data, computing a complex initial structure — you'd be paying the cost on every render for no reason. Lazy initialization is how you avoid that: pass the initializer function, not its result.
-
-The trap: Forgetting the `() =>` and wondering why a supposedly-one-time operation is slow every render.
-
----
-
 **Q (High): State update after `useState`'s setter is called — when does the new value appear?**
 
 Answer: Not immediately. State updates are asynchronous — they're scheduled and applied on the next render. After calling `setCount(5)`, reading `count` on the very next line still gives you the old value. The function doesn't suspend or wait — it returns immediately, and React queues the update for when it's ready to re-render. The new value appears when the component function is called again for the next render. If you need to work with the new value immediately in the same synchronous execution, store it in a local variable: `const newCount = count + 1; setCount(newCount); doSomethingWith(newCount)`.
@@ -351,6 +358,13 @@ The trap: Reading state right after setting it and assuming you'll see the new v
 Answer: Batching is React's optimization of grouping multiple state updates together and applying them in a single re-render. In React 17 and earlier, batching only applied inside React synthetic event handlers. Updates inside `setTimeout`, `Promise.then`, or native DOM event listeners each triggered their own re-render — meaning three `setState` calls inside a `setTimeout` caused three re-renders. React 18 extended batching to cover all contexts by default, including async code. This means three updates inside a `setTimeout` or `await` block now produce one re-render instead of three. It's a free performance improvement, but code that relied on seeing intermediate renders between async `setState` calls may behave differently.
 
 The trap: Not knowing this changed at all, or claiming "batching has always applied everywhere." The async-context change is what's new in React 18.
+
+---
+**Q (Medium): What is lazy initialization in `useState`, and why does it matter?**
+
+Answer: `useState` accepts either a value or a function as its argument. If you pass a function — `useState(() => expensiveComputation())` — React calls it only on the first render to get the initial value. If you pass a value directly — `useState(expensiveComputation())` — the computation runs on *every render*, even though React only uses the result on the first. For lightweight computations, this is harmless. For something expensive — reading from localStorage, parsing large data, computing a complex initial structure — you'd be paying the cost on every render for no reason. Lazy initialization is how you avoid that: pass the initializer function, not its result.
+
+The trap: Forgetting the `() =>` and wondering why a supposedly-one-time operation is slow every render.
 
 ---
 
@@ -375,6 +389,19 @@ The trap: Not recognizing derived state. The test: "could I delete this state va
 Answer: `Object.is` is JavaScript's strict equality check with two edge case fixes over `===`: `Object.is(NaN, NaN)` returns `true` (while `NaN === NaN` returns `false`), and `Object.is(+0, -0)` returns `false` (while `+0 === -0` returns `true`). React uses `Object.is` to compare previous and new state after you call a setter. If they're the same by this comparison, React bails out without re-rendering — no DOM update, no child component re-renders. This is the basis for the "mutation breaks things" problem: mutating an object and passing the same reference means `Object.is(old, new)` is `true`, so React skips the re-render.
 
 The trap: Not knowing React uses `Object.is` and describing the check as just `===`. The NaN and ±0 edge cases rarely matter in practice, but knowing `Object.is` specifically shows you understand the mechanism.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why React uses reference equality (`===`) to detect state changes and what the consequences are for object/array mutation
+- [ ] Can write the correct immutable update for an object field and for an array item from memory (spread/filter/map patterns)
+- [ ] Can explain the snapshot model and demonstrate why `setCount(count + 1)` called three times increments by 1, not 3
+- [ ] Can write the functional update form and name the rule for when to use it
+- [ ] Can distinguish lazy initialization (`useState(() => fn())`) from eager initialization (`useState(fn())`) and explain the cost difference
+- [ ] Can name the key difference between `useState`'s setter and class-era `this.setState` (replace vs. merge)
 
 ---
 

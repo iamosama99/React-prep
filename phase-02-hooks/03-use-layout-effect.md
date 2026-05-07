@@ -1,5 +1,14 @@
 # useLayoutEffect
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Runs before paint | Fires synchronously after DOM commit, before browser paints | Lets you measure and mutate DOM without visible flicker |
+| Blocks the browser | The browser cannot paint while the effect runs | Heavy work here causes jank — keep it fast |
+| SSR incompatibility | Does not run on the server | Guard with `typeof window` or prefer `useEffect` for SSR code |
+| Use case | DOM measurement → style update in one pass | Avoids the measure → paint → re-measure → repaint cycle |
+
 ## What Is This?
 
 `useLayoutEffect` is identical to `useEffect` in signature and behavior — same dependency array, same cleanup functions — but it runs *synchronously* after DOM mutations and *before* the browser paints the screen.
@@ -12,6 +21,8 @@ useLayoutEffect(() => {
 ```
 
 Think of it as `useEffect` that fires before you see the results on screen.
+
+> **Check yourself:** What is the exact order of execution: `useLayoutEffect`, `useEffect`, and the browser paint?
 
 ## Why Does It Exist?
 
@@ -89,6 +100,8 @@ useLayoutEffect(() => {
 // 2. Paint with correct height
 // Result: No flicker
 ```
+
+> **Check yourself:** Give a concrete scenario where using `useEffect` instead of `useLayoutEffect` would cause visible flicker, and explain exactly why.
 
 ## Common Use Cases
 
@@ -274,6 +287,7 @@ Every effect run updates state, which triggers the effect again.
 
 ## Interview Questions
 
+
 **Q (High): When does `useLayoutEffect` run relative to painting?**
 
 Answer: After React commits DOM mutations but *before* the browser paints the screen. It's synchronous — React waits for the effect to complete before allowing the paint to happen. This is different from `useEffect`, which runs *after* the paint.
@@ -358,7 +372,6 @@ useLayoutEffect(() => { ... }, []);
 The trap: Code that reads `window` or `document` in `useLayoutEffect` will crash on the server if you're not careful. You should guard it, though usually `useLayoutEffect` is safe on the server because it simply doesn't run.
 
 ---
-
 **Q (Low): What's the cleanup function do in `useLayoutEffect`?**
 
 Answer: Same as in `useEffect` — it runs before the effect re-runs and before the component unmounts. It lets you undo whatever the effect did.
@@ -376,6 +389,18 @@ useLayoutEffect(() => {
 The cleanup runs synchronously, just like the effect itself. It's called before the browser paints.
 
 The trap: Same as `useEffect` — forgetting the cleanup function or not returning a function (returning something else causes an error).
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can recite the full render-to-paint order: commit → `useLayoutEffect` → paint → `useEffect`
+- [ ] Can describe a concrete flicker scenario that `useLayoutEffect` solves but `useEffect` doesn't
+- [ ] Can explain why `useLayoutEffect` can jank the UI and what types of work to avoid inside it
+- [ ] Can state why `useLayoutEffect` does not run on the server and what the SSR-safe alternative is
+- [ ] Can name the main gotcha: it's synchronous and blocks the browser until it finishes
 
 ---
 

@@ -1,5 +1,14 @@
 # RTK Query
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `createApi` | Central definition of all endpoints, tags, and base URL | Single source of truth for server interactions; generates all hooks automatically |
+| `providesTags` / `invalidatesTags` | Queries declare what data they provide; mutations declare what they invalidate | Automatic cache invalidation without manual `onSuccess` calls |
+| `isLoading` vs `isFetching` | `isLoading` — first fetch only; `isFetching` — any in-flight request | Show full spinner on initial load; subtle indicator on background refresh |
+| `keepUnusedDataFor` | How long cached data persists after last subscriber unmounts | Controls cache retention; prevents memory leaks and redundant requests |
+
 ## What It Is
 
 RTK Query is a data fetching and caching solution built into Redux Toolkit. It eliminates the manual `createAsyncThunk` + loading/error/data state pattern for server data. You define endpoints, RTK Query generates hooks, and the hooks manage fetching, caching, deduplication, background refetching, and cache invalidation automatically.
@@ -111,6 +120,8 @@ const { data } = useGetUserByIdQuery(userId, { skip: !userId });
 const { data } = useGetUsersQuery(undefined, { pollingInterval: 30000 }); // every 30s
 ```
 
+> **Check yourself:** A component renders with `useGetUsersQuery()`. The user navigates away and back. On the second mount, what is `isLoading`? What is `isFetching`? Why do they differ?
+
 ---
 
 ## Mutation Hooks
@@ -177,6 +188,8 @@ getUserById: builder.query({
 
 This deduplication is automatic — two components calling `useGetUserByIdQuery(42)` at the same time trigger exactly one network request.
 
+> **Check yourself:** Two components both call `useGetUserByIdQuery(42)` simultaneously. How many network requests fire? What manages this behavior?
+
 ---
 
 ## Manual Cache Updates (Optimistic Updates)
@@ -225,6 +238,7 @@ Choose RTK Query if you're already in a Redux codebase. Choose React Query if yo
 
 ## Interview Questions
 
+
 **Q (High): How does RTK Query's cache invalidation work?**
 
 Answer: Queries declare `providesTags` — an array of tags describing what data they return. Mutations declare `invalidatesTags` — an array of tags describing what data they changed. When a mutation completes, RTK Query finds every cached query whose `providesTags` intersects with the mutation's `invalidatesTags` and marks them as stale, triggering a background refetch for any query that currently has active subscribers. Tags can be typed (`{ type: 'User', id: 5 }`) to target a specific item, or generic (`'User'`) to invalidate all queries of that type. This lets you express fine-grained invalidation: updating a single user refetches only that user's detail page, while creating a user refetches the entire list.
@@ -236,7 +250,6 @@ Answer: Queries declare `providesTags` — an array of tags describing what data
 Answer: `isLoading` is true only when the first request is in-flight and there's no cached data yet — the component has no data to show. `isFetching` is true whenever any request is in-flight, including background refetches after invalidation or polling. A component that had cached data will have `isLoading: false, isFetching: true` during a background refetch — it can show the stale data while the update is in progress. The distinction lets you show full loading spinners for initial loads and subtle background refresh indicators for subsequent updates.
 
 ---
-
 **Q (Medium): Why is the RTK Query middleware required in `configureStore`?**
 
 Answer: RTK Query uses the Redux middleware to manage cache lifetimes. When a query's last subscriber unmounts, the middleware starts a timer — by default 60 seconds. If no new subscriber mounts before the timer expires, the middleware dispatches an action to remove the cached data from the store. The middleware also handles polling intervals and re-trigger logic when tags are invalidated. Without it, none of these background operations happen: data would stay in the store forever (memory leak) or be garbage-collected immediately, losing the cache benefits.
@@ -246,6 +259,18 @@ Answer: RTK Query uses the Redux middleware to manage cache lifetimes. When a qu
 **Q (Medium): How do you perform optimistic updates in RTK Query and roll back on failure?**
 
 Answer: Use the `onQueryStarted` callback in a mutation endpoint. It receives the mutation argument and a `{ dispatch, queryFulfilled }` object. Call `dispatch(api.util.updateQueryData(endpointName, queryArg, draft => { ... }))` to immediately update the cache optimistically — the draft uses Immer so you can mutate freely. Store the returned `patchResult`. Then `await queryFulfilled` — if it resolves, the optimistic update is confirmed and stays. If it throws, call `patchResult.undo()` to roll back the cache to its previous value.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the `providesTags` / `invalidatesTags` contract and write a minimal example from memory
+- [ ] Can distinguish `isLoading` from `isFetching` and explain when each is true
+- [ ] Can describe what happens when two components simultaneously call the same query hook with the same argument
+- [ ] Can write the `onQueryStarted` optimistic update pattern including the rollback call
+- [ ] Can explain why the RTK Query middleware is required and what breaks without it
 
 ---
 

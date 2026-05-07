@@ -1,5 +1,15 @@
 # Virtual DOM & Reconciliation
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Virtual DOM | In-memory JS object tree mirroring the UI | Makes "re-render everything" conceptually cheap |
+| Reconciliation | Diff algorithm between two VDOM trees | Produces minimal real DOM mutations |
+| Same-type heuristic | Different type → tear down subtree | Enables O(n) diff; causes unexpected state resets |
+| Keys | Identity markers for list children | Prevents position-based matching bugs in reorderable lists |
+| Renderer/reconciler split | Reconciler produces mutations; renderer applies them | Same algorithm targets DOM, native, terminal, etc. |
+
 ## What Is This?
 
 The Virtual DOM is an in-memory representation of your UI — a plain JavaScript object tree that mirrors the structure of the real DOM. When your component renders, React doesn't write to the DOM directly. It builds a virtual tree first, compares it to the previous one, figures out the minimum set of real DOM changes needed, and only then touches the browser.
@@ -19,6 +29,8 @@ const vnode = {
 ```
 
 Reconciliation is the algorithm React uses to diff two virtual trees and produce a minimal list of DOM mutations.
+
+> **Check yourself:** What is the VDOM actually made of, and at what point in a render does React touch the real DOM?
 
 ---
 
@@ -109,6 +121,8 @@ When a component stays the same type at the same position in the tree, React kee
 
 After diffing, React has a list of mutations: create this node, update this attribute, remove that node, move this child. The commit phase applies these mutations to the real DOM synchronously. This is where `useLayoutEffect` fires (synchronously after DOM mutation, before paint) and `useEffect` fires (asynchronously after paint).
 
+> **Check yourself:** What are the two core heuristics that make reconciliation O(n) instead of O(n³)? What does each one trade off?
+
 ---
 
 ## The O(n) Diff in Practice
@@ -128,6 +142,8 @@ The result: a single pass through the tree, O(n) where n is the number of nodes.
 React's VDOM is not in the spec. It's not what makes React React — it's one strategy React uses to efficiently update the DOM. React Native doesn't have a DOM at all; it uses the same reconciler to drive native views. This is possible because the VDOM is just an abstraction layer between your component tree and the output target.
 
 The reconciler (the diff algorithm) is a separate package from the renderer (`react-dom`, `react-native`). This separation is why React can target multiple platforms from the same component code.
+
+> **Check yourself:** Why can React Native use the same reconciliation algorithm despite having no DOM? What is the architectural separation that makes this possible?
 
 ---
 
@@ -250,6 +266,21 @@ The trap: Candidates often state the heuristics without understanding the tradeo
 Answer: The reconciler (the diff algorithm) is decoupled from the renderer (the thing that translates mutations into real output). `react-reconciler` produces a list of mutations — create, update, delete — against a virtual tree. `react-dom` takes those mutations and applies them to DOM nodes. `react-native` takes those same mutations and applies them to native views via the bridge. The VDOM abstraction layer means the reconciler never needs to know what it's rendering to. This is also how `react-three-fiber`, Ink (terminal), and other renderers work — same reconciler, different commit-phase implementations.
 
 The trap: Candidates conflate "Virtual DOM" with "React's architecture." The VDOM is one part of React's architecture — the reconciler. The renderer is a separate, swappable layer.
+
+---
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain what the Virtual DOM is and why React uses it instead of directly mutating the DOM
+- [ ] Can describe the two O(n) heuristics and name the tradeoff each one encodes
+- [ ] Can explain why using array index as a key is dangerous for reorderable lists
+- [ ] Can name what happens to component state when element type changes at the same tree position
+- [ ] Can explain why `React.lazy` and React Native can share the same reconciler
+- [ ] Can describe the intentional "key as remount trigger" pattern and its anti-pattern
 
 ---
 

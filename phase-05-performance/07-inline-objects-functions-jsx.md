@@ -1,5 +1,15 @@
 # Inline Objects and Functions in JSX
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Reference equality (`Object.is`) | React compares props and deps by identity, not by value | `{} !== {}` even if contents are identical — new refs defeat memoization |
+| Inline object/function | Object literal or arrow function written directly in JSX | Creates a new reference on every parent render |
+| `useMemo` / `useCallback` | Hooks that return a stable reference until deps change | Fix reference instability for computed values and callbacks |
+| Hoisting | Declaring a constant outside the component at module scope | Cheapest fix — zero hook overhead, reference is stable forever |
+| Dep array instability | A non-primitive dep re-created each render | Causes `useEffect` / `useMemo` / `useCallback` to run on every render |
+
 ## What Is This?
 
 Every time your component renders, any object literal, array literal, or function expression written inline in JSX creates a new value with a new memory reference. Since `React.memo` and most hook dependency comparisons use `Object.is` (reference equality), these new references defeat memoization and cause unnecessary re-renders — even when the data or behavior is logically identical to the previous render.
@@ -24,6 +34,8 @@ function Parent() {
 This is not a React design flaw — it's a consequence of how JavaScript works. Object literals and function expressions are evaluated at runtime, and each evaluation produces a new value. In a language without persistent data structures or structural equality checks, `{} !== {}`.
 
 React's comparison model is deliberately simple: `Object.is`. Deep equality checks across arbitrary prop trees would be expensive and would give React a false sense of what has "changed." The answer is to make references stable when the underlying value is stable.
+
+> **Check yourself:** Why does `React.memo` still cause a re-render when the parent passes `style={{ color: 'red' }}` every time, even though the color never changes?
 
 ---
 
@@ -69,6 +81,8 @@ It matters when:
 1. The child is wrapped in `React.memo` and the inline prop is defeating the bailout
 2. The inline value is in a `useEffect` / `useMemo` / `useCallback` dependency array — the effect fires every render because the dep is "new" every render
 3. The inline value is passed to a custom hook that uses it as a dep
+
+> **Check yourself:** Name the three situations where inline object/function instability actually causes a measurable problem.
 
 ---
 
@@ -193,6 +207,8 @@ When diagnosing "why is this hook/memo misfiring":
 3. For each non-primitive dep, ask: "where is it created? Is it re-created on every render?"
 4. Fix: hoist (if stable), `useMemo`/`useCallback` (if computed), or move inside the hook (if only used there)
 
+> **Check yourself:** A `useEffect` fires on every render. You check the dep array and it contains `userId` (string) and `options` (object created in the render body). What are your three options to fix it?
+
 ---
 
 ## Gotchas
@@ -245,6 +261,7 @@ Fix: `useMemo` the value object, or split into separate contexts per concern.
 
 ## Interview Questions
 
+
 **Q (High): Why does `React.memo` sometimes fail to prevent re-renders even when the data hasn't changed?**
 
 Answer: Because `React.memo` uses `Object.is` to compare each prop, and `Object.is` for objects, arrays, and functions compares by reference. If the parent creates a new object literal, array, or function in its render body and passes it as a prop, the reference is new on every render — even if the content is identical. Memo sees the new reference as a changed prop and renders anyway. The fix is reference stability in the parent: hoist constant objects to module level, use `useMemo` for computed objects, and `useCallback` for functions.
@@ -262,10 +279,22 @@ Answer: One or more deps in the dependency array is a non-primitive that's re-cr
 Answer: Inline object and function expressions in JSX and hook dependency arrays. The most impactful instances in practice: (1) Context `value` props created as object literals — affects every context consumer on every provider re-render. (2) Inline `onClick` handlers created per list item — defeats memoization on list rows. (3) Options objects in `useEffect` deps — causes effects to fire every render. (4) Computed config objects passed to deeply nested components — propagates renders through the whole subtree. The pattern to fix all of them is the same: make references stable by hoisting, `useMemo`, or `useCallback`.
 
 ---
-
 **Q (Low): Is it always worth adding `useMemo` or `useCallback` to stabilize a reference?**
 
 Answer: No. Both hooks have overhead: they allocate a closure, store the dep array, and compare deps on every render. For a function that wraps a single statement and is passed to a non-memoized child, `useCallback` adds cost without benefit. For a tiny object used in an effect that rarely fires, the overhead of `useMemo` exceeds the cost of re-creating the object. The rule: stabilize a reference only when you've confirmed via profiling or logical analysis that the instability is causing a measurable problem — a wasted expensive render or a firing effect with side effects. Don't add memoization preemptively to "be safe."
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why `{} !== {}` in JavaScript and how this breaks `React.memo`
+- [ ] Can name all three situations where reference instability causes a real problem
+- [ ] Can write the three different fixes for an object in a `useEffect` dep array from memory
+- [ ] Can explain why `useCallback` on a function whose dep is itself unstable doesn't actually help
+- [ ] Can identify the most impactful inline object anti-pattern in production React apps (Context value)
+- [ ] Can articulate when NOT to add `useMemo` / `useCallback`
 
 ---
 

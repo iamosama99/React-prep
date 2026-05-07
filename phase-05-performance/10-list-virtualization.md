@@ -1,5 +1,15 @@
 # List Virtualization
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Windowing | Rendering only the rows visible in the viewport | Keeps DOM node count constant regardless of total list size |
+| Phantom container | A tall inner div sized to represent the full list | Gives the scrollbar correct proportions without rendering all items |
+| Overscan | Extra items rendered above/below the visible area | Prevents blank flicker during fast scrolling |
+| `FixedSizeList` | Virtualization for uniform row heights | O(1) scroll position math — simplest to set up |
+| `VariableSizeList` | Virtualization where each row has a different height | Requires an `itemSize` function and height cache invalidation |
+
 ## What Is This?
 
 List virtualization (also called "windowing") is a technique where only the rows currently visible in the viewport are rendered as DOM nodes. As the user scrolls, rows that leave the viewport are unmounted and rows entering the viewport are mounted — the total number of live DOM nodes stays small regardless of the total list size.
@@ -41,6 +51,8 @@ Rendering 10,000 `<li>` elements produces:
 - Scroll performance bounded by the total number of layout-affecting elements
 
 Virtualization collapses this to ~15–30 DOM nodes (the visible viewport plus a small overscan buffer) regardless of list size. Scroll performance and memory usage stay flat.
+
+> **Check yourself:** Why does a 10,000-row list hurt performance even if only ~15 rows are visible? Name at least two things that scale with total DOM node count.
 
 ---
 
@@ -193,6 +205,8 @@ function VirtualList({ items }) {
 
 The headless approach gives full styling control and works with tables, grids, and any custom layout that `react-window`'s opinionated DOM structure doesn't support.
 
+> **Check yourself:** What is the difference between `react-window` and TanStack Virtual? When would you choose one over the other?
+
 ---
 
 ## Gotchas
@@ -241,6 +255,7 @@ Pass `data` via the `itemData` prop (react-window) so rows don't close over the 
 
 ## Interview Questions
 
+
 **Q (High): What is list virtualization and when should you use it?**
 
 Answer: Virtualization renders only the subset of list items currently visible in the viewport, positioning them absolutely within a tall container that represents the full list size. As the user scrolls, items leaving the viewport are unmounted and new items entering it are mounted — the DOM stays small regardless of list length. You should use it for lists with 500+ items, especially when rows are complex (images, nested components). For small lists (< 100 items), the complexity of virtualization exceeds any benefit — a regular `map` is fine. Profile first: the real signal is layout performance (long frame times during scroll) or initial render time caused by thousands of DOM nodes.
@@ -252,7 +267,6 @@ Answer: Virtualization renders only the subset of list items currently visible i
 Answer: It uses the container's `scrollTop` value and the item sizes. For fixed-size lists: `firstVisibleIndex = Math.floor(scrollTop / itemHeight)`, `lastVisibleIndex = Math.ceil((scrollTop + viewportHeight) / itemHeight)`. It renders items in that range plus a small overscan buffer above and below to prevent blank flicker during fast scrolling. For variable-size lists, it maintains a prefix sum of cumulative heights and uses a binary search to find the visible range. On every scroll event, it recalculates the visible range and updates which items are rendered.
 
 ---
-
 **Q (Medium): What's the difference between `react-window` and TanStack Virtual?**
 
 Answer: `react-window` is opinionated — it owns the DOM structure (outer scroll container + inner absolute-positioned container) and you provide a row renderer. It's simpler to set up and works for most standard lists and grids. TanStack Virtual is headless — it only provides the math (which indices are visible, what offset each item should be at). You own all the markup. This makes it more flexible: it works with tables, masonry layouts, horizontal scrolling, and any custom DOM structure that `react-window`'s preset layout can't accommodate. The tradeoff is that headless requires more boilerplate.
@@ -262,6 +276,18 @@ Answer: `react-window` is opinionated — it owns the DOM structure (outer scrol
 **Q (Medium): What happens to accessibility and find-in-page when you virtualize a list?**
 
 Answer: Both break for content outside the viewport. Screen readers announce only what's in the DOM — virtual items that haven't been rendered don't exist from the AT's perspective. Browser `Ctrl+F` only searches rendered text. For a product list of 10,000 items, a user searching for "blue widget" may not find it if it's outside the scroll window. Mitigations: (1) Use pagination instead of virtualization for content that must be searchable. (2) Add ARIA attributes like `aria-rowcount` and `aria-rowindex` to communicate total size to screen readers. (3) Accept the limitation and ensure the search/filter UX reduces the visible set to manageable size before displaying the virtual list.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the phantom container pattern — how the scrollbar stays proportional without rendering all items
+- [ ] Can describe how `react-window` calculates which items to render given a `scrollTop` value
+- [ ] Can explain the difference between `FixedSizeList` and `VariableSizeList` and when to use each
+- [ ] Can name the most common `react-window` mistake (forgetting to apply the `style` prop)
+- [ ] Can explain the accessibility limitation of virtualization and name two mitigations
 
 ---
 

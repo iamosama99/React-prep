@@ -1,5 +1,15 @@
 # useEffect
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Dependency array | Controls when the effect re-runs | Missing deps → stale data; extra deps → unnecessary runs |
+| Cleanup function | Returned function React calls before re-run or unmount | Prevents listener pile-up and memory leaks |
+| Runs after paint | Effect fires after DOM is committed and browser paints | Safe for DOM reads; use `useLayoutEffect` for pre-paint mutations |
+| Race condition | Older async response arriving after a newer one | Must cancel stale requests in cleanup |
+| StrictMode double-invoke | Dev only: effect → cleanup → effect | Surfaces bugs where cleanup doesn't fully undo the effect |
+
 ## What Is This?
 
 `useEffect` lets you perform side effects in a functional component — anything that reaches beyond the component itself: fetching data, updating the DOM directly, subscribing to external systems, logging, etc.
@@ -12,6 +22,8 @@ useEffect(() => {
 ```
 
 It runs *after* the component renders. You control when it runs by specifying dependencies.
+
+> **Check yourself:** What are the three different behaviors you get by varying the dependency array — no array, empty array, and array with values?
 
 ## Why Does It Exist?
 
@@ -78,6 +90,8 @@ useEffect(() => {
 ```
 
 **Why cleanup matters:** Without it, listeners pile up. If your effect runs 10 times and adds a listener each time, you have 10 listeners for the same event. Cleanup prevents memory leaks.
+
+> **Check yourself:** When exactly does the cleanup function run — only on unmount, or at other times too?
 
 ### Conditional Re-runs
 
@@ -446,6 +460,18 @@ useEffect(() => {
 Without the dependency array, it would fetch after every render. With `[someValue]`, it would fetch whenever `someValue` changes.
 
 The trap: Forgetting the dependency array entirely, or including unnecessary dependencies that cause the effect to re-run more often than intended. Also, if the data depends on props (like `userId`), you *must* include it in dependencies, or the effect closes over a stale value.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can recite the three dependency-array variants and what each means for when the effect runs
+- [ ] Can write a fetch effect with a `cancelled` flag or `AbortController` to handle race conditions from memory
+- [ ] Can explain exactly when the cleanup function runs (not just "on unmount")
+- [ ] Can explain why the effect function cannot be `async` and show the correct pattern
+- [ ] Can describe what StrictMode double-invocation is and why React does it intentionally
 
 ---
 

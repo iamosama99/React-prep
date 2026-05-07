@@ -39,9 +39,26 @@ Each topic file must follow this structure. Do not skip sections that apply. The
 ```
 # [Topic Name]
 
+## Quick Reference
+
+A small table (2–5 rows) or tight bullet list placed immediately after the title.
+Maps the core concept → mechanism → practical implication at a glance.
+A reader returning after weeks should be able to re-anchor in under 10 seconds
+without re-reading the whole file.
+
+Example shape:
+| You write / see | What it actually is | Why it matters |
+|---|---|---|
+| JSX | Babel/SWC → React.createElement() | Browser never sees JSX |
+
+Keep it to 2–5 rows. One idea per row. No prose.
+
 ## What Is This?
 Plain explanation of what the concept IS. Before any mechanics. Make it feel grounded.
 One or two short paragraphs. A code snippet here is fine if it helps orient.
+
+> **Check yourself:** [A tight question about the just-covered concept — forces the
+> reader to actively recall before moving on. Think before scrolling.]
 
 ## Why Does It Exist?
 The problem it solves. The history if relevant. Why the API is designed this way.
@@ -52,26 +69,51 @@ interesting, go deep. Build the reasoning — nothing should feel arbitrary.
 The mechanism. Internals where relevant. Mental models. Step-by-step if clarifying.
 Use code to show the mechanism, not just the API.
 
+> **Check yourself:** [A question that tests mechanical understanding — not just
+> naming, but reasoning about cause and effect.]
+
 ## [Other sections as needed — use judgment]
 E.g.: "The Old vs New Approach", "Side-by-Side Comparison", "In Production",
 "Common Patterns", "Edge Cases". Name them for what they actually cover.
 Only create a section if it genuinely adds value. No filler sections.
+Each major section may have its own Check yourself prompt if the section introduces
+a new idea worth testing. Target 2–3 prompts per file total; don't pad.
 
 ## Gotchas
 The real ones. The ones that trip people up in interviews or production.
 No padding. If there are two, write two. If there are six, write six.
+Every gotcha that is interview-worthy must also appear as a Q&A entry below —
+don't list it here and then omit it from the interview section.
 
 ## Interview Questions
 
-Each question has an importance label: `High` (core concept, asked in almost every senior interview on this topic), `Medium` (common but less universal), or `Low` (edge case, rarely tested in typical senior interviews).
+Each question has an importance label: `High` (core concept, asked in almost every
+senior interview on this topic), `Medium` (common but less universal), or `Low`
+(edge case, rarely tested in typical senior interviews).
 
-**Q (High): [Question text]**
+ORDER QUESTIONS from most to least important: High → Medium → Low.
+Study time is finite — the High questions are asked in nearly every senior
+interview, so they should be encountered and drilled first.
+
+**Q (Medium): [Question text]**
 
 Answer: [What a senior engineer would say. Be complete — this is the reference answer.]
 
 The trap: [What the interviewer is watching for. What weaker candidates say or miss.]
 
 [Repeat for every question the topic genuinely warrants. No artificial cap.]
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can do WITHOUT looking at the file.
+Leave unchecked anything you'd need to read to answer — that's what to revisit.
+
+- [ ] [Concrete capability: "Can explain X in one sentence without notes"]
+- [ ] [Concrete capability: "Can write a minimal code example from memory"]
+- [ ] [Concrete capability: "Can name the gotcha and explain why it happens"]
+- [ ] [Add 2–4 more items specific to the topic — aim for 4–6 total]
 
 ---
 *Next: [Next topic name] — [One sentence on why it follows naturally from this one.]*

@@ -1,5 +1,15 @@
 # React.memo Deep Dive
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `React.memo` | HOC that adds shallow prop comparison before render | Opts a component out of the default "always re-render with parent" behavior |
+| Shallow comparison | `Object.is` on each prop, one level deep | Objects/functions compare by reference — new literal = always re-renders |
+| Reference stability | Props must be same reference across renders for memo to bail out | Requires `useCallback`/`useMemo` in the parent for non-primitives |
+| Custom comparator | Second arg to `React.memo` — your own equality function | Use only when shallow check is insufficient; avoid deep equality on large objects |
+| Memo + own state | Own state changes always re-render, regardless of memo | Memo only intercepts parent-triggered renders |
+
 ## What Is This?
 
 `React.memo` is a higher-order component that wraps a function component and adds a shallow prop comparison check before each render. If the incoming props are shallowly equal to the previous props, React skips calling the component function and reuses the last rendered output.
@@ -12,6 +22,8 @@ const MemoizedChild = React.memo(function Child({ name, onClick }) {
 ```
 
 It is the primary tool for opting a component out of the default "always re-render when parent renders" behavior.
+
+> **Check yourself:** What comparison does `React.memo` use by default? What happens when a parent passes `style={{ color: 'red' }}` to a memoized child on every render?
 
 ---
 
@@ -102,6 +114,8 @@ function Parent() {
 
 Now `handleClick` and `style` are stable references. When `count` changes, the parent re-renders but `MemoChild` sees the same props and skips its render.
 
+> **Check yourself:** You've wrapped a child in `React.memo` and stabilized all its function props with `useCallback`, but it still re-renders on every parent render. What is another prop type that commonly defeats memo that you might have missed?
+
 ---
 
 ## When React.memo Helps vs Hurts
@@ -188,6 +202,7 @@ If you pass a non-memoized callback to a memoized child, you'll wrap it in `useC
 
 ## Interview Questions
 
+
 **Q (High): How does `React.memo` work and what is it doing internally?**
 
 Answer: `React.memo` wraps a component in a special fiber type. Before React calls the wrapped component during reconciliation, it runs a comparison function — by default, a shallow equality check using `Object.is` on each prop. If all props are equal, React bails out of the entire subtree rooted at that component — it reuses the last rendered output without calling the function. If any prop is different, it renders normally. The shallow check means primitives compare by value and objects/arrays/functions compare by reference. A new object with the same content is not equal to the previous one.
@@ -207,7 +222,6 @@ Answer: The most common causes: (1) A prop is a new object or array literal crea
 Answer: When the component's props change on almost every render — memo runs the comparison but always renders, so you've added comparison overhead with no benefit. When the component is cheap to render — for a `<div>` with a text node, comparing the props costs more than just re-rendering. When the component has its own frequently-changing state — memo only intercepts parent-triggered renders; the component's own state changes always render regardless. And when props include non-stabilized objects/functions — memo adds complexity (you now also need useCallback/useMemo everywhere in the parent) that may not pay off. Wrap with memo after profiling shows the component is a hot path.
 
 ---
-
 **Q (Medium): What's the relationship between `React.memo`, `useCallback`, and `useMemo`?**
 
 Answer: They form a trio for preventing unnecessary child renders. `React.memo` is the gate on the child: it bails out if props are shallowly equal. `useCallback` and `useMemo` are tools in the parent to produce stable prop references: `useCallback` for functions, `useMemo` for objects/arrays. Without reference stability in the parent, memo in the child never bails out. All three are needed together to achieve the optimization: memo checks stability, the other two provide it.
@@ -217,6 +231,21 @@ Answer: They form a trio for preventing unnecessary child renders. `React.memo` 
 **Q (Medium): Can a memoized component still re-render even when no props changed?**
 
 Answer: Yes — three ways. (1) The component's own state changes (`useState`, `useReducer`). (2) A context it subscribes to changes — `useContext` bypasses the memo check entirely. (3) A custom comparison function returns `false` (a poorly written comparator that always returns false). Memo only prevents re-renders triggered by parent renders. It has no effect on re-renders from the component's own internal state or from context.
+
+---
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain what comparison `React.memo` does by default and name the one case where it always fails
+- [ ] Can name all three causes of a memoized component re-rendering despite no prop change
+- [ ] Can explain the relationship between `React.memo`, `useCallback`, and `useMemo` and when all three are needed together
+- [ ] Can name at least three situations where adding `React.memo` hurts rather than helps
+- [ ] Can explain why passing JSX as `children` to a memoized component defeats the memoization
+- [ ] Can describe how a stale closure bug can be introduced by adding `useCallback` for memo compatibility
 
 ---
 

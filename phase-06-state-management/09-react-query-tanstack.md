@@ -1,5 +1,14 @@
 # React Query / TanStack Query
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Query key | Serializable array that uniquely identifies a cache entry | Same key = one request, shared cache; hierarchical prefix matching for invalidation |
+| `staleTime` | How long fetched data is considered fresh | Controls whether a background refetch fires on mount |
+| `gcTime` | How long unused cache entries stay in memory after last subscriber unmounts | Controls retention without blocking the initial load experience |
+| Stale-while-revalidate | Return cached data immediately, refetch in background | Users see content instantly; UI silently corrects if data changed |
+
 ## What It Is
 
 TanStack Query (formerly React Query) is a server-state management library. It handles the full lifecycle of async data in React: fetching, caching, background refetching, deduplication, stale-while-revalidate, pagination, mutations, and optimistic updates. You describe what data you want and how to get it; the library manages every phase of that data's life.
@@ -64,6 +73,8 @@ useQuery({ queryKey: ['user', 42], queryFn: ... }); // deduped
 **`staleTime` vs `gcTime`:**
 - `staleTime`: how long fetched data is considered fresh. During this window, no background refetch happens.
 - `gcTime` (was `cacheTime` in v3): how long *unused* data stays in the cache after the last subscriber unmounts. After this, it's garbage-collected.
+
+> **Check yourself:** You set `staleTime: 60000`. A component mounts and fetches the data. 30 seconds later the component unmounts, then remounts. Does it show a loading spinner? Does it background-refetch?
 
 ---
 
@@ -143,6 +154,8 @@ queryClient.invalidateQueries({ queryKey: ['posts'] });
 // Invalidate exactly this query
 queryClient.invalidateQueries({ queryKey: ['posts', postId], exact: true });
 ```
+
+> **Check yourself:** `queryClient.invalidateQueries({ queryKey: ['posts'] })` is called. Which of these keys are matched: `['posts']`, `['posts', 1]`, `['post', 1]`, `['posts', 'list', { filter: 'active' }]`?
 
 ---
 
@@ -252,6 +265,7 @@ Load data before the user navigates to a page:
 
 ## Interview Questions
 
+
 **Q (High): Explain the stale-while-revalidate pattern in React Query.**
 
 Answer: When a query has cached data that's older than `staleTime`, React Query returns the cached data immediately (no loading state) and starts a background refetch simultaneously. The user sees content instantly. When the refetch completes, if the data changed, the component re-renders with the fresh data. If it didn't change, nothing happens. This pattern prioritizes responsiveness — the user is never blocked waiting for a network request when there's usable data in cache. `staleTime` controls how long data is considered "fresh enough" to not trigger a background refetch. At `staleTime: 0` (default), data is stale the moment it's fetched, so every component mount triggers a background refetch.
@@ -269,10 +283,21 @@ Answer: The query key is a serializable array that uniquely identifies a cache e
 Answer: `staleTime` determines freshness — how long after a successful fetch the data is considered current. During this window, if a component mounts and finds this data in cache, it uses it without triggering a background refetch. `gcTime` determines retention — how long unused cache entries (no active subscribers) remain in memory before being garbage-collected. When a component unmounts, its cache entry isn't removed immediately; it stays for `gcTime` in case the component remounts or another component needs the same data. If the component remounts within `gcTime`, it gets the cached data immediately. After `gcTime`, the entry is removed and the next mount triggers a fresh fetch.
 
 ---
-
 **Q (Medium): How do you handle the race condition where a background refetch overwrites an optimistic update?**
 
 Answer: In the `onMutate` callback, before applying the optimistic update, call `queryClient.cancelQueries()` for the affected query keys. This cancels any in-flight refetch requests for those queries. Without this, you could apply an optimistic update, then have a concurrent background refetch complete and overwrite it with stale server data before your mutation's response arrives. After canceling, apply the optimistic update. The `onSettled` callback — which runs on both success and failure — typically calls `invalidateQueries` to trigger a fresh refetch once the mutation is resolved.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain stale-while-revalidate in one sentence without notes
+- [ ] Can distinguish `staleTime` from `gcTime` — what each controls and when each matters
+- [ ] Can explain query key hierarchical matching and why it enables efficient invalidation
+- [ ] Can write the full optimistic update pattern (onMutate / onError / onSettled) from memory
+- [ ] Can explain when to use `isLoading` vs `isFetching` for UX decisions
 
 ---
 

@@ -1,5 +1,14 @@
 # Lists & Keys
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `key` prop | Stable identifier on each list item | Lets React match items by identity across renders, not by position |
+| Positional matching (no key) | React assumes item at index N is the same item across renders | Breaks when items are added/removed/reordered — wrong state sticks to wrong items |
+| Stable key | Same item always gets the same key across renders | Random or index keys break identity matching when the list changes |
+| Key-based reset | Giving any component a new `key` forces a full unmount + remount | Cleanest way to reset a component's state when navigating between entities |
+
 ## What Is This?
 
 When you render a collection of data — a list of comments, a table of users, a grid of products — you use JavaScript's `Array.map()` to transform each item into a React element:
@@ -17,6 +26,8 @@ function UserList({ users }) {
 ```
 
 The `key` prop on `<li>` is what this topic is really about. It looks like a small detail, but it's the mechanism React uses to track individual items across re-renders. Get it wrong, and React makes incorrect assumptions that produce subtle, hard-to-debug bugs — wrong components re-using old state, animations playing on the wrong item, inputs keeping the wrong value.
+
+> **Check yourself:** What problem does the `key` prop solve? What does React do without it when items are removed from the middle of a list?
 
 ---
 
@@ -81,6 +92,8 @@ A good key has three properties:
 // Terrible — new random key every render
 {users.map(user => <UserCard key={Math.random()} user={user} />)}
 ```
+
+> **Check yourself:** What are the three properties of a good key? Why is `Math.random()` a disaster as a key, and what specifically happens on every re-render when you use it?
 
 ---
 
@@ -206,6 +219,7 @@ The actual performance benefit is that with stable keys on unchanged items, Reac
 
 ## Interview Questions
 
+
 **Q (High): What is the `key` prop and why does React require it on list items?**
 
 Answer: The `key` prop is a stable identifier that React uses to match elements across renders. Without it, React matches list items by position — the first new item is assumed to be the same as the first old item. This breaks when items are added, removed, or reordered: React incorrectly mutates existing DOM nodes rather than adding, removing, or moving them. With keys, React matches by identity regardless of position, so it can correctly determine what actually changed — moved items keep their DOM nodes and state, removed items are unmounted, new items are created fresh.
@@ -230,14 +244,6 @@ The trap: Not knowing this technique exists. It solves a common class of bugs (s
 
 ---
 
-**Q (Low): Are keys global or scoped to a list?**
-
-Answer: Keys are scoped to the immediate siblings within a parent. Two separate lists can both have an item with `key="1"` — that's not a conflict. React only compares keys within the same parent container. Keys only need to be unique among their siblings, not across the entire component tree.
-
-The trap: Thinking keys need to be globally unique. They don't. The constraint is sibling-unique, not globally unique.
-
----
-
 **Q (Medium): Why can't you use `Math.random()` as a key?**
 
 Answer: Because `Math.random()` generates a new value on every render. Every render, every item gets a new key — which means React thinks every item was removed and a new one added. It unmounts and remounts every component in the list on every parent re-render. This defeats the purpose of keys entirely, plus it's a performance catastrophe for large lists and causes state to reset on every render. A key must be *stable* — the same item must have the same key across renders so React can recognize it as the same item.
@@ -251,6 +257,25 @@ The trap: Thinking any unique value is a good key. Uniqueness is necessary but n
 Answer: Always use a stable, data-derived identifier — a database ID, a UUID, or any other field that uniquely identifies the item and doesn't change when the item's position changes. This is exactly the scenario where index keys break completely: after a drag, every item has a new index, so React would rematch all keys to wrong positions and corrupt any state attached to list items. With stable IDs, React correctly identifies each item's new position and moves the DOM nodes accordingly. If your data doesn't have natural IDs, generate them once at creation time — `crypto.randomUUID()` on item creation, not on render.
 
 The trap: Reaching for index keys because they seem easier. Drag-and-drop is precisely the use case where index keys fail most visibly.
+
+---
+**Q (Low): Are keys global or scoped to a list?**
+
+Answer: Keys are scoped to the immediate siblings within a parent. Two separate lists can both have an item with `key="1"` — that's not a conflict. React only compares keys within the same parent container. Keys only need to be unique among their siblings, not across the entire component tree.
+
+The trap: Thinking keys need to be globally unique. They don't. The constraint is sibling-unique, not globally unique.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain what React does without keys when an item is removed from the middle of a list — the exact mutation sequence
+- [ ] Can name the three properties of a good key (stable, sibling-unique, data-derived) and explain each
+- [ ] Can state the three conditions under which index keys are acceptable, and give one example where they'd fail
+- [ ] Can write a `<React.Fragment key={...}>` pattern for a keyed list item that returns two sibling elements
+- [ ] Can explain the key-based reset pattern and why it's cleaner than a `useEffect` reset
 
 ---
 

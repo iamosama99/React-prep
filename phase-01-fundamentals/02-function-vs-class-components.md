@@ -1,5 +1,15 @@
 # Function vs Class Components
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Function component | JS function that takes props and returns JSX | The modern default; every render is a fresh call with its own snapshot of values |
+| Class component | ES6 class extending `React.Component` with a `render()` method | Legacy model; one persistent instance per mount; `this.props` is always live |
+| Hooks (React 16.8) | APIs like `useState`/`useEffect` that give function components stateful capabilities | Made function components fully capable; unlocked reusable stateful logic without HOC wrappers |
+| Error boundary | Class component that catches render errors in a subtree | The only remaining feature that requires a class — no hooks equivalent as of 2026 |
+| Snapshot vs instance | Function components capture values at render time; class components read live `this.props` | Source of async-callback bugs in class components; core correctness difference |
+
 ## What Is This?
 
 In React, a **component** is the fundamental building block — a piece of UI with its own logic, state, and output. There are two ways to define one.
@@ -35,6 +45,8 @@ Function components existed from early on, but they were "dumb" — they could a
 **In February 2019, React 16.8 shipped with Hooks.** Hooks gave function components the ability to manage state (`useState`), run side effects (`useEffect`), access context, and more. Overnight, function components could do everything class components could, plus one thing class components couldn't: easily share stateful logic between components without restructuring the component tree.
 
 From that point, the community started preferring function components with hooks for all new code. Class components didn't disappear — codebases still full of them exist — but greenfield React code has been almost exclusively function-based since 2019.
+
+> **Check yourself:** What was the key limitation of function components before React 16.8, and what two concrete problems did the move to hooks solve beyond simply providing the same capabilities as classes?
 
 ---
 
@@ -94,6 +106,8 @@ Now do this: click Follow on `userA`, then *immediately* switch to `userB` (whic
 Neither is always "correct" — it depends on what you want. But the function component behavior is more predictable: what you closed over is what you get. The class component behavior requires careful thought about *when* you're reading `this.props`.
 
 This "capture at render time" behavior is what people mean when they say function components have clearer semantics around values over time. It also directly motivates the **stale closure problem** in hooks — but that's a later topic.
+
+> **Check yourself:** In the follow-button example, what does each version alert if you click on userA and then immediately switch the displayed user to userB? Explain the mechanism behind each result.
 
 ---
 
@@ -335,6 +349,18 @@ The trap: Not understanding that React *calls* function components rather than i
 Answer: Wrapper hell is what happens when you compose multiple HOCs or render props to inject behaviors into a component. Each HOC wraps the component in another component, so in React DevTools you see a deep chain of wrappers — `<WithAuth><WithTheme><WithLocale><ActualComponent>` — even though only one component is visible in the UI. It makes debugging hard, props collide invisibly, and the structure is difficult to reason about. Hooks solve this by letting you express the same behaviors as plain function calls inside the component body. `useAuth()`, `useTheme()`, `useLocale()` can all coexist flat inside one function without any wrapping — the component tree stays clean.
 
 The trap: Vaguely saying "HOCs are bad." The specific problem is the structural bloat and opacity they introduce, and the specific solution is that hooks decouple behavior from component wrapping.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the snapshot-vs-instance difference and demonstrate it with the follow-button async example
+- [ ] Can name the two concrete problems hooks solved beyond syntax (logic reuse and lifecycle colocation)
+- [ ] Can explain why hooks cannot be used inside class components in terms of React's fiber mechanism
+- [ ] Can name the one thing class components can do that function components still cannot as of 2026
+- [ ] Can distinguish `PureComponent` from `React.memo` — what they are, where they apply, and what they share
 
 ---
 

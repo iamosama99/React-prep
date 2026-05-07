@@ -1,5 +1,14 @@
 # Portals
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `createPortal(children, domNode)` | Renders React output into a different DOM node | Lets UI escape `overflow: hidden` and stacking contexts |
+| React tree vs DOM tree | Portal child stays in React hierarchy despite different DOM location | Context, events, and prop flow are unaffected |
+| Event bubbling | Events bubble through the React tree, not the DOM tree | "Click outside" patterns can break if you assume DOM bubbling |
+| SSR guard | Defer portal render until after hydration with a `mounted` state | `document` doesn't exist on the server — naive usage causes hydration mismatch |
+
 ## What Is This?
 
 A portal renders a React component's output into a different DOM node than the one React normally uses — while keeping the component in its original position in the React component tree.
@@ -20,6 +29,8 @@ function Modal({ children, isOpen }) {
 ```
 
 The modal's JSX appears inside `<body>` in the DOM, but in the React tree, the `Modal` component is wherever the caller put it. This is not the same as moving components around — the component hierarchy is unchanged.
+
+> **Check yourself:** What two trees does React maintain, and how does `createPortal` affect each of them?
 
 ## Why Does It Exist?
 
@@ -64,6 +75,8 @@ function App() {
 Even though the button is inside `<body>` in the DOM, clicking it will trigger the `onClick` on the `<div>` in the React tree — because React's synthetic event system bubbles through the *component* hierarchy, not the DOM hierarchy. This is intentional and expected: the portal is a child in React's eyes.
 
 This has a practical implication: if you have an "outside click" handler on `document` to close a dropdown, it will fire for clicks *inside* the dropdown if the event bubbles to the DOM root. You need to handle this with `event.stopPropagation()` or by checking if the click target is inside the portal's DOM node.
+
+> **Check yourself:** A user clicks a button inside a modal rendered via a portal. The modal's parent in React has an `onClick` handler. Does that handler fire? Why?
 
 ## Common Use Cases
 
@@ -163,6 +176,8 @@ Context works across portal boundaries. A Context provided above the portal in t
 
 Even though `<ThemedButton>` renders inside `document.body` in the DOM, it's a descendant of the Provider in the React tree. Context reads from the component hierarchy, not the DOM hierarchy.
 
+> **Check yourself:** A `ThemeContext.Provider` wraps a modal in the React tree. The modal renders via a portal into `document.body`. Can a component inside the modal read from `ThemeContext`? Why?
+
 ## Gotchas
 
 **Portal DOM node must exist before React renders.** If you pass a DOM node that doesn't exist yet, you'll get an error. Pre-create portal containers in `index.html`, or use `useState` + `useEffect` to create them dynamically.
@@ -179,11 +194,17 @@ Even though `<ThemedButton>` renders inside `document.body` in the DOM, it's a d
 
 ## Interview Questions
 
+
+
 **Q (High): What is a React portal and when would you use it?**
 
 Answer: A portal renders a component's output into a different DOM node while keeping the component in its normal position in the React tree. You use it when CSS layout constraints prevent proper rendering at the natural DOM location — specifically `overflow: hidden` clipping and stacking context isolation. The primary use cases are modals, dropdowns, tooltips, and toasts: UI elements that need to visually escape their container and appear above the rest of the page, but whose behavior (Context access, event handling, prop sourcing) should remain tied to where they logically belong in the component hierarchy.
 
 The trap: "It's for rendering components outside React's control." No — portals are fully inside React's tree. Only the DOM output changes.
+
+---
+
+
 
 **Q (High): Events in a portal bubble through the React tree, not the DOM tree. Why does this matter in practice?**
 
@@ -191,15 +212,34 @@ Answer: It matters for "click outside to close" patterns. If you implement this 
 
 The trap: Not knowing the distinction between DOM bubbling and React synthetic event bubbling.
 
+
+---
+
 **Q (Medium): How do you handle portal rendering during server-side rendering?**
 
 Answer: `createPortal` needs a DOM node — `document` doesn't exist on the server. The solution is to defer portal rendering until after hydration using a mounted state. Initialize `mounted` as `false`, set it to `true` in a `useEffect` (which only runs client-side), and don't render the portal until `mounted` is true. This means portals render a `null` on the server and the first client render, then appear after hydration. Hydration is consistent (null on both sides) and the portal appears on the first client-only paint.
 
 The trap: Using `typeof window !== 'undefined'` instead of `useEffect`. The `typeof window` check may be evaluated correctly in SSR environments but can still cause hydration mismatches.
 
+---
+
+
+
 **Q (Medium): Does Context work across a portal boundary?**
 
 Answer: Yes. Context reads from the React component tree, not the DOM tree. A Provider above the portal in the component hierarchy will make its value available to all descendants, including those rendered inside the portal's target DOM node. This is one of the key design benefits of portals — the modal or dropdown gets access to theme, auth context, translations, etc. exactly as if it were rendered in place.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the difference between the React component tree and the DOM tree, and how a portal affects each
+- [ ] Can write a minimal modal component using `createPortal` from memory, including the SSR guard
+- [ ] Can explain why event bubbling through the React tree (not the DOM tree) breaks naive "click outside" patterns, and how to fix it
+- [ ] Can explain why Context works across portal boundaries
+- [ ] Can name at least two gotchas specific to portals (beyond the SSR issue)
 
 ---
+
 *Next: StrictMode — how React's development-only safety net works and what double-invocation of effects actually tells you.*

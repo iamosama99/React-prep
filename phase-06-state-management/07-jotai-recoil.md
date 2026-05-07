@@ -1,5 +1,14 @@
 # Jotai and Recoil
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Atom | An independent unit of state with its own subscriber set | Components subscribe to exactly the atoms they need — no extra re-renders |
+| Derived atom / selector | Computed value that auto-tracks its atom dependencies | Efficient derived state without manual `useMemo` dependency arrays |
+| Async atom | Atom that returns a Promise; integrates with React Suspense | No `isLoading` flags — Suspense handles the loading state |
+| Jotai vs Recoil | Jotai: no string keys, no required Provider, ~3kb | Recoil: larger, requires `RecoilRoot`, slower development since 2023 |
+
 ## The Atom Model
 
 Both Jotai and Recoil are built on the **atom** abstraction: a small, independent unit of state that components can subscribe to individually. A component subscribes to an atom and re-renders only when that atom's value changes — not when unrelated atoms change.
@@ -78,6 +87,8 @@ function UserProfile() {
 }
 ```
 
+> **Check yourself:** A Recoil selector depends on `countAtom` and `nameAtom`. Only `countAtom` changes. Does the selector recompute? Do components subscribed to the selector re-render?
+
 ---
 
 ## Jotai
@@ -139,6 +150,8 @@ const themeAtom = atomWithStorage('theme', 'light');
 // reads from localStorage on init, writes to localStorage on change
 ```
 
+> **Check yourself:** In Jotai, you have a derived atom that calls `get(countAtom)` and `get(nameAtom)`. Only `nameAtom` changes. Does the derived atom recompute? How does it know to?
+
 ---
 
 ## Jotai vs Recoil: Key Differences
@@ -173,6 +186,7 @@ It's awkward when:
 
 ## Interview Questions
 
+
 **Q (High): What is an atom and how is it different from Redux state?**
 
 Answer: An atom is an independent unit of state — a single value that components can subscribe to individually. In Redux, all state lives in a single store and you use selectors to access slices of it; every subscribed component is notified when any part of the store changes (then filtered by selector comparison). With atoms, state is fragmented by design: each atom is a separate subscription channel. A component subscribing to `countAtom` is completely unaffected by changes to `nameAtom`. This gives you granular subscriptions without writing selectors, and enables derived state through dependency graphs rather than a single normalized tree.
@@ -184,7 +198,6 @@ Answer: An atom is an independent unit of state — a single value that componen
 Answer: A derived atom or selector declares dependencies by calling `get(someAtom)` during its evaluation. The library tracks which atoms were accessed. When any dependency changes, the derived atom recomputes. Consumers of the derived atom re-render only if the derived atom's output changes. This creates an automatic dependency graph — you don't declare dependencies manually like you do with `useMemo` deps arrays. Importantly, if a dependency changes but the derived output remains the same (e.g., a filter that still returns the same items), no re-render occurs. This makes complex derived state efficient without manual memoization wiring.
 
 ---
-
 **Q (Medium): Why would you choose Jotai over Recoil today?**
 
 Answer: Jotai is smaller (~3kb vs ~20kb+), requires no string keys (Recoil's keys are required and must be globally unique — a source of bugs in large codebases), and doesn't require a Provider. Recoil's development has significantly slowed since the core team's priorities shifted post-Facebook; the library has accumulated unresolved issues. Jotai has active maintenance, better TypeScript support, and a cleaner API for the same atom paradigm. For new projects wanting the atom model, Jotai is the practical choice.
@@ -194,6 +207,18 @@ Answer: Jotai is smaller (~3kb vs ~20kb+), requires no string keys (Recoil's key
 **Q (Medium): How does the atom model integrate with React Suspense?**
 
 Answer: Async atoms and selectors return Promises. When a component reads an async atom whose Promise hasn't resolved yet, Jotai/Recoil throw the Promise (the Suspense protocol). The nearest `<Suspense>` boundary catches it and renders the fallback until the Promise resolves. When it resolves, the atom updates and the component renders with the data — no `isLoading` flags, no conditional rendering boilerplate. This makes async data fetching feel like synchronous state access. The component declares what data it needs; Suspense handles the loading state transparently.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the atom model and how it differs from Redux's single store in terms of subscriptions
+- [ ] Can write a minimal Jotai derived atom from memory and explain when it recomputes
+- [ ] Can explain how async atoms integrate with Suspense without `isLoading` flags
+- [ ] Can name three concrete reasons to choose Jotai over Recoil for a new project
+- [ ] Can describe a scenario where the atom model is awkward and a single store is better
 
 ---
 

@@ -1,5 +1,15 @@
 # JSX & React.createElement
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| JSX | Syntactic sugar compiled to `React.createElement(...)` calls | It's not HTML — the browser never sees it; understanding this prevents the "JSX = HTML" mental model |
+| React element | Plain JS object with `type`, `props`, `key`, `ref` | Creating an element doesn't touch the DOM; React processes it later during reconciliation |
+| React component | Function (or class) that accepts props and returns elements | Components are factories; elements are the output they produce |
+| New JSX transform | Compiler injects `react/jsx-runtime` import automatically | Explains why `import React` is no longer required in modern projects |
+| Expression-only rule in `{}` | JSX curly braces accept expressions, not statements | Direct consequence of JSX compiling to function call arguments |
+
 ## What Is This?
 
 JSX is the HTML-looking syntax you write inside JavaScript files in React. It looks like this:
@@ -55,6 +65,8 @@ React.createElement(
 That is genuinely hard to read and maintain. The HTML-like syntax of JSX makes component structure visible at a glance — it mirrors the shape of the UI. This is the entire reason JSX exists: **developer ergonomics**. It's purely a compile-time convenience. At runtime, there is no JSX anywhere.
 
 This is an important mental shift: *JSX is for humans. `React.createElement` is for machines.*
+
+> **Check yourself:** Without looking up, what does `<button className="btn">Save</button>` compile to? Write out the `React.createElement` call and sketch the plain JS object it returns.
 
 ---
 
@@ -113,6 +125,8 @@ All modern tooling — Vite, Next.js, Create React App 4+ — ships with this en
 
 When you see `import React from 'react'` on every file in an older codebase, you now know exactly why it's there.
 
+> **Check yourself:** Why did every JSX file previously require `import React from 'react'`, and what exactly did React 17 change to make that unnecessary?
+
 ---
 
 ## Why `className` Instead of `class` — and the Full Rule
@@ -155,6 +169,8 @@ Why this restriction? Because JSX compiles to a function call, and a function ar
 // ❌ Invalid — 'if' is a statement
 <p>{if (isLoggedIn) { 'Welcome' }}</p>
 ```
+
+> **Check yourself:** What is the difference between a React element and a React component, and what does React do differently when it encounters a lowercase tag vs an uppercase tag in JSX?
 
 ---
 
@@ -218,6 +234,22 @@ The trap: Saying "JSX compiles to HTML" or thinking it produces DOM nodes direct
 
 ---
 
+**Q (High): What's the difference between a React element and a React component?**
+
+Answer: A React *element* is the plain JS object produced by `React.createElement` — it's immutable data describing what to render, like `{ type: 'button', props: { children: 'Save' } }`. A React *component* is a function (or class) that accepts props and returns elements. When you write `<MyButton />`, React has a reference to the `MyButton` function — it calls that function to get elements back. Elements are the output; components are the factories.
+
+The trap: Using these terms interchangeably. The distinction matters in practice — React decides when to call your component (not you), and understanding that elements are just data helps explain why creating elements doesn't immediately touch the DOM.
+
+---
+
+**Q (High): What is the JSX expression `{0 && <Spinner />}` going to render, and why?**
+
+Answer: It renders `0`. In JavaScript, `0 && anything` short-circuits and returns `0` — not `false`. React renders `false`, `null`, and `undefined` as nothing, but it *does* render numbers, including `0`. So you get the number zero appearing in your UI. The fix is to coerce the condition to a boolean: `{count > 0 && <Spinner />}` or `{Boolean(count) && <Spinner />}`.
+
+The trap: Assuming all falsy values behave the same in JSX. They don't. `0` is the only falsy value that renders.
+
+---
+
 **Q (Medium): Why did you previously need `import React from 'react'` in every JSX file, and why don't you need it anymore?**
 
 Answer: The old JSX transform compiled JSX to `React.createElement(...)`, so `React` had to be in scope. If you forgot the import, you'd get a runtime error even though you never called React directly. React 17 introduced a new transform that compiles JSX to calls imported automatically from `react/jsx-runtime`. The compiler injects that import itself. Modern tooling uses this by default, so the manual import is no longer needed for JSX — only for hooks and other named exports.
@@ -242,22 +274,6 @@ The trap: Thinking this is an arbitrary restriction. Once you understand that JS
 
 ---
 
-**Q (High): What's the difference between a React element and a React component?**
-
-Answer: A React *element* is the plain JS object produced by `React.createElement` — it's immutable data describing what to render, like `{ type: 'button', props: { children: 'Save' } }`. A React *component* is a function (or class) that accepts props and returns elements. When you write `<MyButton />`, React has a reference to the `MyButton` function — it calls that function to get elements back. Elements are the output; components are the factories.
-
-The trap: Using these terms interchangeably. The distinction matters in practice — React decides when to call your component (not you), and understanding that elements are just data helps explain why creating elements doesn't immediately touch the DOM.
-
----
-
-**Q (High): What is the JSX expression `{0 && <Spinner />}` going to render, and why?**
-
-Answer: It renders `0`. In JavaScript, `0 && anything` short-circuits and returns `0` — not `false`. React renders `false`, `null`, and `undefined` as nothing, but it *does* render numbers, including `0`. So you get the number zero appearing in your UI. The fix is to coerce the condition to a boolean: `{count > 0 && <Spinner />}` or `{Boolean(count) && <Spinner />}`.
-
-The trap: Assuming all falsy values behave the same in JSX. They don't. `0` is the only falsy value that renders.
-
----
-
 **Q (Medium): What happens when React sees a lowercase tag vs an uppercase tag in JSX?**
 
 Answer: Lowercase tags (`<div>`, `<button>`, `<mycomponent>`) compile to `React.createElement('div', ...)` — a string as the type. React treats string types as native DOM elements. Uppercase tags (`<MyComponent>`) compile to `React.createElement(MyComponent, ...)` — the variable as the type. React treats function/class types as components and calls them. This is why custom components must start with a capital letter: if you write `<myComponent />`, React won't call your function — it'll try to render an unknown HTML element called `mycomponent`.
@@ -271,6 +287,19 @@ The trap: Thinking the capital letter convention is just a style rule. It's sema
 Answer: Because `React.createElement` takes a single root `type`. A component must return a single element, which can have many children. When you need sibling elements without a DOM wrapper, you use a Fragment — `<>...</>` or `<React.Fragment>` — which compiles to `React.createElement(React.Fragment, null, ...)`. Fragments render nothing in the DOM; they're a purely virtual grouping mechanism.
 
 The trap: Not knowing what a Fragment compiles to. The answer should name `React.Fragment` as the type and explain that it renders to nothing in the DOM.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain what JSX compiles to and sketch the JS object a simple element produces from memory
+- [ ] Can name the two JSX transforms and explain why `import React` is no longer required in modern projects
+- [ ] Can explain why `className` is used instead of `class` in terms of JavaScript semantics, not just "React convention"
+- [ ] Can explain why only expressions (not statements) are valid inside JSX `{}` and give two alternatives to `if`
+- [ ] Can articulate the difference between a React element and a React component without confusing them
+- [ ] Can describe the `{0 && <Component />}` gotcha and write the correct fix from memory
 
 ---
 

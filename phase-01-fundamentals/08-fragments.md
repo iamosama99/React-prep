@@ -1,5 +1,14 @@
 # Fragments
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Fragment (`<>...</>`) | A React wrapper that renders children with zero DOM output | Satisfies JSX's single-root rule without polluting the DOM |
+| Long-form `<React.Fragment>` | The explicit form that accepts props | Required when you need to add a `key` prop — the only prop Fragments accept |
+| DOM purity | Fragment produces no DOM node | Critical for semantically constrained HTML (`table`, `dl`, `ul`) where wrapper divs are invalid |
+| Fragment vs `null` | Fragment renders children; `null` renders nothing | Not interchangeable — Fragment is a container, `null` is absence |
+
 ## What Is This?
 
 A Fragment is a React component that renders its children without adding any DOM node of its own. It's a wrapper that exists only in the virtual DOM, invisible in the real DOM output.
@@ -18,6 +27,8 @@ function UserInfo({ name, email }) {
 ```
 
 The `<>...</>` is the shorthand syntax for `React.Fragment`. What the browser receives is just the four `<dt>` and `<dd>` elements — no wrapper div, no wrapper span. The Fragment itself produces zero DOM output.
+
+> **Check yourself:** What does `<>...</>` compile to, and what DOM output does it produce? When would a `<div>` wrapper here produce invalid HTML?
 
 ---
 
@@ -77,6 +88,8 @@ The long form `<React.Fragment>` is identical in behavior but allows props (spec
 ```
 
 This is the only time you need the long form: when the Fragment needs a `key` prop in a list.
+
+> **Check yourself:** Why can't you write `<key={item.id}>...</>` to add a key to the shorthand Fragment? What is the only prop a Fragment accepts, and why no others?
 
 ---
 
@@ -178,6 +191,7 @@ In practice, you'll use `null` for "render nothing" and Fragments for "render ch
 
 ## Interview Questions
 
+
 **Q (Medium): What is a React Fragment and why does it exist?**
 
 Answer: A Fragment is a component that renders its children directly without emitting any DOM element. It exists to solve the mismatch between React's requirement that a component return a single root element (JSX is a function call, functions return one value) and the common need to return multiple sibling elements. Without Fragments, you'd wrap siblings in a `<div>`, which pollutes the DOM and breaks semantically structured HTML like tables and definition lists. `<>...</>` or `<React.Fragment>` satisfies the single-root constraint in JSX while contributing zero DOM output.
@@ -193,12 +207,23 @@ Answer: When you need to add a `key` prop — specifically in lists where the Fr
 The trap: Not knowing the long form exists, or not knowing *when* it's needed. The key-in-a-list scenario is the canonical use case.
 
 ---
-
 **Q (Low): Does using a Fragment instead of a `div` affect performance?**
 
 Answer: Yes, marginally — Fragments produce one fewer DOM node, which reduces DOM tree depth slightly. For most applications this is immeasurable. The more meaningful benefit is structural correctness: unnecessary divs can break CSS layouts (particularly flexbox and grid where direct child relationships matter), interfere with semantic HTML rules, and add DOM depth that CSS selectors have to pierce. Fragments are the right default when you genuinely don't need a DOM wrapper — not as a performance optimization, but as a correctness choice.
 
 The trap: Saying "no performance difference at all." There is a small difference (one fewer DOM node), though it's rarely significant enough to be the primary reason to use Fragments.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why JSX requires a single root element and how that constraint leads to Fragments existing
+- [ ] Can name a real HTML context (`<table>`, `<dl>`) where a `<div>` wrapper would produce invalid HTML, and show how a Fragment solves it
+- [ ] Can write the long-form Fragment with a key prop from memory, and explain why the shorthand can't be used in that case
+- [ ] Can articulate the difference between returning `null` and returning an empty `<></>` Fragment
+- [ ] Can state the one and only prop a Fragment accepts, and explain why no others are valid
 
 ---
 

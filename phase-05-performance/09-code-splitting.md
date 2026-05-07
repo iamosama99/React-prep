@@ -1,5 +1,15 @@
 # Code Splitting
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Dynamic `import()` | JavaScript expression returning a Promise for a module | The bundler-level mechanism — creates a separate chunk for that module graph |
+| `React.lazy` | Wraps a dynamic import and returns a lazy component | Integrates chunk loading with React's render cycle |
+| `Suspense` | Renders a fallback while lazy component loads | Required ancestor for any `React.lazy` component |
+| Route-level splitting | Lazy-loading each page's code separately | Highest-impact split — users only download the code for pages they visit |
+| Preloading | Triggering a chunk fetch before navigation | Eliminates the fetch waterfall for likely-to-be-visited routes |
+
 ## What Is This?
 
 Code splitting is the practice of dividing your JavaScript bundle into smaller chunks that are loaded on demand, rather than delivering one large bundle on initial page load. In a React app, you typically split by route or by feature — the bundle for the dashboard is only loaded when the user navigates to the dashboard, not when they first land on the login page.
@@ -23,6 +33,8 @@ const Settings  = lazy(() => import('./Settings'));
 Modern React apps bundle all JavaScript together by default. A bundler like webpack or Vite processes the entire import graph and emits a single `.js` file. For small apps this is fine. For large apps this produces a bundle that can be several megabytes — and the browser must download, parse, and compile all of it before executing any JavaScript, including the code to show the initial page.
 
 Code splitting attacks the first-load problem: by splitting the bundle, the browser only downloads the code it needs for the current view. The rest is fetched lazily, in the background or on demand. The result is a faster Time to Interactive (TTI) and First Contentful Paint (FCP).
+
+> **Check yourself:** What is the main performance problem code splitting solves, and which metrics does it most directly improve?
 
 ---
 
@@ -115,6 +127,8 @@ function Dashboard({ showChart }) {
 }
 ```
 
+> **Check yourself:** How does `React.lazy` use the Suspense protocol internally to show a fallback? What does the lazy component do when it hasn't loaded yet?
+
 ---
 
 ## Preloading
@@ -206,6 +220,7 @@ If two chunks both use React, the bundler puts React in a shared chunk fetched a
 
 ## Interview Questions
 
+
 **Q (High): What is code splitting and why is it important for React performance?**
 
 Answer: Code splitting divides the JavaScript bundle into smaller chunks that are loaded on demand. Without it, the browser downloads all of the app's JavaScript before executing any of it — including code for routes the user may never visit. This slows Time to Interactive on the initial page load. Code splitting solves this by only delivering the code needed for the current view. In React, the primary tools are dynamic `import()` (the bundler-level mechanism), `React.lazy` (the component-level wrapper), and `Suspense` (the loading fallback). The most impactful split point is the route: each page's code loads only when navigated to. The result is faster FCP and TTI, especially on slow connections.
@@ -229,10 +244,21 @@ Answer: Route-level splitting loads an entire page's worth of code only when tha
 Answer: Wrap the lazy component (and its `Suspense` boundary) in an error boundary. When `React.lazy`'s Promise rejects — due to a network failure or 404 — React propagates the error to the nearest error boundary. Without one, the error is unhandled and the component tree crashes. With an error boundary, you can show a retry UI or an error page. Additionally, you should consider adding a retry mechanism in the factory function — on mobile or flaky connections, a transient failure can often be recovered by refetching the chunk.
 
 ---
-
 **Q (Low): Does `React.lazy` work with server-side rendering?**
 
 Answer: Not directly. `React.lazy` relies on dynamic `import()`, which is asynchronous. Server rendering is traditionally synchronous — `renderToString` produces HTML in one pass and can't await a lazy import mid-render. React 18 with `renderToPipeableStream` (streaming SSR) does support Suspense on the server: lazy components are sent to the client progressively as their chunks load. However, most React SSR setups use framework-specific APIs — Next.js provides `next/dynamic` which handles both client-side code splitting and SSR fallbacks. Always check what your SSR framework supports before using `React.lazy` directly in a server-rendered app.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the role of dynamic `import()`, `React.lazy`, and `Suspense` and how they relate to each other
+- [ ] Can write a route-based code-splitting setup with React Router and Suspense from memory
+- [ ] Can explain how `React.lazy` internally uses the Suspense throw-Promise protocol
+- [ ] Can describe the named-export gotcha and write the `.then()` wrapper to fix it
+- [ ] Can name two scenarios where aggressive code splitting hurts rather than helps
 
 ---
 

@@ -1,5 +1,14 @@
 # State Machines (XState)
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Finite state machine | One active state at a time; events trigger transitions between named states | Makes impossible state combinations structurally unrepresentable |
+| `useReducer` as state machine | `switch` on `state.status`, `if` on event type — invalid events return current state | No library needed for simple machines |
+| XState `createMachine` | Full statechart library with hierarchy, parallel states, actors, visualizer | Reach for it when flat state machines would require repetition or become unwieldy |
+| Hierarchical states | States that contain sub-states; parent transitions are inherited | Eliminates repeating the same transition in every sub-state |
+
 ## The Problem With Boolean State
 
 The instinct when adding a new state to a component is to add a new boolean:
@@ -16,6 +25,8 @@ Four booleans = sixteen theoretical combinations. But only four are valid: loadi
 State machines make impossible states impossible. Instead of four booleans, you have one `status` that can only be one of four values at a time.
 
 ---
+
+> **Check yourself:** If a component has 4 independent boolean flags, how many state combinations exist? How many are actually valid in a typical async fetch flow?
 
 ## What a State Machine Is
 
@@ -183,6 +194,8 @@ The `LOGOUT` event at the `authenticated` level is inherited by all sub-states. 
 
 ---
 
+> **Check yourself:** In the auth machine above, the `LOGOUT` transition is defined at the `authenticated` level, not in each sub-state. What happens when the user is in `loadingProfile` and triggers `LOGOUT`?
+
 ## When State Machines Beat Booleans
 
 Use a state machine when:
@@ -224,21 +237,37 @@ This is always clearer. The machine-based approach is not about XState specifica
 
 ## Interview Questions
 
+
+
 **Q (High): What problem does the state machine pattern solve that booleans don't?**
 
 Answer: Multiple booleans can be in combinations that are logically impossible in your domain but are not prevented by the code. `isLoading && isSuccess` is false in your mental model but nothing stops the code from reaching it. When it does — due to a bug, a race condition, or a missed state reset — the UI enters an untested, undefined state. A state machine uses a single status value that can only be one thing at a time: `'idle' | 'loading' | 'success' | 'error'`. Impossible combinations are impossible structurally. Additionally, state machines let you define which transitions are valid in which states — events that arrive in the wrong state are simply ignored, preventing entire classes of state-management bugs.
 
 ---
 
+
+
 **Q (High): When would you reach for XState vs a plain `useReducer`?**
 
 Answer: A plain `useReducer` with explicit state values handles most cases well: it's the state machine pattern without the library overhead. Reach for XState when: the state has hierarchy (states within states — e.g., an `authenticated` super-state containing `viewingProfile`, `editingProfile` sub-states); you need parallel states (two independent state machines running simultaneously); you want to invoke async services declaratively inside the machine rather than imperatively in `useEffect`; or the machine is complex enough that visual documentation (XState's Visualizer) would help onboard team members. XState's actor model also helps when machines need to communicate. For a simple async fetch flow, `useReducer` with explicit status strings is sufficient and requires no additional dependency.
+
 
 ---
 
 **Q (Medium): What is a "hierarchical state" and what problem does it solve?**
 
 Answer: A hierarchical state (statechart) is a state that contains nested sub-states. This allows parent states to define transitions that are inherited by all their children. For example, an `authenticated` state might contain `idle`, `loading`, and `error` sub-states. By defining `LOGOUT → unauthenticated` at the `authenticated` level, all three sub-states inherit that transition without repeating it. This solves the combinatorial explosion of flat state machines: in a flat machine you'd need to add `LOGOUT` handling to every single state that can occur while authenticated. Hierarchical states let you express "while in any of these states, this event behaves the same way" once.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why 4 boolean flags produce 16 combinations and why that's a problem — specifically what goes wrong when an impossible combination is reached
+- [ ] Can write a `useReducer`-based state machine for a fetch flow from memory, with the outer `switch` on state and inner `if` on event
+- [ ] Can explain what hierarchical states solve, and give an example of a transition that benefits from being defined at the parent level
+- [ ] Can articulate when to reach for XState vs a plain `useReducer` — at least three criteria for choosing XState
+- [ ] Can rewrite a boolean-flag UI condition (`!isLoading && !isError && data`) as a state-machine condition
 
 ---
 

@@ -1,5 +1,15 @@
 # shouldComponentUpdate
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `shouldComponentUpdate(nextProps, nextState)` | Lifecycle method that returns true/false to allow or skip a re-render | The manual escape valve for preventing unnecessary renders |
+| Reference equality (`!==`) | Default comparison — checks if two values are the same object in memory | Shallow; two identical objects with different references return false and trigger a re-render |
+| `PureComponent` | Base class that auto-implements SCU with shallow comparison of all props + state | The right default; manual SCU only when you need more precision |
+| Immutability requirement | Mutable state makes SCU see unchanged references and silently skip renders | State must always be replaced, never mutated, for SCU to work correctly |
+| Context bypass | Context updates re-render the consumer regardless of SCU's return value | SCU only guards against prop/state-driven re-renders |
+
 ## What Is This?
 
 `shouldComponentUpdate` is a lifecycle method that gives you manual control over whether a class component re-renders. React calls it before every update, passing the incoming props and state. Return `true` to proceed with the render. Return `false` to skip it entirely — the component stays as-is in the DOM.
@@ -45,6 +55,10 @@ class DataGrid extends React.Component {
 ```
 
 Before `PureComponent` (React 15.3) and `React.memo` (React 16.6), manual `shouldComponentUpdate` was how you did memoization.
+
+---
+
+> **Check yourself:** When `shouldComponentUpdate` returns `false`, which subsequent lifecycle methods are skipped? What does the component do instead?
 
 ---
 
@@ -106,6 +120,10 @@ shouldComponentUpdate(nextProps, nextState) {
 ```
 
 `PureComponent` implements exactly this — shallow comparison of all props and state — so you rarely need to write this manually.
+
+---
+
+> **Check yourself:** Why is mutating state directly (e.g., `this.state.items.push(x)`) a correctness bug specifically when using `shouldComponentUpdate` or `PureComponent`?
 
 ---
 
@@ -180,6 +198,7 @@ this.setState({ items: [...this.state.items, newItem] }); // new reference
 
 ## Interview Questions
 
+
 **Q (High): What does `shouldComponentUpdate` do and what are the risks of using it incorrectly?**
 
 Answer: `shouldComponentUpdate` receives the incoming props and state and returns a boolean — `true` to proceed with the render, `false` to skip it. The risk of returning `false` incorrectly is stale UI: the component stops updating even though something it cares about changed. React has no mechanism to catch this — the app appears to work but shows outdated data. The second risk is maintenance: as the component evolves and new props are added, the check must be updated too. Forgetting to include a new prop in the comparison means changes to that prop are silently ignored. `PureComponent` avoids this by comparing all props, but at the cost of less precision.
@@ -197,10 +216,21 @@ Answer: `PureComponent` is a base class that implements `shouldComponentUpdate` 
 Answer: Inline object literals create new references on every render: `<Component filters={{ status: 'active' }} />` passes a different object each time even if the contents are identical. `PureComponent`'s shallow comparison sees `prevProps.filters !== nextProps.filters` (different references) and re-renders. The fix: move the object out of render (define it as a constant or memoize it with `useMemo`), or pass individual primitive props instead of an object, or override `shouldComponentUpdate` with a custom deep comparison of the filters properties. In class components the clean solution is a memoized selector (e.g., with `reselect`). In functional components, `useMemo` handles this.
 
 ---
-
 **Q (Low): Can you use `shouldComponentUpdate` with `React.forwardRef`?**
 
 Answer: Yes, but with a caveat. If you wrap a class component in `forwardRef`, `shouldComponentUpdate` still works on the underlying class. The `forwardRef` wrapper itself is a thin function component and doesn't have lifecycle methods. The ref is forwarded to the class instance, and the class's `shouldComponentUpdate` controls its rendering as normal.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can name all lifecycle methods that are skipped when `shouldComponentUpdate` returns `false`
+- [ ] Can explain why mutable state is a correctness bug (not just a style issue) when using SCU or PureComponent
+- [ ] Can describe the note-the-inversion between SCU's `false` and React.memo comparator's `true`
+- [ ] Can give a concrete scenario where manual SCU is better than PureComponent
+- [ ] Can explain why context updates bypass `shouldComponentUpdate`
 
 ---
 

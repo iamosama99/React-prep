@@ -1,5 +1,15 @@
 # Lifecycle Methods
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Mount phase | constructor → getDerivedStateFromProps → render → componentDidMount | The sequence every class component follows on first appearance |
+| `componentDidMount` | Fires once after the DOM is ready | The correct place for data fetching, subscriptions, timers |
+| `componentDidUpdate` | Fires after every subsequent re-render | Respond to prop/state changes; always guard with a comparison |
+| `componentWillUnmount` | Fires just before the component is removed | Clean up everything set up in componentDidMount to prevent leaks |
+| Deprecated methods | `componentWillMount`, `componentWillReceiveProps`, `componentWillUpdate` | Unsafe in concurrent mode — replaced by commit-phase equivalents |
+
 ## What Is This?
 
 Class components go through three distinct phases during their existence: **mounting** (born into the DOM), **updating** (re-rendering when props or state change), and **unmounting** (removed from the DOM). React exposes hooks into each of these phases as methods you override on the class. These are lifecycle methods.
@@ -84,6 +94,10 @@ componentDidMount() {
 ```
 
 The equivalent of `useEffect(() => { ... }, [])`.
+
+---
+
+> **Check yourself:** In the mount phase, what is the correct order of the four main steps from constructor to componentDidMount? Can you name them in sequence without looking?
 
 ---
 
@@ -172,6 +186,10 @@ Called after `getDerivedStateFromError` when the error has been caught. Use it t
 
 ---
 
+> **Check yourself:** What is `getSnapshotBeforeUpdate` for, and what happens to its return value? Where does that value end up?
+
+---
+
 ## The Deprecated Methods
 
 React 16.3 deprecated three lifecycle methods because they were frequently misused and caused bugs in concurrent mode (where React can interrupt, abandon, and restart renders):
@@ -221,6 +239,7 @@ The core problem: these ran before React committed to the DOM, in the "render ph
 
 ## Interview Questions
 
+
 **Q (High): Walk me through the complete lifecycle of a React class component.**
 
 Answer: Three phases. Mount: constructor initializes state and binds handlers → `getDerivedStateFromProps` derives any state from props → `render` returns the element tree → React commits to the DOM → `componentDidMount` fires (side effects go here). Update: triggered by `setState` or prop change → `getDerivedStateFromProps` → `shouldComponentUpdate` (can bail out) → `render` → `getSnapshotBeforeUpdate` (captures DOM state before changes) → React commits → `componentDidUpdate` (respond to changes, compare prev vs current props/state). Unmount: `componentWillUnmount` fires → component is removed.
@@ -248,10 +267,22 @@ Answer: `componentDidMount` fires once, after the initial render, when the compo
 Answer: It runs synchronously after `render` but before React applies the DOM changes. Whatever it returns gets passed to `componentDidUpdate` as the third argument. The canonical use case is preserving scroll position in a chat UI or feed. You read the current scroll height before new messages are added, then in `componentDidUpdate` you restore the position so the user's viewport doesn't jump. The sync read is the key — `componentDidUpdate` fires after the DOM mutation, so by then the scroll position has already shifted and you can't read the pre-mutation state. There's no clean hook equivalent; `useLayoutEffect` gets you close but doesn't give you access to the pre-mutation DOM in quite the same way.
 
 ---
-
 **Q (Low): Can you call `setState` in `componentDidMount`? What happens?**
 
 Answer: Yes, you can. React will trigger a second render immediately after the first one, before the browser paints — so the user never sees the intermediate state. This is how libraries initialize from DOM measurements (e.g., knowing the width of a container before showing content). The cost is that two renders happen on mount instead of one. Avoid it when you can initialize state in the constructor, but it's legitimate for DOM-dependent initialization.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can list all mount-phase methods in the correct order from constructor to componentDidMount
+- [ ] Can explain why `componentDidUpdate` needs a conditional guard and what happens without one
+- [ ] Can describe what `getSnapshotBeforeUpdate` does and where its return value ends up
+- [ ] Can name the three deprecated lifecycle methods and explain why concurrent mode made them unsafe
+- [ ] Can write the `componentDidMount` / `componentWillUnmount` pattern for a timer from memory
+- [ ] Can map each class lifecycle to its hook equivalent
 
 ---
 

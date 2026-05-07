@@ -1,5 +1,15 @@
 # One-Way Data Flow
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| One-way data flow | Data travels down the tree as props; change intent travels up through callbacks | Single source of truth per piece of state; makes data changes traceable to a specific owner |
+| Lifting state up | Moving state to the lowest common ancestor of components that share it | Siblings can't share state directly — the parent acts as the coordinator |
+| Callback prop | A function passed down that the child calls to signal the parent | Not two-way binding — data still flows down; the callback is just the change-request mechanism |
+| Source of truth principle | Only one component owns a given piece of state | Copying props into local state creates two sources of truth that diverge |
+| Pure component ideal | Given the same props + state, always renders the same output | Consequence of one-way flow — no hidden channels can write to a component from the side |
+
 ## What Is This?
 
 One-way data flow is React's core architectural rule: **data moves down the component tree as props, and change requests move back up through callbacks.** A parent passes data to a child. If the child needs to change that data, it calls a function the parent passed down. The actual change happens in the owner — the parent — and the new value flows back down as a prop.
@@ -32,6 +42,8 @@ With two-way binding, when the UI shows unexpected data, you have to trace *whic
 **One-way flow constrains that.** There is always exactly one component that owns a piece of state. If you want to know why a value is what it is, you find the owner — the component that holds it in `useState` — and trace the event handlers that call `setState`. The trail is always top-down, one direction, one owner. You can answer "why is the cart empty?" by finding the component that owns cart state and reading its update logic. You don't have to worry about a sibling component that wrote to it from the side.
 
 This traceability is what makes React applications debuggable at scale.
+
+> **Check yourself:** What is the core traceability problem that two-way data binding creates as an app grows, and what specific property of one-way flow solves it?
 
 ---
 
@@ -136,6 +148,8 @@ This pattern is called lifting state up because you're moving state from child t
 
 Knowing when to lift state is a core React design skill. The rule: if two components need to agree on the same value, that value's state lives in their nearest common ancestor.
 
+> **Check yourself:** Given two sibling components that both need to read and update the same piece of data, describe step-by-step where the state lives and how each component interacts with it. Which component should you lift to, and why?
+
 ---
 
 ## One-Way Flow and the "Source of Truth" Principle
@@ -175,6 +189,7 @@ The correct behavior: read the prop directly, or use `useMemo`/derivation to tra
 
 ## Interview Questions
 
+
 **Q (High): What is one-way data flow in React and why did React choose it?**
 
 Answer: One-way data flow means data travels in a single direction: from parent to child as props. Children communicate intent back to parents via callbacks, but they don't write to parent state directly — the parent decides whether and how to update. React chose this model for predictability and debuggability: with a single owner per piece of state, you can always trace the current value to its source. In a two-way binding model, any component can modify shared state, which makes it hard to answer "why does this value look like this?" when the app has grown. One-way flow constrains the answer to: find the owner, read its update logic.
@@ -198,7 +213,6 @@ Answer: Through their common ancestor. Component A cannot directly signal Compon
 The trap: Suggesting the components use a shared mutable variable outside the tree (like a module-level object). That completely bypasses React's rendering model and causes unsynchronized updates.
 
 ---
-
 **Q (Medium): Why is copying a prop into local state with `useState` usually a bug?**
 
 Answer: Because it creates two sources of truth. The initial value passed to `useState` is only used on the first render — after that, local state and the prop diverge. If the parent re-renders with a new prop value, the component's local copy doesn't update. Now the UI reflects stale data, and any handler that updates local state further entrenches the divergence. The legitimate exception is "uncontrolled mode" — when you intentionally copy an initial value and let the component manage edits locally (like a form field with a `defaultValue`). Even then, you should be explicit about it in the component's design and name the prop `initialX` rather than `x` to signal it's a seed value, not a live prop.
@@ -212,6 +226,18 @@ The trap: Not knowing that `useState(prop)` only reads the prop once. This is a 
 Answer: In two-way data binding, a piece of UI state is directly connected to a data model — changes in the UI update the model, and changes to the model update the UI, automatically in both directions. In React's one-way flow, the UI reads data passed down as props, and any change to data goes through an explicit callback that updates the owner's state, which then re-renders the UI. Two-way binding is less code to wire up initially but harder to debug at scale because you lose the single-source-of-truth property. One-way flow is more explicit and slightly more verbose, but every data change is traceable to a specific `setState` call in a specific owner component. React's controlled inputs (`value` + `onChange`) are sometimes called "two-way binding" colloquially, but they implement the one-way flow pattern — the input is driven by state, and `onChange` requests a state update via a callback. The data always flows through the owner.
 
 The trap: Thinking React can't do interactive forms because it only allows one-way flow. The controlled input pattern is the answer.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can articulate the core traceability argument for one-way flow over two-way binding — not just "it's more predictable" but specifically why
+- [ ] Can describe the lifting-state-up pattern with a concrete sibling example, naming where state lives and what each component receives
+- [ ] Can explain why callback props do not constitute "two-way data binding" — describe what two-way binding actually means and how the callback pattern differs
+- [ ] Can identify the "copying props into state" antipattern and explain exactly when it diverges and why
+- [ ] Can describe what "parent re-renders always trigger child re-renders" means and what the opt-out mechanism is
 
 ---
 

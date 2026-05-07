@@ -1,5 +1,15 @@
 # Profiler API & DevTools Profiler
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `<Profiler>` component | Programmatic API that fires a callback with timing data on every commit | Works in production — use for RUM and slow-render monitoring |
+| `actualDuration` | Time React actually spent rendering the committed subtree | The primary signal: high = slow render |
+| `baseDuration` | Estimated time to render the subtree with zero memoization | `baseDuration - actualDuration` = time saved by memo |
+| DevTools Profiler | Browser extension UI for interactive flame-graph recording | Use in development to find which components render and why |
+| "Why did this render?" | DevTools annotation explaining each component's render cause | Fastest way to diagnose unexpected re-renders |
+
 ## What Is This?
 
 React exposes two complementary profiling tools:
@@ -75,6 +85,8 @@ You can nest `<Profiler>` components to measure specific subtrees independently:
 </Profiler>
 ```
 
+> **Check yourself:** What is the difference between `actualDuration` and `baseDuration`? If the two values are nearly equal, what does that tell you about your memoization?
+
 ---
 
 ## React DevTools Profiler
@@ -122,6 +134,8 @@ The "parent rendered" reason on a component you expected to be memoized is a dia
 ### The ranked chart
 
 The Profiler tab also offers a "ranked" view that lists all components rendered in a commit, sorted by render duration from slowest to fastest. This is the fastest way to find the hottest component in a large render.
+
+> **Check yourself:** You see "Parent rendered" as the render reason for a memoized component. What are the steps you'd take to diagnose and fix it?
 
 ---
 
@@ -188,6 +202,7 @@ Commit time includes applying DOM mutations. A component with a fast React rende
 
 ## Interview Questions
 
+
 **Q (High): What is the React `<Profiler>` component and when would you use it over the DevTools Profiler?**
 
 Answer: The `<Profiler>` component is a programmatic API that fires a callback with timing data on every commit within its subtree — `actualDuration`, `baseDuration`, `phase` (mount/update), and timestamps. It works in production. The DevTools Profiler is a browser extension for interactive recording and visual inspection — flame graphs, ranked views, "why did this render" annotations. Use DevTools Profiler when debugging an unknown performance problem in development — it gives the full visual picture fast. Use the `<Profiler>` API when you need to monitor render performance from real user sessions (RUM), log slow renders to an analytics service, or run performance assertions in CI. Both measure the same thing; the choice is interactive-visual vs programmatic-production.
@@ -205,10 +220,21 @@ Answer: "Parent rendered" means the component had no changes to its own state, p
 Answer: `baseDuration` is the estimated time to render the subtree if every component re-rendered — no memo bailouts, no skip. `actualDuration` is the time actually spent — only the components that did render. The gap (`baseDuration - actualDuration`) is the time saved by memoization. If `actualDuration ≈ baseDuration`, memoization is saving nothing — every component in the tree is rendering. If `actualDuration` is much smaller, memo is working. A high `baseDuration` with a low `actualDuration` is a healthy profile for a large tree with good memoization. A high `actualDuration` on a small `baseDuration` subtree means the renders themselves are expensive.
 
 ---
-
 **Q (Low): How do you profile a React app in production?**
 
 Answer: Two options. First, the `<Profiler>` component — it works in production builds with a small overhead. Place it around the subtrees you care about, log slow renders to your monitoring service, and remove or disable it when not needed. Second, use the `react-dom/profiling` bundle instead of `react-dom` in your production build. This is a version of React that includes the profiling instrumentation hooks, allowing the DevTools Profiler to connect to a production build. It's heavier than the normal production build and is used for targeted investigations (e.g., "reproduce the exact slow render from a user report") rather than always-on monitoring.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain `actualDuration` vs `baseDuration` and what each tells you about memoization effectiveness
+- [ ] Can describe what a "Parent rendered" reason means in DevTools and outline the diagnostic steps to fix it
+- [ ] Can explain when to use the `<Profiler>` API vs the DevTools Profiler (production monitoring vs development debugging)
+- [ ] Can name two things the flame graph does NOT show (browser layout time; DOM mutation cost)
+- [ ] Can explain why DevTools profiling numbers are inflated in development (StrictMode double-invoke)
 
 ---
 

@@ -1,5 +1,15 @@
 # Automatic Batching (React 18)
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Batching | React grouping multiple `setState` calls into one re-render | Reduces wasted renders when multiple state slices update together |
+| React 17 batching | Only applied inside React synthetic event handlers | `setTimeout`, Promises, and native listeners each triggered one render per `setState` |
+| Automatic batching (React 18) | Batching applies everywhere in the same scheduler task | Free perf win for async callbacks and third-party code that sets state |
+| `createRoot` requirement | Automatic batching only activates with `createRoot` | Apps still on `ReactDOM.render` keep React 17 behavior |
+| `flushSync` | Forces an immediate synchronous flush, breaking the batch | Opt-out for cases where you need an intermediate DOM commit |
+
 ## What Is This?
 
 Batching is React grouping multiple state updates into a single re-render. Instead of re-rendering once per `setState` call, React waits until all updates in a given context are queued, then renders once with the final state.
@@ -34,6 +44,8 @@ This meant that async code was penalized: a fetch callback that updated two stat
 ### React 18's solution
 
 React 18 introduced a scheduler-level batching model. Instead of "batch updates that arrive from within a React event handler," React now batches all updates that arrive within the same microtask / scheduler task, regardless of their origin. The render is deferred to the next scheduler tick, giving any synchronous state updates in the current call stack time to accumulate before the render runs.
+
+> **Check yourself:** In React 17, which contexts batched `setState` calls and which didn't? What was the practical consequence for async code?
 
 ---
 
@@ -149,6 +161,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 
 This was a deliberate migration path — apps could upgrade the React package and adopt new features incrementally.
 
+> **Check yourself:** You upgraded to React 18 but async callbacks still seem to cause multiple re-renders. What's the most likely cause?
+
 ---
 
 ## Batching and State Update Order
@@ -172,6 +186,8 @@ setCount(count + 1); // schedules count → count+1
 setCount(count + 1); // schedules count → count+1 again (same stale value)
 // One render with count = count + 1, not count + 2
 ```
+
+> **Check yourself:** If you call `setCount(count + 1)` twice in a batch, do you get one increment or two? Why? What form fixes this?
 
 ---
 
@@ -204,6 +220,7 @@ The render hasn't happened; state is not updated synchronously. Always use the f
 
 ## Interview Questions
 
+
 **Q (High): What is batching in React and what changed in React 18?**
 
 Answer: Batching is React grouping multiple state updates into a single re-render. Before React 18, batching only applied inside React's synthetic event handlers — `setTimeout`, Promises, and native event listeners each triggered one render per `setState` call. React 18 with `createRoot` enables automatic batching everywhere: any state updates queued synchronously within the same scheduler task are collapsed into one render. A `fetch` callback that calls three `setState`s now produces one render instead of three. The opt-out is `flushSync` for cases where you genuinely need an intermediate DOM commit.
@@ -217,7 +234,6 @@ The trap: Candidates who say "React always batched state updates" are partially 
 Answer: `flushSync` forces React to synchronously flush all queued state updates and commit the resulting DOM changes before returning. It's the opt-out from batching. You'd use it when you need to read the DOM immediately after a state update — for example, computing a scroll position after an item is added to a list, or coordinating with a third-party library that reads the DOM synchronously. It's intentionally verbose — if you find yourself reaching for it often, it's usually a signal that the state structure or the component design should be rethought. Overusing `flushSync` negates the performance benefit of batching and can cause layout thrash.
 
 ---
-
 **Q (Medium): Does automatic batching apply if I'm still using `ReactDOM.render` (legacy mode)?**
 
 Answer: No. Automatic batching is gated on `createRoot`. If you're on legacy mode (`ReactDOM.render`), you get React 17's batching behavior even with the React 18 package — batching only inside synthetic event handlers. This was deliberate: it gives teams a gradual migration path. They can upgrade the React package and adopt new React 18 features incrementally, without breaking apps that depend on the synchronous setState behavior outside event handlers.
@@ -227,6 +243,18 @@ Answer: No. Automatic batching is gated on `createRoot`. If you're on legacy mod
 **Q (Medium): In a batched update, you call `setState` twice with the direct form (`setState(value + 1)`) vs the functional form (`setState(v => v + 1)`). What's the difference?**
 
 Answer: The direct form captures the state value from the current render — both calls see the same `value`. If both enqueue `value + 1`, the second overwrites the first and you end up with one increment, not two. The functional form receives the most recent queued state as its argument — the second call sees the result of the first. Two functional increments produce two increments. This is why the functional updater form is always safer when the new state depends on the previous state, especially in batched contexts.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain what React 17 batched vs what it did NOT batch, with a concrete example
+- [ ] Can explain what changed in React 18 and what the `createRoot` requirement is
+- [ ] Can describe what `flushSync` does and name a real use case for it
+- [ ] Can explain the difference between the direct and functional updater form within a batch, and predict the final state value
+- [ ] Can name why automatic batching is a no-op if you haven't migrated to `createRoot`
 
 ---
 

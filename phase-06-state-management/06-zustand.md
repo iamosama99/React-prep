@@ -1,5 +1,14 @@
 # Zustand
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| `create` | Defines store state and actions in one function; returns a hook | No Provider, no reducers — the hook is usable anywhere in the tree |
+| Selector-based re-render | Components only re-render when their selector's return value changes | More granular than Context; automatic without any extra config |
+| Module-level singleton | Store lives outside React; state persists for the module lifetime | Easy to read/write from outside components; requires manual reset in tests |
+| `shallow` equality | Compares object properties instead of the object reference | Required when selecting multiple values as a single object |
+
 ## The Pitch
 
 Zustand is global state management with almost no API surface. There are no providers, no reducers, no action creators, no boilerplate. You define a store as a function, read it with a selector hook, and update it by calling functions you defined in the store. That's the entire model.
@@ -42,6 +51,8 @@ The component re-renders only when `count` changes. A component that only select
 The store state lives in a closure outside React. `create` returns an enhanced hook backed by `useSyncExternalStore`. When you call the hook with a selector, Zustand subscribes the component to the store and runs the selector on every state change. If the selector's return value changes (by `Object.is`), the component re-renders. If not, it doesn't.
 
 No provider means the store is module-level — a singleton. This is deliberate. For per-component or per-subtree state, use React's own `useState`/`useReducer`. Zustand is for state that truly needs to be global.
+
+> **Check yourself:** Two components both select `state.count` from the same Zustand store. The store updates `state.name`. Do either component re-render? Why?
 
 ---
 
@@ -157,6 +168,8 @@ const name = useUserStore(state => state.name);
 const email = useUserStore(state => state.email);
 ```
 
+> **Check yourself:** You select `{ name, email }` from a Zustand store without `shallow`. The store updates `role`. Does your component re-render? Why, and how do you fix it?
+
 ---
 
 ## Reading State Outside Components
@@ -200,6 +213,7 @@ Zustand isn't a Redux replacement for every project — it's the right tool for 
 
 ## Interview Questions
 
+
 **Q (High): How does Zustand avoid re-rendering components that don't care about the changed state?**
 
 Answer: Every `useStore(selector)` call subscribes the component to the store via `useSyncExternalStore`. On every state change, Zustand runs the selector function and compares the result to the previous result using `Object.is`. If the result is the same, the component doesn't re-render. If it's different, it does. This is per-component, per-selector granularity — a component selecting only `state.count` doesn't re-render when `state.name` changes, because `count` is the same value. This is more granular than Context, which re-renders all subscribers on any change.
@@ -211,7 +225,6 @@ Answer: Every `useStore(selector)` call subscribes the component to the store vi
 Answer: The store is a module-level singleton — it's created once when the module is imported. All components in the app share the same store instance. Implications: (1) No setup required in the tree; any component can import and use the store directly. (2) State persists for the lifetime of the JavaScript module, not the component tree — you need to reset it manually if needed. (3) It's harder to have independent instances of the same store (e.g., two independent counter widgets) — that scenario usually calls for component-level state instead. (4) Testing requires resetting or clearing the store between tests to avoid state leakage.
 
 ---
-
 **Q (Medium): Why does selecting multiple values with an object return in Zustand cause unnecessary re-renders, and how do you fix it?**
 
 Answer: When the selector returns `{ name: state.name, email: state.email }`, a new object is created on every call — even if `name` and `email` haven't changed. Zustand's default comparison is `Object.is`, which returns false for two different object references regardless of contents. Fix: pass `shallow` as the second argument to `useStore`. Shallow equality compares each property individually instead of comparing the container object reference. Alternatively, select each value in a separate `useStore` call — each one uses `Object.is` on a primitive, which only re-renders when that specific primitive changes.
@@ -221,6 +234,18 @@ Answer: When the selector returns `{ name: state.name, email: state.email }`, a 
 **Q (Medium): How do you use Zustand state outside of React components?**
 
 Answer: The return value of `create` is the hook, but it also has `getState()`, `setState()`, and `subscribe()` methods. `getState()` returns the current state snapshot synchronously. `setState()` updates state the same way `set` does inside the store. `subscribe()` lets you listen for state changes. This lets you read and update Zustand state from services, utilities, event handlers outside the React tree, or in non-component code — something that's not possible with Context or component-level state.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can write a minimal Zustand store with state and an action from memory
+- [ ] Can explain why `shallow` is needed when selecting multiple values as an object
+- [ ] Can explain what "module-level singleton" means and the testing implication
+- [ ] Can name two ways to read Zustand state outside of a React component
+- [ ] Can state when you'd pick Zustand over Redux and when you'd pick Redux over Zustand
 
 ---
 

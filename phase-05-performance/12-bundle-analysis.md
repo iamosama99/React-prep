@@ -1,5 +1,15 @@
 # Bundle Analysis
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Bundle treemap | Visual representation of bundle composition by file size | Makes silently-accumulated large dependencies immediately visible |
+| Stat / parsed / gzip size | Raw, minified, and compressed sizes | Gzip = network cost; parsed = CPU parse cost — both matter |
+| `"sideEffects": false` | Library declaration that enables file-level tree shaking | Without it, bundlers conservatively include unreferenced files |
+| Duplicate modules | Same package appearing twice across chunks | Indicates version mismatch; wastes bytes in every affected chunk |
+| Sub-path import | `import groupBy from 'lodash/groupBy'` instead of importing the root | Bypasses barrel files, enables tree shaking even for CJS libraries |
+
 ## What Is This?
 
 Bundle analysis is the process of examining what's in your JavaScript bundle — which modules are included, how large each is, why each was included (the import chain), and whether any large dependencies can be eliminated, replaced, or deferred. The primary tool is a visual treemap that makes the size composition of your bundle immediately scannable.
@@ -24,6 +34,8 @@ JavaScript bundle size directly impacts page load performance. Every kilobyte of
 Steps 3–5 happen on the main thread. A 1MB bundle parsed on a mid-range Android phone can block the main thread for 5–10 seconds. Parse and compile costs are independent of execution time — a large dependency you never call still pays the parse/compile cost just for being in the bundle.
 
 Bundle analysis solves a specific problem: dependencies accumulate silently. You `npm install` a small utility, it depends on a massive library, and your bundle grows 300KB without any explicit decision. The treemap makes this visible.
+
+> **Check yourself:** Why does including a large library you never call still hurt performance? Name the steps that happen to every JS byte before it can execute.
 
 ---
 
@@ -140,6 +152,8 @@ Look at:
 
 A utility library that's 10KB but not tree-shakable forces you to load all 10KB even if you use one function. A 50KB tree-shakable library where you use 2KB of it loads 2KB.
 
+> **Check yourself:** You're choosing between two date libraries: one is 10KB but not tree-shakable, the other is 50KB but fully tree-shakable and you'll use 2KB of it. Which has a lower bundle impact and why?
+
 ---
 
 ## Build-time vs Runtime Costs
@@ -175,6 +189,7 @@ For tree shaking to work, a package must set `"sideEffects": false` in its `pack
 
 ## Interview Questions
 
+
 **Q (High): How would you investigate why your React app's bundle is larger than expected?**
 
 Answer: Start with a bundle visualizer — `webpack-bundle-analyzer` for webpack, `rollup-plugin-visualizer` for Vite. Build with the plugin enabled and open the treemap. Look for: unexpectedly large rectangles (a single dependency consuming most of the bundle), duplicate modules (same package appearing twice), development-only code in production, and full library imports where you only need one function. The most common findings: lodash/underscore imported as a whole namespace, moment.js with all locales, icon libraries importing the entire icon set, and visualization libraries included in the main chunk when they should be code-split. Once you identify the large modules, check whether they're tree-shakable, whether a lighter alternative exists, or whether they should be lazy-loaded.
@@ -192,10 +207,21 @@ Answer: Stat size is the raw size of the file before any bundler transformation 
 Answer: Three approaches, in order of effort. First, if you need the full moment.js API, use the `moment-locales-webpack-plugin` to strip unused locales — this can reduce moment's footprint from ~600KB to ~40KB by including only the locales your app needs. Second, migrate to `date-fns` or `dayjs` — both are tree-shakable, have similar APIs, and are an order of magnitude smaller. `date-fns` is particularly clean for tree-shaking since each function is its own module. Third, if moment is only used in a few admin pages, code-split those pages so moment is a lazy chunk, not in the main bundle. The right answer combines: replace with a lighter alternative where possible, and code-split the routes that use the date library anyway.
 
 ---
-
 **Q (Low): What is `"sideEffects": false` in a package.json and why does it matter for bundle size?**
 
 Answer: `"sideEffects": false` is a declaration in a library's `package.json` that tells bundlers "none of the files in this package have side effects — it's safe to remove any export that isn't imported." Without this flag, bundlers conservatively include every file that's imported, even if the specific export from that file is never used. With it, the bundler can tree-shake at the file level: if you `import { formatDate } from 'date-fns'`, only the `formatDate` module and its dependencies are bundled. If `"sideEffects": false` is absent, the bundler may include unrelated date-fns modules that were transitively imported. This flag is a library author's responsibility, but app developers can work around its absence by importing from specific sub-paths (`import formatDate from 'date-fns/formatDate'`) rather than the package root.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the three size metrics (stat, parsed, gzip) and which matters for network vs CPU cost
+- [ ] Can name four common large-bundle culprits and the fix for each
+- [ ] Can explain what `"sideEffects": false` does and why its absence forces conservative bundling
+- [ ] Can describe how to set up a bundle visualizer in both webpack and Vite projects
+- [ ] Can distinguish what bundle analysis reveals vs what Chrome Coverage reveals
 
 ---
 

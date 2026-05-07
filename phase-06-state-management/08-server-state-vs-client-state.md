@@ -1,5 +1,14 @@
 # Server State vs Client State
 
+## Quick Reference
+
+| Property | Client State | Server State |
+|---|---|---|
+| Source of truth | Your app | Server/database |
+| Staleness | Never stale — you control all changes | Can go stale at any time |
+| Loading/error states | Not applicable | Always applicable |
+| Right tool | `useState`, Zustand, Redux | React Query, RTK Query, SWR |
+
 ## The Fundamental Split
 
 Most React state management discussions treat all state the same way. The insight that changed the field: **server state and client state have completely different properties and need different tools**.
@@ -25,6 +34,8 @@ The operations on each type are fundamentally different:
 | Updates | Immediate, synchronous | Fire-and-forget → wait → confirm |
 
 Trying to manage server state with a client state tool (like putting API responses into Redux with no cache management) means you manually build what React Query or RTK Query provide: staleness checks, background refetching, deduplication, loading states, error states, cache invalidation. You get all the complexity with none of the infrastructure.
+
+> **Check yourself:** Name three behaviors that React Query handles automatically that you would have to write by hand if you stored API responses in a Redux slice.
 
 ---
 
@@ -94,6 +105,8 @@ const { data, isLoading, isError } = useQuery({ queryKey: ['users'], queryFn: ap
 - User preferences saved to a server? Server state while fetching, client state while editing, then mutated back to server.
 - An optimistic update? Client-state lookahead layered over server state — the server state library manages it.
 
+> **Check yourself:** Classify each of these: (1) which filter is active in a data table, (2) the list of products from the API, (3) the current step of a multi-step checkout wizard, (4) the user's saved address from the database.
+
 ---
 
 ## The Architecture That Falls Out
@@ -136,6 +149,7 @@ If a user wants to share "the current view" with a colleague, URL state lets the
 
 ## Interview Questions
 
+
 **Q (High): What is the difference between server state and client state? Why does it matter for library selection?**
 
 Answer: Client state is owned by the application — it only exists in the current session, the app has full synchronous control over it, and it never becomes stale because no external system can change it. UI flags, form inputs, selection state. Server state is owned by a remote source — the application has a cached copy that may be outdated at any moment. It needs fetching, loading/error handling, staleness management, deduplication, and invalidation. These properties require fundamentally different tools: client state needs a synchronous reactive container (useState, Zustand, Redux slice), server state needs a caching layer with background refetch and invalidation semantics (React Query, RTK Query). Mixing them — storing API responses in Redux with manual thunks — means you build the caching infrastructure by hand without the library's optimizations.
@@ -147,10 +161,21 @@ Answer: Client state is owned by the application — it only exists in the curre
 Answer: Move API data to React Query or RTK Query. Server data stored in Redux with hand-written thunks doesn't handle cache invalidation, background refetching, deduplication of concurrent requests, or stale-while-revalidate — you'd need to build all of that yourself. Every new endpoint requires ~30 lines of action types, action creators, and reducer cases. React Query collapses that to a single `useQuery` call and handles all the async lifecycle automatically. What remains in Redux (or Zustand) is genuinely client-owned state: UI flags, selected items, in-progress forms. Most teams doing this migration find their Redux store shrinks dramatically.
 
 ---
-
 **Q (Medium): Give examples of what belongs in URL state vs React state vs server state.**
 
 Answer: URL state — filter, sort, search query, active tab when you want deep linking, selected item ID for navigation. This state should survive a page refresh and be shareable. React/client state — modal open/closed (unless you need deep linking to modals), drag-in-progress, multi-step wizard progress, controlled form input before submission. This is ephemeral and session-specific. Server state — anything fetched from an API: user data, product catalog, orders. This has a server as its source of truth, becomes stale, and needs a caching layer.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can define server state and client state and name two examples of each from memory
+- [ ] Can name at least four behaviors React Query handles that manual Redux thunks do not
+- [ ] Can classify a given piece of state (modal, API data, filter, preferences) into the correct layer
+- [ ] Can explain why the three-layer architecture (server state / client state / URL state) simplifies most apps
+- [ ] Can give two examples of state that belongs in the URL and explain the benefit
 
 ---
 

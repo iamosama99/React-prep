@@ -1,10 +1,19 @@
 # Rules of hooks
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Call order stability | React tracks hooks by the order they are called | Any change in call order breaks state association |
+| Top-level only | Hooks cannot be inside conditions, loops, or nested functions | Guards call order stability across renders |
+| Function components and custom hooks only | Hooks cannot be called in class components or plain functions | Hooks depend on React's render context |
+| ESLint plugin | `eslint-plugin-react-hooks` enforces both rules statically | Catches violations before runtime |
+
 ## What Is This?
 The rules of hooks are the constraints React enforces on how hooks are called. They require hooks to be called only at the top level of function components and custom hooks, and never inside loops, conditions, or nested functions.
 
 ## Why Does It Exist?
-React relies on the order of hook calls to associate stateful behavior with a component. If hooks are called conditionally or inside loops, the call order can change between renders, breaking React’s internal hook state tracking.
+React relies on the order of hook calls to associate stateful behavior with a component. If hooks are called conditionally or inside loops, the call order can change between renders, breaking React's internal hook state tracking.
 
 ## How It Works
 There are two core rules:
@@ -22,11 +31,15 @@ if (isVisible) {
 
 If `isVisible` changes between renders, the hook order changes and React cannot match effects and state to the correct positions.
 
+> **Check yourself:** What does React use to track which state and effects belong to which hook call, and what breaks that mechanism?
+
 ### Why top-level matters
 React builds a list of hooks in the order they are called during render. That list must be stable across all renders of the same component. Conditional or dynamic hook calls break that guarantee.
 
 ### Custom hooks count too
-A custom hook is just a function that uses hooks. The rules apply inside custom hooks as well, because they are still part of React’s hook call sequence.
+A custom hook is just a function that uses hooks. The rules apply inside custom hooks as well, because they are still part of React's hook call sequence.
+
+> **Check yourself:** A custom hook calls useState and useEffect inside it. Do the rules of hooks apply inside that custom hook? Why?
 
 ## Gotchas
 - `useEffect` inside an event handler is invalid because the hook is not called during render.
@@ -35,13 +48,30 @@ A custom hook is just a function that uses hooks. The rules apply inside custom 
 - The ESLint React Hooks plugin exists to enforce these rules automatically.
 
 ## Interview Questions
+
+
 **Q (High): Why must hooks be called at the top level?**
 Answer: because React uses call order to track hook state. Top-level calls ensure the same sequence on every render, so state and effects stay matched to the correct hook position.
 The trap: saying it is only a style rule or that it is to make code easier to read.
 
+
+---
+
 **Q (Medium): Can you call hooks inside a custom hook?**
 Answer: yes. Custom hooks are just reusable functions that follow the same rules. They are allowed to call hooks because they are part of the hook call sequence.
 The trap: thinking custom hooks are exempt from the hooks rules.
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can state both rules of hooks from memory without prompting
+- [ ] Can explain why conditional hook calls break React's internals
+- [ ] Can write an example of an invalid hook call and fix it
+- [ ] Can explain why the rules also apply inside custom hooks
+- [ ] Can name the ESLint tool that enforces these rules
 
 ---
+
 *Next: Stale closure problem — a common bug pattern once hook rules are understood.*

@@ -1,10 +1,21 @@
 # Avoiding Re-renders Without Memo
 
+## Quick Reference
+
+| Pattern | Core idea | When to use it |
+|---|---|---|
+| Push state down | Move fast-changing state into the smallest component that needs it | State is only used by a small subtree |
+| Children as props | Pass the expensive tree from a stable ancestor as `children` | Wrapper component re-renders often but content doesn't change |
+| Slot props / render props | Same idea extended to any JSX prop, not just `children` | Layout components that re-render on scroll/resize |
+| Isolate the provider | Wrap context provider only around what consumes it | Context-triggered renders spilling to unaffected siblings |
+
 ## What Is This?
 
 `React.memo` is the hammer in React performance work, but structural patterns can eliminate unnecessary re-renders entirely — without the overhead of prop comparison, without requiring `useCallback`/`useMemo` to stabilize references, and without the maintenance burden of custom comparators.
 
 These patterns work by keeping fast-changing state away from components that don't need it, using composition to pass stable component trees through parents that re-render frequently.
+
+> **Check yourself:** What single insight do all three structural patterns (push state down, children as props, slot props) exploit?
 
 ---
 
@@ -142,6 +153,8 @@ const el = <ExpensiveTree />;
 
 This is why the children-as-props pattern works without any memo.
 
+> **Check yourself:** Why does passing `<ExpensiveTree />` as `children` from a stable parent prevent re-renders in the child? What built-in reconciler behavior makes this work?
+
 ---
 
 ## Pattern 4: Separate Rendering Concerns with Context
@@ -216,6 +229,7 @@ Even if you've perfectly isolated state using these patterns, any `useContext` c
 
 ## Interview Questions
 
+
 **Q (High): You have an expensive component re-rendering because its parent re-renders, but you want to avoid adding `React.memo`. What structural patterns can you use?**
 
 Answer: Two main patterns. First, push state down — if the parent's state is only used by a small portion of the tree, move that state into a smaller component that only wraps what needs it. The expensive component becomes a sibling, outside the re-render propagation path. Second, use children as props — move the expensive component up to a grandparent that doesn't re-render, and pass it down as `children`. When the immediate parent re-renders, the `children` prop is the same React element reference (created by the stable grandparent), so React bails out of reconciling it without needing memo. Both patterns work by keeping the expensive component outside the blast radius of the re-rendering state owner.
@@ -229,10 +243,24 @@ The trap: Many candidates jump straight to `React.memo` for any re-render proble
 Answer: A React element is a plain JavaScript object created by `React.createElement`. When `App` renders `<ExpensiveTree />` and passes it as `children` to `Wrapper`, that object is created in `App`'s render. If `App` doesn't re-render, the same object reference is passed to `Wrapper` every time `Wrapper` re-renders. During reconciliation, React checks element identity — if the element reference is the same as the previous render, it skips reconciling that entire subtree. The expensive component function never runs. This is a built-in reconciler optimization, independent of `React.memo`.
 
 ---
-
 **Q (Medium): What's the tradeoff between pushing state down and using `React.memo`?**
 
 Answer: Pushing state down is zero-cost — no comparison overhead, no need to stabilize references with `useCallback`/`useMemo`, and the code makes the data flow visible by design. The tradeoff is structural: it only works when the state is genuinely local to a small subtree. If the state needs to be shared across many siblings or distant descendants, pushing it down creates prop drilling or requires context. `React.memo` is more flexible — it works regardless of where state lives — but it adds comparison cost on every render, requires reference stability from the parent, and can introduce stale closure bugs when combined with `useCallback`. Prefer structural solutions; use memo when structure can't solve it.
+
+---
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain the single insight that all three structural patterns exploit
+- [ ] Can write the "push state down" refactor from the bad/good example from memory
+- [ ] Can explain why the children-as-props pattern works without `React.memo` (what the reconciler does with same-reference elements)
+- [ ] Can describe the condition that must hold for the children-as-props trick to work (stable ancestor)
+- [ ] Can name the tradeoff between pushing state down vs using `React.memo`
+- [ ] Can explain why context consumers still re-render even after applying these structural patterns
 
 ---
 

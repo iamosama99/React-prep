@@ -1,5 +1,15 @@
 # Props, props.children, and defaultProps
 
+## Quick Reference
+
+| Concept | What it is | Why it matters |
+|---|---|---|
+| Props | The first argument to a component function — a plain JS object from the caller | The component's public API; read-only inside the component; enforces one-way data flow |
+| `props.children` | Special prop auto-populated with content between opening/closing tags | Enables components to act as wrappers without knowing what they'll contain |
+| Default parameters | JS-native fallback values in the function signature: `{ variant = 'primary' }` | Modern replacement for `defaultProps`; only triggers on `undefined`, not `null` |
+| Prop drilling | Data passing through intermediate components that don't use it | A maintenance coupling problem — signals need for Context, composition, or restructuring |
+| Callback props | Passing a function down so a child can signal intent upward | The correct mechanism for child-to-parent communication without breaking one-way flow |
+
 ## What Is This?
 
 **Props** (short for properties) are how you pass data *into* a component. They're the component's public API — the knobs and levers a caller can turn to customize what the component does or displays.
@@ -39,6 +49,8 @@ Without props, every component would be hardcoded. You'd need a `SaveButton`, a 
 More fundamentally, props enforce **one-way data flow** — data moves *down* the component tree from parent to child, never the other way around. A parent owns the data, passes it down as props, and the child renders based on what it receives. This constraint is what makes React applications predictable: to understand what a component renders, you look at its props. There are no side channels.
 
 This is in deliberate contrast to two-way data binding frameworks (like early Angular), where data could flow both ways and state could be hard to trace. React chose the stricter model intentionally.
+
+> **Check yourself:** Why are props read-only inside a component? What would break if a child could mutate a prop, and how does the callback pattern restore the ability to trigger changes upward?
 
 ---
 
@@ -168,6 +180,8 @@ This is rarely done in practice but it confirms that `children` has no special s
 
 When you pass multiple children, `children` is an array. When you pass one child, `children` is that single element (not wrapped in an array). When you pass none, `children` is `undefined`. This inconsistency is the reason `React.Children.map` exists — it handles all cases uniformly. More on that in the Component Patterns phase.
 
+> **Check yourself:** What is prop drilling, why is it a problem at the maintenance level (not the performance level), and what are the three solution categories?
+
 ---
 
 ## defaultProps and Default Parameters
@@ -283,6 +297,7 @@ This is plain JavaScript behavior, but it surprises people. If your API needs to
 
 ## Interview Questions
 
+
 **Q (High): What are props and how are they different from state?**
 
 Answer: Props are inputs passed *into* a component from its parent — they are owned by the caller, read-only inside the component, and the mechanism for one-way data flow. State is data *owned by* the component itself — it lives inside the component, can be changed by the component, and causes a re-render when it changes. The key mental model: props are "what you're told," state is "what you remember." A component can read its props freely, but it can never write to them.
@@ -304,14 +319,6 @@ The trap: Thinking `children` is special beyond its name. It's an ordinary prop 
 Answer: Prop drilling is passing data through multiple component layers to reach a deeply nested component, where intermediate components receive and forward props they don't actually use. The problem is maintenance coupling — when the data shape changes, every intermediate component needs to be updated even though they have no interest in the data. It also makes components harder to reuse in isolation because they carry props purely for forwarding. Solutions depend on the cause: Context API for data that many components need (like theme, auth user, locale); composition/children for structural problems where you can restructure the tree; state management libraries for app-wide state.
 
 The trap: Saying "prop drilling is always bad" or "use Context instead of props." Context has its own performance tradeoffs (every consumer re-renders on any context change). Prop drilling is only a problem when it becomes deep and pervasive. 2-3 levels is usually fine.
-
----
-
-**Q (Low): What's the difference between `defaultProps` and default parameter values?**
-
-Answer: Both define fallback values for missing props, but they operate at different levels. `defaultProps` is a React-level feature — React merges the defaults into the props object before calling the component. Default parameters are a JavaScript-level feature — the runtime substitutes the default when the argument is `undefined`. For function components, default parameters are the modern approach: they're native JavaScript, better supported by TypeScript type inference, and `defaultProps` for function components was deprecated in React 19. `defaultProps` still applies for class components.
-
-The trap: Not knowing that `defaultProps` is deprecated for function components. Also missing that both approaches only trigger on `undefined` — passing `null` explicitly bypasses both.
 
 ---
 
@@ -344,6 +351,25 @@ The trap: Thinking you can read `props.key` inside a component to access the key
 Answer: Add it with a default value in the function signature: `function MyComponent({ existingProp, newProp = 'defaultValue' })`. Because the default kicks in when the prop is absent (`undefined`), all 20 existing call sites that don't pass the prop will get the default automatically — no changes needed at the call sites. This is the whole value of defaults. If you're in a TypeScript codebase, mark the prop optional in the type: `newProp?: string`. The only risk is if some call sites are explicitly passing `null` and expecting the default behavior — default parameters don't activate on `null`, so you'd need `newProp = undefined` and handle null inside the function, or use `newProp ?? 'defaultValue'` in the body.
 
 The trap: Saying you'd add a required prop and update all 20 call sites. That's valid for truly required data, but unnecessary for optional behavior with sensible defaults. The interviewer is testing whether you default-in-the-signature instinctively.
+
+---
+**Q (Low): What's the difference between `defaultProps` and default parameter values?**
+
+Answer: Both define fallback values for missing props, but they operate at different levels. `defaultProps` is a React-level feature — React merges the defaults into the props object before calling the component. Default parameters are a JavaScript-level feature — the runtime substitutes the default when the argument is `undefined`. For function components, default parameters are the modern approach: they're native JavaScript, better supported by TypeScript type inference, and `defaultProps` for function components was deprecated in React 19. `defaultProps` still applies for class components.
+
+The trap: Not knowing that `defaultProps` is deprecated for function components. Also missing that both approaches only trigger on `undefined` — passing `null` explicitly bypasses both.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain why props are read-only in terms of data ownership, not just "React convention"
+- [ ] Can describe what `props.children` contains for zero, one, and multiple children, and why this inconsistency matters
+- [ ] Can explain why `defaultProps` is deprecated for function components and what replaces it
+- [ ] Can identify prop drilling by example and name the three solution categories with a brief reason for each
+- [ ] Can write the callback pattern that lets a child trigger a change in a parent's state from memory
 
 ---
 

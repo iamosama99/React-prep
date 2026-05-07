@@ -1,5 +1,15 @@
 # Redux Toolkit
 
+## Quick Reference
+
+| API | What it does | Replaces |
+|---|---|---|
+| `configureStore` | Sets up store with DevTools, thunk, and `combineReducers` automatically | `createStore` + manual middleware composition |
+| `createSlice` | Generates action creators and action types from a reducers map | Separate action constants, creators, and reducer |
+| Immer (built in) | Lets you write mutation syntax in reducers safely | Verbose spread operators for immutable updates |
+| `createAsyncThunk` | Generates `pending/fulfilled/rejected` action lifecycle | Manual `REQUEST/SUCCESS/FAILURE` action triad |
+| `createSelector` | Memoized selector — only recomputes when inputs change | Inline selectors that create new references on every call |
+
 ## What Redux Toolkit Is
 
 Redux Toolkit (RTK) is the official, opinionated way to write Redux. It's not a different state management system — it's Redux with the boilerplate collapsed. Everything underneath is still actions, reducers, and a store; RTK just eliminates the ceremony.
@@ -71,6 +81,8 @@ export default counterSlice.reducer;
 ```
 
 `counterSlice.actions.increment()` produces `{ type: 'counter/increment' }`. The type string is `${name}/${reducerName}` automatically.
+
+> **Check yourself:** What string does `counterSlice.actions.incrementByAmount(5)` produce as its `type`? What is the `payload`?
 
 ---
 
@@ -167,6 +179,8 @@ const userSlice = createSlice({
 
 `extraReducers` handles actions defined outside the slice (like the async thunk lifecycle actions). The `builder` pattern is type-safe and preferred over the object notation.
 
+> **Check yourself:** What three action types does `createAsyncThunk('user/fetchById', ...)` generate? Which one fires first when you dispatch the thunk?
+
 ---
 
 ## createSelector (from Reselect)
@@ -237,6 +251,7 @@ All the Redux tradeoffs remain: explicit over implicit, verbose for complex asyn
 
 ## Interview Questions
 
+
 **Q (High): How does RTK's mutation syntax in reducers stay compatible with Redux's immutability requirement?**
 
 Answer: RTK uses Immer, which wraps the state in a Proxy when your reducer function runs. Any "mutation" you perform goes to the Proxy, which records what changed. When the reducer returns, Immer uses the recorded changes to produce a new plain object — your original state is never touched. From Redux's perspective, the reducer returned a new state object, which is what it expects. From your perspective, you wrote simple imperative assignments instead of nested spread operators. You can also return a new value explicitly to replace the entire slice state, but never both mutate and return — Immer throws if you do.
@@ -248,7 +263,6 @@ Answer: RTK uses Immer, which wraps the state in a Proxy when your reducer funct
 Answer: `createAsyncThunk` takes a string action type prefix and an async payload creator function. It generates three action creators: `pending` (dispatched when the async call starts), `fulfilled` (dispatched when it resolves, with the resolved value as `payload`), and `rejected` (dispatched on error, with the error as `payload` if you used `rejectWithValue`, otherwise `error`). When you dispatch the thunk, it dispatches `pending` immediately, runs the async function, then dispatches `fulfilled` or `rejected`. You handle these in `extraReducers` using the builder pattern. This replaces the manual `REQUEST/SUCCESS/FAILURE` action type triad from raw Redux.
 
 ---
-
 **Q (Medium): When should you use `createSelector` vs a plain inline selector in `useSelector`?**
 
 Answer: Use `createSelector` when the selector derives new data (filtering, mapping, reducing) rather than just accessing existing data. Inline selectors that create new arrays/objects on every call (`state => state.items.filter(...)`) cause `useSelector` to re-render on every store update, because the new array reference is never equal to the previous one. `createSelector` memoizes: if the input selectors return the same values as last time, the result function doesn't run and the cached result is returned — same reference, no re-render. For simple property access (`state => state.user.name`), a plain selector is fine.
@@ -258,6 +272,18 @@ Answer: Use `createSelector` when the selector derives new data (filtering, mapp
 **Q (Medium): What is `createEntityAdapter` and what problem does it solve?**
 
 Answer: It manages a normalized data structure — `{ ids: string[], entities: { [id]: item } }` — for collections. It provides pre-built CRUD reducer functions (`addOne`, `setAll`, `updateOne`, `removeOne`, etc.) and memoized selectors (`selectAll`, `selectById`, `selectTotal`). It solves the problem of arrays as primary data containers: finding, updating, or deleting by ID in an array is O(n) and requires array spread + findIndex. In a normalized structure, it's O(1) map access. It also prevents duplicated data when the same entity appears in multiple queries.
+
+---
+
+## Self-Assessment
+
+Before moving on, check off each item you can answer WITHOUT looking at the file.
+
+- [ ] Can explain how Immer makes mutation syntax safe and what happens if you both mutate and return a new value
+- [ ] Can write a `createSlice` with at least one sync and one async reducer from memory
+- [ ] Can name the three action types `createAsyncThunk` generates and where each is handled
+- [ ] Can explain when `createSelector` prevents a re-render that an inline selector would not
+- [ ] Can describe what `createEntityAdapter` normalizes and the performance benefit over arrays
 
 ---
 
