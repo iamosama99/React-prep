@@ -169,14 +169,14 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > React Router v6/v7 patterns. Often combined with code-splitting questions.
 
-- [ ] [React Router v6 basics](phase-07-routing/01-react-router-v6-basics.md) — Routes, Route, Outlet, Link
-- [ ] [Nested routes & layouts](phase-07-routing/02-nested-routes-layouts.md) — Outlet pattern
-- [ ] [Dynamic routes & params](phase-07-routing/03-dynamic-routes-params.md) — useParams, useSearchParams
-- [ ] [Programmatic navigation](phase-07-routing/04-programmatic-navigation.md) — useNavigate, replace vs push
-- [ ] [Protected routes](phase-07-routing/05-protected-routes.md) — auth guards, redirect patterns
-- [ ] [Lazy-loaded routes](phase-07-routing/06-lazy-loaded-routes.md) — route-based code splitting
-- [ ] [Data loaders & actions (v6.4+)](phase-07-routing/07-data-loaders-actions.md) — Remix-style data fetching in routes
-- [ ] [URL state vs component state](phase-07-routing/08-url-state-vs-component-state.md) — when to push state into the URL
+- [x] [React Router v6 basics](phase-07-routing/01-react-router-v6-basics.md) — Routes, Route, Outlet, Link
+- [x] [Nested routes & layouts](phase-07-routing/02-nested-routes-layouts.md) — Outlet pattern
+- [x] [Dynamic routes & params](phase-07-routing/03-dynamic-routes-params.md) — useParams, useSearchParams
+- [x] [Programmatic navigation](phase-07-routing/04-programmatic-navigation.md) — useNavigate, replace vs push
+- [x] [Protected routes](phase-07-routing/05-protected-routes.md) — auth guards, redirect patterns
+- [x] [Lazy-loaded routes](phase-07-routing/06-lazy-loaded-routes.md) — route-based code splitting
+- [x] [Data loaders & actions (v6.4+)](phase-07-routing/07-data-loaders-actions.md) — Remix-style data fetching in routes
+- [x] [URL state vs component state](phase-07-routing/08-url-state-vs-component-state.md) — when to push state into the URL
 
 ---
 

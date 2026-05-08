@@ -252,38 +252,38 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Context API limitations | `phase-06-state-management/01-context-api-limitations.md` | 👉 **Next** |
-| 2 | Context optimization | `phase-06-state-management/02-context-optimization.md` | ⬜ |
-| 3 | Redux core | `phase-06-state-management/03-redux-core.md` | ⬜ |
-| 4 | Redux Toolkit | `phase-06-state-management/04-redux-toolkit.md` | ⬜ |
-| 5 | RTK Query | `phase-06-state-management/05-rtk-query.md` | ⬜ |
-| 6 | Zustand | `phase-06-state-management/06-zustand.md` | ⬜ |
-| 7 | Jotai / Recoil | `phase-06-state-management/07-jotai-recoil.md` | ⬜ |
-| 8 | Server state vs client state | `phase-06-state-management/08-server-state-vs-client-state.md` | ⬜ |
-| 9 | React Query / TanStack Query | `phase-06-state-management/09-react-query-tanstack.md` | ⬜ |
-| 10 | SWR | `phase-06-state-management/10-swr.md` | ⬜ |
-| 11 | Optimistic updates | `phase-06-state-management/11-optimistic-updates.md` | ⬜ |
-| 12 | Cache invalidation strategies | `phase-06-state-management/12-cache-invalidation-strategies.md` | ⬜ |
-| 13 | State machines (XState) | `phase-06-state-management/13-state-machines-xstate.md` | ⬜ |
+| 1 | Context API limitations | `phase-06-state-management/01-context-api-limitations.md` | ✅ |
+| 2 | Context optimization | `phase-06-state-management/02-context-optimization.md` | ✅ |
+| 3 | Redux core | `phase-06-state-management/03-redux-core.md` | ✅ |
+| 4 | Redux Toolkit | `phase-06-state-management/04-redux-toolkit.md` | ✅ |
+| 5 | RTK Query | `phase-06-state-management/05-rtk-query.md` | ✅ |
+| 6 | Zustand | `phase-06-state-management/06-zustand.md` | ✅ |
+| 7 | Jotai / Recoil | `phase-06-state-management/07-jotai-recoil.md` | ✅ |
+| 8 | Server state vs client state | `phase-06-state-management/08-server-state-vs-client-state.md` | ✅ |
+| 9 | React Query / TanStack Query | `phase-06-state-management/09-react-query-tanstack.md` | ✅ |
+| 10 | SWR | `phase-06-state-management/10-swr.md` | ✅ |
+| 11 | Optimistic updates | `phase-06-state-management/11-optimistic-updates.md` | ✅ |
+| 12 | Cache invalidation strategies | `phase-06-state-management/12-cache-invalidation-strategies.md` | ✅ |
+| 13 | State machines (XState) | `phase-06-state-management/13-state-machines-xstate.md` | ✅ |
 
 ### Phase 7 — Routing (8 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | React Router v6 basics | `phase-07-routing/01-react-router-v6-basics.md` | ⬜ |
-| 2 | Nested routes & layouts | `phase-07-routing/02-nested-routes-layouts.md` | ⬜ |
-| 3 | Dynamic routes & params | `phase-07-routing/03-dynamic-routes-params.md` | ⬜ |
-| 4 | Programmatic navigation | `phase-07-routing/04-programmatic-navigation.md` | ⬜ |
-| 5 | Protected routes | `phase-07-routing/05-protected-routes.md` | ⬜ |
-| 6 | Lazy-loaded routes | `phase-07-routing/06-lazy-loaded-routes.md` | ⬜ |
-| 7 | Data loaders & actions (v6.4+) | `phase-07-routing/07-data-loaders-actions.md` | ⬜ |
-| 8 | URL state vs component state | `phase-07-routing/08-url-state-vs-component-state.md` | ⬜ |
+| 1 | React Router v6 basics | `phase-07-routing/01-react-router-v6-basics.md` | ✅ |
+| 2 | Nested routes & layouts | `phase-07-routing/02-nested-routes-layouts.md` | ✅ |
+| 3 | Dynamic routes & params | `phase-07-routing/03-dynamic-routes-params.md` | ✅ |
+| 4 | Programmatic navigation | `phase-07-routing/04-programmatic-navigation.md` | ✅ |
+| 5 | Protected routes | `phase-07-routing/05-protected-routes.md` | ✅ |
+| 6 | Lazy-loaded routes | `phase-07-routing/06-lazy-loaded-routes.md` | ✅ |
+| 7 | Data loaders & actions (v6.4+) | `phase-07-routing/07-data-loaders-actions.md` | ✅ |
+| 8 | URL state vs component state | `phase-07-routing/08-url-state-vs-component-state.md` | ✅ |
 
 ### Phase 8 — Forms (8 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Controlled form patterns | `phase-08-forms/01-controlled-form-patterns.md` | ⬜ |
+| 1 | Controlled form patterns | `phase-08-forms/01-controlled-form-patterns.md` | 👉 **Next** |
 | 2 | Form validation strategies | `phase-08-forms/02-form-validation-strategies.md` | ⬜ |
 | 3 | React Hook Form | `phase-08-forms/03-react-hook-form.md` | ⬜ |
 | 4 | Formik | `phase-08-forms/04-formik.md` | ⬜ |
