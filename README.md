@@ -184,14 +184,14 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Common live coding round. Expect to build a multi-step form with validation.
 
-- [ ] [Controlled form patterns](phase-08-forms/01-controlled-form-patterns.md) — single onChange handler, name attribute
-- [ ] [Form validation strategies](phase-08-forms/02-form-validation-strategies.md) — on-change, on-blur, on-submit
-- [ ] [React Hook Form](phase-08-forms/03-react-hook-form.md) — uncontrolled by default, ref-based, fast
-- [ ] [Formik](phase-08-forms/04-formik.md) — older but still common, Field/Form/ErrorMessage
-- [ ] [Schema validation: Zod / Yup](phase-08-forms/05-schema-validation-zod-yup.md) — resolver pattern, type inference
-- [ ] [Multi-step / wizard forms](phase-08-forms/06-multi-step-wizard-forms.md) — state preservation across steps
-- [ ] [File uploads](phase-08-forms/07-file-uploads.md) — FormData, drag-drop, progress UI
-- [ ] [Debounced search inputs](phase-08-forms/08-debounced-search-inputs.md) — useDeferredValue or useDebounce hook
+- [x] [Controlled form patterns](phase-08-forms/01-controlled-form-patterns.md) — single onChange handler, name attribute
+- [x] [Form validation strategies](phase-08-forms/02-form-validation-strategies.md) — on-change, on-blur, on-submit
+- [x] [React Hook Form](phase-08-forms/03-react-hook-form.md) — uncontrolled by default, ref-based, fast
+- [x] [Formik](phase-08-forms/04-formik.md) — older but still common, Field/Form/ErrorMessage
+- [x] [Schema validation: Zod / Yup](phase-08-forms/05-schema-validation-zod-yup.md) — resolver pattern, type inference
+- [x] [Multi-step / wizard forms](phase-08-forms/06-multi-step-wizard-forms.md) — state preservation across steps
+- [x] [File uploads](phase-08-forms/07-file-uploads.md) — FormData, drag-drop, progress UI
+- [x] [Debounced search inputs](phase-08-forms/08-debounced-search-inputs.md) — useDeferredValue or useDebounce hook
 
 ---
 
