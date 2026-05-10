@@ -160,7 +160,7 @@ Leave unchecked anything you'd need to read to answer — that's what to revisit
 
 ## Progress Tracker
 
-Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
+Legend: ✅ Done | ✅ Not started | 👉 **Next up**
 
 ### Phase 1 — Fundamentals Refresher (10 topics)
 
@@ -283,89 +283,89 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Controlled form patterns | `phase-08-forms/01-controlled-form-patterns.md` | 👉 **Next** |
-| 2 | Form validation strategies | `phase-08-forms/02-form-validation-strategies.md` | ⬜ |
-| 3 | React Hook Form | `phase-08-forms/03-react-hook-form.md` | ⬜ |
-| 4 | Formik | `phase-08-forms/04-formik.md` | ⬜ |
-| 5 | Schema validation: Zod / Yup | `phase-08-forms/05-schema-validation-zod-yup.md` | ⬜ |
-| 6 | Multi-step / wizard forms | `phase-08-forms/06-multi-step-wizard-forms.md` | ⬜ |
-| 7 | File uploads | `phase-08-forms/07-file-uploads.md` | ⬜ |
-| 8 | Debounced search inputs | `phase-08-forms/08-debounced-search-inputs.md` | ⬜ |
+| 1 | Controlled form patterns | `phase-08-forms/01-controlled-form-patterns.md` | ✅ |
+| 2 | Form validation strategies | `phase-08-forms/02-form-validation-strategies.md` | ✅ |
+| 3 | React Hook Form | `phase-08-forms/03-react-hook-form.md` | ✅ |
+| 4 | Formik | `phase-08-forms/04-formik.md` | ✅ |
+| 5 | Schema validation: Zod / Yup | `phase-08-forms/05-schema-validation-zod-yup.md` | ✅ |
+| 6 | Multi-step / wizard forms | `phase-08-forms/06-multi-step-wizard-forms.md` | ✅ |
+| 7 | File uploads | `phase-08-forms/07-file-uploads.md` | ✅ |
+| 8 | Debounced search inputs | `phase-08-forms/08-debounced-search-inputs.md` | ✅ |
 
 ### Phase 9 — TypeScript with React (9 topics) — TS examples start here
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Typing function components | `phase-09-typescript/01-typing-function-components.md` | ⬜ |
-| 2 | Typing useState & useReducer | `phase-09-typescript/02-typing-usestate-usereducer.md` | ⬜ |
-| 3 | Typing refs | `phase-09-typescript/03-typing-refs.md` | ⬜ |
-| 4 | Typing event handlers | `phase-09-typescript/04-typing-event-handlers.md` | ⬜ |
-| 5 | Generic components | `phase-09-typescript/05-generic-components.md` | ⬜ |
-| 6 | Polymorphic components with `as` | `phase-09-typescript/06-polymorphic-components-as.md` | ⬜ |
-| 7 | Discriminated union props | `phase-09-typescript/07-discriminated-union-props.md` | ⬜ |
-| 8 | Typing custom hooks | `phase-09-typescript/08-typing-custom-hooks.md` | ⬜ |
-| 9 | Utility types | `phase-09-typescript/09-utility-types.md` | ⬜ |
+| 1 | Typing function components | `phase-09-typescript/01-typing-function-components.md` | ✅ |
+| 2 | Typing useState & useReducer | `phase-09-typescript/02-typing-usestate-usereducer.md` | ✅ |
+| 3 | Typing refs | `phase-09-typescript/03-typing-refs.md` | ✅ |
+| 4 | Typing event handlers | `phase-09-typescript/04-typing-event-handlers.md` | ✅ |
+| 5 | Generic components | `phase-09-typescript/05-generic-components.md` | ✅ |
+| 6 | Polymorphic components with `as` | `phase-09-typescript/06-polymorphic-components-as.md` | ✅ |
+| 7 | Discriminated union props | `phase-09-typescript/07-discriminated-union-props.md` | ✅ |
+| 8 | Typing custom hooks | `phase-09-typescript/08-typing-custom-hooks.md` | ✅ |
+| 9 | Utility types | `phase-09-typescript/09-utility-types.md` | ✅ |
 
 ### Phase 10 — Testing (9 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | React Testing Library philosophy | `phase-10-testing/01-rtl-philosophy.md` | ⬜ |
-| 2 | Jest fundamentals | `phase-10-testing/02-jest-fundamentals.md` | ⬜ |
-| 3 | user-event vs fireEvent | `phase-10-testing/03-user-event-vs-fireevent.md` | ⬜ |
-| 4 | Mocking modules & APIs | `phase-10-testing/04-mocking-modules-apis.md` | ⬜ |
-| 5 | Testing async UI | `phase-10-testing/05-testing-async-ui.md` | ⬜ |
-| 6 | Testing custom hooks | `phase-10-testing/06-testing-custom-hooks.md` | ⬜ |
-| 7 | Integration vs unit vs E2E | `phase-10-testing/07-integration-unit-e2e.md` | ⬜ |
-| 8 | E2E with Playwright/Cypress | `phase-10-testing/08-e2e-playwright-cypress.md` | ⬜ |
-| 9 | Snapshot testing pros/cons | `phase-10-testing/09-snapshot-testing.md` | ⬜ |
+| 1 | React Testing Library philosophy | `phase-10-testing/01-rtl-philosophy.md` | ✅ |
+| 2 | Jest fundamentals | `phase-10-testing/02-jest-fundamentals.md` | ✅ |
+| 3 | user-event vs fireEvent | `phase-10-testing/03-user-event-vs-fireevent.md` | ✅ |
+| 4 | Mocking modules & APIs | `phase-10-testing/04-mocking-modules-apis.md` | ✅ |
+| 5 | Testing async UI | `phase-10-testing/05-testing-async-ui.md` | ✅ |
+| 6 | Testing custom hooks | `phase-10-testing/06-testing-custom-hooks.md` | ✅ |
+| 7 | Integration vs unit vs E2E | `phase-10-testing/07-integration-unit-e2e.md` | ✅ |
+| 8 | E2E with Playwright/Cypress | `phase-10-testing/08-e2e-playwright-cypress.md` | ✅ |
+| 9 | Snapshot testing pros/cons | `phase-10-testing/09-snapshot-testing.md` | ✅ |
 
 ### Phase 11 — Modern React: RSC & Concurrent (8 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | React 18 changes summary | `phase-11-modern-react/01-react-18-changes.md` | ⬜ |
-| 2 | Concurrent rendering model | `phase-11-modern-react/02-concurrent-rendering-model.md` | ⬜ |
-| 3 | Suspense for data fetching | `phase-11-modern-react/03-suspense-data-fetching.md` | ⬜ |
-| 4 | Server components (RSC) | `phase-11-modern-react/04-server-components-rsc.md` | ⬜ |
-| 5 | Client vs server components | `phase-11-modern-react/05-client-vs-server-components.md` | ⬜ |
-| 6 | Server actions | `phase-11-modern-react/06-server-actions.md` | ⬜ |
-| 7 | Streaming SSR | `phase-11-modern-react/07-streaming-ssr.md` | ⬜ |
-| 8 | use() hook | `phase-11-modern-react/08-use-hook.md` | ⬜ |
+| 1 | React 18 changes summary | `phase-11-modern-react/01-react-18-changes.md` | ✅ |
+| 2 | Concurrent rendering model | `phase-11-modern-react/02-concurrent-rendering-model.md` | ✅ |
+| 3 | Suspense for data fetching | `phase-11-modern-react/03-suspense-data-fetching.md` | ✅ |
+| 4 | Server components (RSC) | `phase-11-modern-react/04-server-components-rsc.md` | ✅ |
+| 5 | Client vs server components | `phase-11-modern-react/05-client-vs-server-components.md` | ✅ |
+| 6 | Server actions | `phase-11-modern-react/06-server-actions.md` | ✅ |
+| 7 | Streaming SSR | `phase-11-modern-react/07-streaming-ssr.md` | ✅ |
+| 8 | use() hook | `phase-11-modern-react/08-use-hook.md` | ✅ |
 
 ### Phase 12 — SSR & Meta-Frameworks (8 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | CSR vs SSR vs SSG vs ISR | `phase-12-ssr-frameworks/01-csr-ssr-ssg-isr.md` | ⬜ |
-| 2 | Hydration | `phase-12-ssr-frameworks/02-hydration.md` | ⬜ |
-| 3 | Next.js App Router | `phase-12-ssr-frameworks/03-nextjs-app-router.md` | ⬜ |
-| 4 | Next.js Pages Router | `phase-12-ssr-frameworks/04-nextjs-pages-router.md` | ⬜ |
-| 5 | Data fetching in Next.js | `phase-12-ssr-frameworks/05-data-fetching-nextjs.md` | ⬜ |
-| 6 | Middleware & edge runtime | `phase-12-ssr-frameworks/06-middleware-edge-runtime.md` | ⬜ |
-| 7 | SEO & metadata | `phase-12-ssr-frameworks/07-seo-metadata.md` | ⬜ |
-| 8 | Remix basics | `phase-12-ssr-frameworks/08-remix-basics.md` | ⬜ |
+| 1 | CSR vs SSR vs SSG vs ISR | `phase-12-ssr-frameworks/01-csr-ssr-ssg-isr.md` | ✅ |
+| 2 | Hydration | `phase-12-ssr-frameworks/02-hydration.md` | ✅ |
+| 3 | Next.js App Router | `phase-12-ssr-frameworks/03-nextjs-app-router.md` | ✅ |
+| 4 | Next.js Pages Router | `phase-12-ssr-frameworks/04-nextjs-pages-router.md` | ✅ |
+| 5 | Data fetching in Next.js | `phase-12-ssr-frameworks/05-data-fetching-nextjs.md` | ✅ |
+| 6 | Middleware & edge runtime | `phase-12-ssr-frameworks/06-middleware-edge-runtime.md` | ✅ |
+| 7 | SEO & metadata | `phase-12-ssr-frameworks/07-seo-metadata.md` | ✅ |
+| 8 | Remix basics | `phase-12-ssr-frameworks/08-remix-basics.md` | ✅ |
 
 ### Phase 13 — Tooling, Security, a11y (10 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Webpack vs Vite vs Turbopack | `phase-13-tooling-security-a11y/01-webpack-vite-turbopack.md` | ⬜ |
-| 2 | Babel & SWC | `phase-13-tooling-security-a11y/02-babel-swc.md` | ⬜ |
-| 3 | ESLint + Prettier setup | `phase-13-tooling-security-a11y/03-eslint-prettier.md` | ⬜ |
-| 4 | XSS in React | `phase-13-tooling-security-a11y/04-xss-in-react.md` | ⬜ |
-| 5 | Authentication patterns | `phase-13-tooling-security-a11y/05-authentication-patterns.md` | ⬜ |
-| 6 | CSRF in SPA contexts | `phase-13-tooling-security-a11y/06-csrf-spa.md` | ⬜ |
-| 7 | ARIA roles & labels | `phase-13-tooling-security-a11y/07-aria-roles-labels.md` | ⬜ |
-| 8 | Focus management in SPAs | `phase-13-tooling-security-a11y/08-focus-management-spas.md` | ⬜ |
-| 9 | Keyboard navigation | `phase-13-tooling-security-a11y/09-keyboard-navigation.md` | ⬜ |
-| 10 | Screen reader testing | `phase-13-tooling-security-a11y/10-screen-reader-testing.md` | ⬜ |
+| 1 | Webpack vs Vite vs Turbopack | `phase-13-tooling-security-a11y/01-webpack-vite-turbopack.md` | ✅ |
+| 2 | Babel & SWC | `phase-13-tooling-security-a11y/02-babel-swc.md` | ✅ |
+| 3 | ESLint + Prettier setup | `phase-13-tooling-security-a11y/03-eslint-prettier.md` | ✅ |
+| 4 | XSS in React | `phase-13-tooling-security-a11y/04-xss-in-react.md` | ✅ |
+| 5 | Authentication patterns | `phase-13-tooling-security-a11y/05-authentication-patterns.md` | ✅ |
+| 6 | CSRF in SPA contexts | `phase-13-tooling-security-a11y/06-csrf-spa.md` | ✅ |
+| 7 | ARIA roles & labels | `phase-13-tooling-security-a11y/07-aria-roles-labels.md` | ✅ |
+| 8 | Focus management in SPAs | `phase-13-tooling-security-a11y/08-focus-management-spas.md` | ✅ |
+| 9 | Keyboard navigation | `phase-13-tooling-security-a11y/09-keyboard-navigation.md` | ✅ |
+| 10 | Screen reader testing | `phase-13-tooling-security-a11y/10-screen-reader-testing.md` | ✅ |
 
 ### Phase 14 — Live Coding Round Patterns (14 topics)
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Build a useDebounce hook | `phase-14-live-coding/01-use-debounce-throttle.md` | ⬜ |
+| 1 | Build a useDebounce hook | `phase-14-live-coding/01-use-debounce-throttle.md` | 👉 **Next** |
 | 2 | Build a useFetch hook | `phase-14-live-coding/02-use-fetch.md` | ⬜ |
 | 3 | Implement useState from scratch | `phase-14-live-coding/03-implement-use-state-scratch.md` | ⬜ |
 | 4 | Autocomplete / typeahead | `phase-14-live-coding/04-autocomplete-typeahead.md` | ⬜ |

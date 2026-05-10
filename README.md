@@ -53,16 +53,16 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Quick warmup. Asked in screening rounds even at senior level.
 
-- [ ] [JSX & React.createElement](phase-01-fundamentals/01-jsx-react-createelement.md) — how JSX compiles, why className not class
-- [ ] [Function vs class components](phase-01-fundamentals/02-function-vs-class-components.md) — when each is used, modern preference
-- [ ] [Props, props.children, defaultProps](phase-01-fundamentals/03-props-children-defaultprops.md) — data flow, prop drilling problems
-- [ ] [State & immutability](phase-01-fundamentals/04-state-and-immutability.md) — why you can't mutate, spread vs structuredClone
-- [ ] [One-way data flow](phase-01-fundamentals/05-one-way-data-flow.md) — unidirectional binding, lifting state up
-- [ ] [Conditional rendering patterns](phase-01-fundamentals/06-conditional-rendering.md) — &&, ternary, early returns, gotchas with 0
-- [ ] [Lists & keys](phase-01-fundamentals/07-lists-and-keys.md) — why index-as-key breaks, stable IDs
-- [ ] [Fragments](phase-01-fundamentals/08-fragments.md) — `<></>` vs `<Fragment>`, when keys needed
-- [ ] [Controlled vs uncontrolled inputs](phase-01-fundamentals/09-controlled-vs-uncontrolled-inputs.md) — value+onChange vs defaultValue+ref
-- [ ] [Synthetic events](phase-01-fundamentals/10-synthetic-events.md) — event pooling history, delegation in React
+- [x] [JSX & React.createElement](phase-01-fundamentals/01-jsx-react-createelement.md) — how JSX compiles, why className not class
+- [x] [Function vs class components](phase-01-fundamentals/02-function-vs-class-components.md) — when each is used, modern preference
+- [x] [Props, props.children, defaultProps](phase-01-fundamentals/03-props-children-defaultprops.md) — data flow, prop drilling problems
+- [x] [State & immutability](phase-01-fundamentals/04-state-and-immutability.md) — why you can't mutate, spread vs structuredClone
+- [x] [One-way data flow](phase-01-fundamentals/05-one-way-data-flow.md) — unidirectional binding, lifting state up
+- [x] [Conditional rendering patterns](phase-01-fundamentals/06-conditional-rendering.md) — &&, ternary, early returns, gotchas with 0
+- [x] [Lists & keys](phase-01-fundamentals/07-lists-and-keys.md) — why index-as-key breaks, stable IDs
+- [x] [Fragments](phase-01-fundamentals/08-fragments.md) — `<></>` vs `<Fragment>`, when keys needed
+- [x] [Controlled vs uncontrolled inputs](phase-01-fundamentals/09-controlled-vs-uncontrolled-inputs.md) — value+onChange vs defaultValue+ref
+- [x] [Synthetic events](phase-01-fundamentals/10-synthetic-events.md) — event pooling history, delegation in React
 
 ---
 
@@ -70,11 +70,11 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Single biggest topic for senior interviews. Expect deep follow-ups.
 
-- [ ] [useState](phase-02-hooks/01-use-state.md) — functional updates, lazy init, batching
-- [ ] [useEffect](phase-02-hooks/02-use-effect.md) — deps array, cleanup, race conditions, double-fire in StrictMode
-- [ ] [useLayoutEffect](phase-02-hooks/03-use-layout-effect.md) — sync DOM mutations before paint
-- [ ] [useInsertionEffect](phase-02-hooks/04-use-insertion-effect.md) — CSS-in-JS library use case
-- [ ] [useRef](phase-02-hooks/05-use-ref.md) — DOM access AND mutable instance variable
+- [x] [useState](phase-02-hooks/01-use-state.md) — functional updates, lazy init, batching
+- [x] [useEffect](phase-02-hooks/02-use-effect.md) — deps array, cleanup, race conditions, double-fire in StrictMode
+- [x] [useLayoutEffect](phase-02-hooks/03-use-layout-effect.md) — sync DOM mutations before paint
+- [x] [useInsertionEffect](phase-02-hooks/04-use-insertion-effect.md) — CSS-in-JS library use case
+- [x] [useRef](phase-02-hooks/05-use-ref.md) — DOM access AND mutable instance variable
 - [x] [useMemo](phase-02-hooks/06-use-memo.md) — referential equality, when memoization hurts
 - [x] [useCallback](phase-02-hooks/07-use-callback.md) — stable function refs, parent-child re-render chain
 - [x] [useContext](phase-02-hooks/08-use-context.md) — provider pattern, re-render limitations
@@ -108,18 +108,18 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Senior-level expectation: pick the right pattern for the problem.
 
-- [ ] [Composition over inheritance](phase-04-component-patterns/01-composition-over-inheritance.md) — React's first principle
-- [ ] [Compound components](phase-04-component-patterns/02-compound-components.md) — shared implicit state via context
-- [ ] [Render props](phase-04-component-patterns/03-render-props.md) — function-as-children, when still useful
-- [ ] [HOCs](phase-04-component-patterns/04-hocs.md) — wrapping hell, when to prefer hooks
-- [ ] [Custom hooks as the modern pattern](phase-04-component-patterns/05-custom-hooks-modern-pattern.md) — why hooks replaced most HOCs/render props
-- [ ] [Controlled vs uncontrolled component design](phase-04-component-patterns/06-controlled-vs-uncontrolled-design.md) — giving callers the choice
-- [ ] [forwardRef](phase-04-component-patterns/07-forward-ref.md) — passing refs through wrappers
-- [ ] [React.Children utilities](phase-04-component-patterns/08-react-children-utilities.md) — map, toArray, only, cloneElement
-- [ ] [Portals](phase-04-component-patterns/09-portals.md) — modals, tooltips, escaping overflow:hidden
-- [ ] [StrictMode](phase-04-component-patterns/10-strict-mode.md) — double-invocation, deprecated API warnings
-- [ ] [Polymorphic components](phase-04-component-patterns/11-polymorphic-components.md) — the `as` prop pattern with TypeScript
-- [ ] [Slot pattern / asChild](phase-04-component-patterns/12-slot-pattern-as-child.md) — Radix-style component composition
+- [x] [Composition over inheritance](phase-04-component-patterns/01-composition-over-inheritance.md) — React's first principle
+- [x] [Compound components](phase-04-component-patterns/02-compound-components.md) — shared implicit state via context
+- [x] [Render props](phase-04-component-patterns/03-render-props.md) — function-as-children, when still useful
+- [x] [HOCs](phase-04-component-patterns/04-hocs.md) — wrapping hell, when to prefer hooks
+- [x] [Custom hooks as the modern pattern](phase-04-component-patterns/05-custom-hooks-modern-pattern.md) — why hooks replaced most HOCs/render props
+- [x] [Controlled vs uncontrolled component design](phase-04-component-patterns/06-controlled-vs-uncontrolled-design.md) — giving callers the choice
+- [x] [forwardRef](phase-04-component-patterns/07-forward-ref.md) — passing refs through wrappers
+- [x] [React.Children utilities](phase-04-component-patterns/08-react-children-utilities.md) — map, toArray, only, cloneElement
+- [x] [Portals](phase-04-component-patterns/09-portals.md) — modals, tooltips, escaping overflow:hidden
+- [x] [StrictMode](phase-04-component-patterns/10-strict-mode.md) — double-invocation, deprecated API warnings
+- [x] [Polymorphic components](phase-04-component-patterns/11-polymorphic-components.md) — the `as` prop pattern with TypeScript
+- [x] [Slot pattern / asChild](phase-04-component-patterns/12-slot-pattern-as-child.md) — Radix-style component composition
 
 ---
 
@@ -127,21 +127,21 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Heavy focus area. Expect questions on diffing, memoization tradeoffs, and bundle size.
 
-- [ ] [Virtual DOM & reconciliation](phase-05-performance/01-virtual-dom-reconciliation.md) — diffing algorithm, O(n) heuristic
-- [ ] [Fiber architecture](phase-05-performance/02-fiber-architecture.md) — why it replaced stack reconciler
-- [ ] [Render vs commit phase](phase-05-performance/03-render-vs-commit-phase.md) — two-phase rendering model
-- [ ] [What causes re-renders](phase-05-performance/04-what-causes-rerenders.md) — state, props, context, parent renders
-- [ ] [React.memo deep dive](phase-05-performance/05-react-memo-deep-dive.md) — shallow comparison, custom equality fn
-- [ ] [Avoiding re-renders without memo](phase-05-performance/06-avoiding-rerenders-without-memo.md) — composition trick, children-as-prop
-- [ ] [Inline objects/functions in JSX](phase-05-performance/07-inline-objects-functions-jsx.md) — why they break memo
-- [ ] [Automatic batching (React 18)](phase-05-performance/08-automatic-batching-react-18.md) — why setState in promises now batches
-- [ ] [Code splitting](phase-05-performance/09-code-splitting.md) — React.lazy + Suspense, route-based splits
-- [ ] [List virtualization](phase-05-performance/10-list-virtualization.md) — react-window for 10k+ rows
-- [ ] [Profiler API & DevTools profiler](phase-05-performance/11-profiler-api-devtools.md) — flame graphs, ranked view
-- [ ] [Bundle analysis](phase-05-performance/12-bundle-analysis.md) — webpack-bundle-analyzer, source-map-explorer
-- [ ] [Tree shaking](phase-05-performance/13-tree-shaking.md) — ESM, sideEffects flag
-- [ ] [Web vitals in React](phase-05-performance/14-web-vitals-react.md) — LCP, INP, CLS measurement
-- [ ] [Concurrent rendering](phase-05-performance/15-concurrent-rendering.md) — interruptible renders, time slicing
+- [x] [Virtual DOM & reconciliation](phase-05-performance/01-virtual-dom-reconciliation.md) — diffing algorithm, O(n) heuristic
+- [x] [Fiber architecture](phase-05-performance/02-fiber-architecture.md) — why it replaced stack reconciler
+- [x] [Render vs commit phase](phase-05-performance/03-render-vs-commit-phase.md) — two-phase rendering model
+- [x] [What causes re-renders](phase-05-performance/04-what-causes-rerenders.md) — state, props, context, parent renders
+- [x] [React.memo deep dive](phase-05-performance/05-react-memo-deep-dive.md) — shallow comparison, custom equality fn
+- [x] [Avoiding re-renders without memo](phase-05-performance/06-avoiding-rerenders-without-memo.md) — composition trick, children-as-prop
+- [x] [Inline objects/functions in JSX](phase-05-performance/07-inline-objects-functions-jsx.md) — why they break memo
+- [x] [Automatic batching (React 18)](phase-05-performance/08-automatic-batching-react-18.md) — why setState in promises now batches
+- [x] [Code splitting](phase-05-performance/09-code-splitting.md) — React.lazy + Suspense, route-based splits
+- [x] [List virtualization](phase-05-performance/10-list-virtualization.md) — react-window for 10k+ rows
+- [x] [Profiler API & DevTools profiler](phase-05-performance/11-profiler-api-devtools.md) — flame graphs, ranked view
+- [x] [Bundle analysis](phase-05-performance/12-bundle-analysis.md) — webpack-bundle-analyzer, source-map-explorer
+- [x] [Tree shaking](phase-05-performance/13-tree-shaking.md) — ESM, sideEffects flag
+- [x] [Web vitals in React](phase-05-performance/14-web-vitals-react.md) — LCP, INP, CLS measurement
+- [x] [Concurrent rendering](phase-05-performance/15-concurrent-rendering.md) — interruptible renders, time slicing
 
 ---
 
@@ -199,15 +199,15 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Almost always tested at 4+ YOE. Generic components separate juniors from seniors.
 
-- [ ] [Typing function components](phase-09-typescript/01-typing-function-components.md) — FC vs explicit props type, children typing
-- [ ] [Typing useState & useReducer](phase-09-typescript/02-typing-usestate-usereducer.md) — discriminated union state, action types
-- [ ] [Typing refs](phase-09-typescript/03-typing-refs.md) — useRef\<HTMLDivElement\>(null), nullability
-- [ ] [Typing event handlers](phase-09-typescript/04-typing-event-handlers.md) — ChangeEvent, MouseEvent, FormEvent
-- [ ] [Generic components](phase-09-typescript/05-generic-components.md) — \<T,\>(...) syntax, Select\<T\> example
-- [ ] [Polymorphic components with `as`](phase-09-typescript/06-polymorphic-components-as.md) — ElementType, ComponentPropsWithoutRef
-- [ ] [Discriminated union props](phase-09-typescript/07-discriminated-union-props.md) — e.g. Button: variant=primary | link with href
-- [ ] [Typing custom hooks](phase-09-typescript/08-typing-custom-hooks.md) — tuple returns, generic state
-- [ ] [Utility types](phase-09-typescript/09-utility-types.md) — Pick, Omit, Partial in component APIs
+- [x] [Typing function components](phase-09-typescript/01-typing-function-components.md) — FC vs explicit props type, children typing
+- [x] [Typing useState & useReducer](phase-09-typescript/02-typing-usestate-usereducer.md) — discriminated union state, action types
+- [x] [Typing refs](phase-09-typescript/03-typing-refs.md) — useRef\<HTMLDivElement\>(null), nullability
+- [x] [Typing event handlers](phase-09-typescript/04-typing-event-handlers.md) — ChangeEvent, MouseEvent, FormEvent
+- [x] [Generic components](phase-09-typescript/05-generic-components.md) — \<T,\>(...) syntax, Select\<T\> example
+- [x] [Polymorphic components with `as`](phase-09-typescript/06-polymorphic-components-as.md) — ElementType, ComponentPropsWithoutRef
+- [x] [Discriminated union props](phase-09-typescript/07-discriminated-union-props.md) — e.g. Button: variant=primary | link with href
+- [x] [Typing custom hooks](phase-09-typescript/08-typing-custom-hooks.md) — tuple returns, generic state
+- [x] [Utility types](phase-09-typescript/09-utility-types.md) — Pick, Omit, Partial in component APIs
 
 ---
 
@@ -215,15 +215,15 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Senior expectation: test user behavior, not implementation details.
 
-- [ ] [React Testing Library philosophy](phase-10-testing/01-rtl-philosophy.md) — queries by role > by testid
-- [ ] [Jest fundamentals](phase-10-testing/02-jest-fundamentals.md) — matchers, mocks, spies, fake timers
-- [ ] [user-event vs fireEvent](phase-10-testing/03-user-event-vs-fireevent.md) — why user-event is preferred
-- [ ] [Mocking modules & APIs](phase-10-testing/04-mocking-modules-apis.md) — jest.mock, MSW for network
-- [ ] [Testing async UI](phase-10-testing/05-testing-async-ui.md) — findBy queries, waitFor
-- [ ] [Testing custom hooks](phase-10-testing/06-testing-custom-hooks.md) — renderHook from RTL
-- [ ] [Integration vs unit vs E2E](phase-10-testing/07-integration-unit-e2e.md) — the testing trophy
-- [ ] [E2E with Playwright/Cypress](phase-10-testing/08-e2e-playwright-cypress.md) — when E2E is worth the cost
-- [ ] [Snapshot testing pros/cons](phase-10-testing/09-snapshot-testing.md) — why most teams limit them
+- [x] [React Testing Library philosophy](phase-10-testing/01-rtl-philosophy.md) — queries by role > by testid
+- [x] [Jest fundamentals](phase-10-testing/02-jest-fundamentals.md) — matchers, mocks, spies, fake timers
+- [x] [user-event vs fireEvent](phase-10-testing/03-user-event-vs-fireevent.md) — why user-event is preferred
+- [x] [Mocking modules & APIs](phase-10-testing/04-mocking-modules-apis.md) — jest.mock, MSW for network
+- [x] [Testing async UI](phase-10-testing/05-testing-async-ui.md) — findBy queries, waitFor
+- [x] [Testing custom hooks](phase-10-testing/06-testing-custom-hooks.md) — renderHook from RTL
+- [x] [Integration vs unit vs E2E](phase-10-testing/07-integration-unit-e2e.md) — the testing trophy
+- [x] [E2E with Playwright/Cypress](phase-10-testing/08-e2e-playwright-cypress.md) — when E2E is worth the cost
+- [x] [Snapshot testing pros/cons](phase-10-testing/09-snapshot-testing.md) — why most teams limit them
 
 ---
 
