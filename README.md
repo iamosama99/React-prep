@@ -231,14 +231,14 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Hot topic in 2026 interviews, especially at Next.js shops. Many candidates fumble this.
 
-- [ ] [React 18 changes summary](phase-11-modern-react/01-react-18-changes.md) — automatic batching, concurrent, Suspense for data
-- [ ] [Concurrent rendering model](phase-11-modern-react/02-concurrent-rendering-model.md) — interruptible, prioritized work
-- [ ] [Suspense for data fetching](phase-11-modern-react/03-suspense-data-fetching.md) — throwing promises, boundaries
-- [ ] [Server components (RSC)](phase-11-modern-react/04-server-components-rsc.md) — zero JS shipped, server-only deps
-- [ ] [Client vs server components](phase-11-modern-react/05-client-vs-server-components.md) — 'use client' boundary rules
-- [ ] [Server actions](phase-11-modern-react/06-server-actions.md) — 'use server', form actions, mutations
-- [ ] [Streaming SSR](phase-11-modern-react/07-streaming-ssr.md) — renderToPipeableStream, Suspense streaming
-- [ ] [use() hook](phase-11-modern-react/08-use-hook.md) — reading promises and context conditionally
+- [x] [React 18 changes summary](phase-11-modern-react/01-react-18-changes.md) — automatic batching, concurrent, Suspense for data
+- [x] [Concurrent rendering model](phase-11-modern-react/02-concurrent-rendering-model.md) — interruptible, prioritized work
+- [x] [Suspense for data fetching](phase-11-modern-react/03-suspense-data-fetching.md) — throwing promises, boundaries
+- [x] [Server components (RSC)](phase-11-modern-react/04-server-components-rsc.md) — zero JS shipped, server-only deps
+- [x] [Client vs server components](phase-11-modern-react/05-client-vs-server-components.md) — 'use client' boundary rules
+- [x] [Server actions](phase-11-modern-react/06-server-actions.md) — 'use server', form actions, mutations
+- [x] [Streaming SSR](phase-11-modern-react/07-streaming-ssr.md) — renderToPipeableStream, Suspense streaming
+- [x] [use() hook](phase-11-modern-react/08-use-hook.md) — reading promises and context conditionally
 
 ---
 
@@ -246,14 +246,14 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Next.js dominates. Know rendering modes cold.
 
-- [ ] [CSR vs SSR vs SSG vs ISR](phase-12-ssr-frameworks/01-csr-ssr-ssg-isr.md) — tradeoffs, when to pick each
-- [ ] [Hydration](phase-12-ssr-frameworks/02-hydration.md) — what it does, common mismatch errors
-- [ ] [Next.js App Router](phase-12-ssr-frameworks/03-nextjs-app-router.md) — file conventions, layouts, loading.tsx
-- [ ] [Next.js Pages Router](phase-12-ssr-frameworks/04-nextjs-pages-router.md) — getServerSideProps, getStaticProps, getStaticPaths
-- [ ] [Data fetching in Next.js](phase-12-ssr-frameworks/05-data-fetching-nextjs.md) — fetch caching, revalidate, no-store
-- [ ] [Middleware & edge runtime](phase-12-ssr-frameworks/06-middleware-edge-runtime.md) — auth at the edge
-- [ ] [SEO & metadata](phase-12-ssr-frameworks/07-seo-metadata.md) — generateMetadata, OG tags, sitemaps
-- [ ] [Remix basics](phase-12-ssr-frameworks/08-remix-basics.md) — loaders/actions, nested routing
+- [x] [CSR vs SSR vs SSG vs ISR](phase-12-ssr-frameworks/01-csr-ssr-ssg-isr.md) — tradeoffs, when to pick each
+- [x] [Hydration](phase-12-ssr-frameworks/02-hydration.md) — what it does, common mismatch errors
+- [x] [Next.js App Router](phase-12-ssr-frameworks/03-nextjs-app-router.md) — file conventions, layouts, loading.tsx
+- [x] [Next.js Pages Router](phase-12-ssr-frameworks/04-nextjs-pages-router.md) — getServerSideProps, getStaticProps, getStaticPaths
+- [x] [Data fetching in Next.js](phase-12-ssr-frameworks/05-data-fetching-nextjs.md) — fetch caching, revalidate, no-store
+- [x] [Middleware & edge runtime](phase-12-ssr-frameworks/06-middleware-edge-runtime.md) — auth at the edge
+- [x] [SEO & metadata](phase-12-ssr-frameworks/07-seo-metadata.md) — generateMetadata, OG tags, sitemaps
+- [x] [Remix basics](phase-12-ssr-frameworks/08-remix-basics.md) — loaders/actions, nested routing
 
 ---
 
@@ -261,16 +261,16 @@ Language is plain but terminology is exact. Mental models are built from first p
 
 > Expect at least one question from each of these areas.
 
-- [ ] [Webpack vs Vite vs Turbopack](phase-13-tooling-security-a11y/01-webpack-vite-turbopack.md) — dev server speed, HMR, prod builds
-- [ ] [Babel & SWC](phase-13-tooling-security-a11y/02-babel-swc.md) — JSX transform, new vs old runtime
-- [ ] [ESLint + Prettier setup](phase-13-tooling-security-a11y/03-eslint-prettier.md) — react-hooks plugin rules
-- [ ] [XSS in React](phase-13-tooling-security-a11y/04-xss-in-react.md) — dangerouslySetInnerHTML risks
-- [ ] [Authentication patterns](phase-13-tooling-security-a11y/05-authentication-patterns.md) — JWT in storage vs httpOnly cookies
-- [ ] [CSRF in SPA contexts](phase-13-tooling-security-a11y/06-csrf-spa.md) — when it matters
-- [ ] [ARIA roles & labels](phase-13-tooling-security-a11y/07-aria-roles-labels.md) — landmark roles, aria-live
-- [ ] [Focus management in SPAs](phase-13-tooling-security-a11y/08-focus-management-spas.md) — route changes, modals, focus trap
-- [ ] [Keyboard navigation](phase-13-tooling-security-a11y/09-keyboard-navigation.md) — tab order, escape to close, arrow keys
-- [ ] [Screen reader testing](phase-13-tooling-security-a11y/10-screen-reader-testing.md) — NVDA/VoiceOver basics
+- [x] [Webpack vs Vite vs Turbopack](phase-13-tooling-security-a11y/01-webpack-vite-turbopack.md) — dev server speed, HMR, prod builds
+- [x] [Babel & SWC](phase-13-tooling-security-a11y/02-babel-swc.md) — JSX transform, new vs old runtime
+- [x] [ESLint + Prettier setup](phase-13-tooling-security-a11y/03-eslint-prettier.md) — react-hooks plugin rules
+- [x] [XSS in React](phase-13-tooling-security-a11y/04-xss-in-react.md) — dangerouslySetInnerHTML risks
+- [x] [Authentication patterns](phase-13-tooling-security-a11y/05-authentication-patterns.md) — JWT in storage vs httpOnly cookies
+- [x] [CSRF in SPA contexts](phase-13-tooling-security-a11y/06-csrf-spa.md) — when it matters
+- [x] [ARIA roles & labels](phase-13-tooling-security-a11y/07-aria-roles-labels.md) — landmark roles, aria-live
+- [x] [Focus management in SPAs](phase-13-tooling-security-a11y/08-focus-management-spas.md) — route changes, modals, focus trap
+- [x] [Keyboard navigation](phase-13-tooling-security-a11y/09-keyboard-navigation.md) — tab order, escape to close, arrow keys
+- [x] [Screen reader testing](phase-13-tooling-security-a11y/10-screen-reader-testing.md) — NVDA/VoiceOver basics
 
 ---
 
