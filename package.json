@@ -1,0 +1,8 @@
+{
+  "name": "react-prep",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "tutorial": "node scripts/tutorial.js"
+  }
+}

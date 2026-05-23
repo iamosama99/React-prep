@@ -139,7 +139,18 @@ Leave unchecked anything you'd need to read to answer — that's what to revisit
 /Users/osama/Developer/Projects/React prep/
 ├── CONTEXT.md                    ← this file
 ├── README.md                     ← full topic index with checkboxes
+├── package.json                  ← root scripts: { "tutorial": "node scripts/tutorial.js" }
 ├── .gitignore
+├── scripts/
+│   └── tutorial.js               ← runner: finds tutorial file, copies to sandbox, starts Vite
+├── sandbox/                      ← shared Vite + React app (deps already installed)
+│   ├── src/App.jsx               ← gets replaced each run; edit this file while in the browser
+│   ├── src/main.jsx
+│   ├── src/index.css
+│   ├── vite.config.js
+│   ├── tsconfig.json             ← handles .tsx tutorials (phases 9+)
+│   └── package.json
+├── _templates/                   ← tutorial stub templates for new topics
 ├── phase-01-fundamentals/        # JS examples
 ├── phase-02-hooks/               # JS examples
 ├── phase-03-class-legacy/        # JS examples
@@ -155,6 +166,20 @@ Leave unchecked anything you'd need to read to answer — that's what to revisit
 ├── phase-13-tooling-security-a11y/ # TS examples
 └── phase-14-live-coding/         # TS examples
 ```
+
+**Running a tutorial:**
+
+```bash
+# From the project root — browser opens automatically at localhost:5173
+npm run tutorial use-state
+npm run tutorial 01-jsx
+npm run tutorial 03-props
+
+# If query matches multiple topics, be more specific
+npm run tutorial phase-02/use-state
+```
+
+Edit `sandbox/src/App.jsx` (or `.tsx`) directly while the server is running — Vite hot-reloads on save. The file is a copy of the tutorial; the original in its phase folder is untouched.
 
 ---
 

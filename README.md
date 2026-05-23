@@ -39,16 +39,37 @@ phase-02-hooks/
   02-use-effect/
     notes.md
     tutorial.jsx
+
+sandbox/            ← shared Vite app (one-time npm install already done)
+scripts/
+  tutorial.js       ← runner: copies tutorial into sandbox and starts Vite
+package.json        ← root scripts: { "tutorial": "node scripts/tutorial.js" }
 ```
 
-Phases 1–8 use `.jsx`; phases 9–13 use `.tsx` (TypeScript).
+Phases 1–8 use `.jsx`; phases 9–13 use `.tsx` (TypeScript). The sandbox handles both.
 
 **Study workflow per topic:**
 1. Read `notes.md` — understand the concept, internals, and interview traps
-2. Open `tutorial.jsx` / `tutorial.tsx` — complete Exercise 1 → 2 → 3, then experiment in the Playground
-3. Run the tutorial in [StackBlitz](https://stackblitz.com/new/react) (JSX) or [StackBlitz TS](https://stackblitz.com/new/react-ts) (TSX) — paste the file into `src/App.jsx`
+2. Run the tutorial from the **project root** — browser opens automatically at `localhost:5173`:
+   ```bash
+   npm run tutorial <name>
+   ```
+   `<name>` is a **substring match** against the topic's folder path. The folder
+   structure is `phase-XX-{phase}/{NN}-{topic-slug}/` — anything in that path works:
+   ```bash
+   npm run tutorial use-state          # keyword from topic slug → unique match
+   npm run tutorial 01-jsx             # number + keyword → unique match
+   npm run tutorial fiber              # single keyword → unique match
+   npm run tutorial 01                 # bare number → ambiguous (one per phase = 14 matches)
+   npm run tutorial phase-02/use-state # phase + keyword → unambiguous
+   ```
+   If the name matches multiple topics, the script lists them and asks you to
+   narrow down. If you can't remember the name, run any non-matching word (e.g.
+   `npm run tutorial list`) — the error output prints all 134 tutorials.
 
-See [`_templates/README.md`](_templates/README.md) for full instructions on running tutorial files locally.
+3. Complete Exercise 1 → 2 → 3 inside the tutorial file, then experiment in the Playground — Vite hot-reloads on every save
+
+See [`_templates/README.md`](_templates/README.md) for a full matching reference table.
 
 ---
 
