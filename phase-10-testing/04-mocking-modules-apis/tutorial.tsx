@@ -1,61 +1,130 @@
 // ============================================================
 // Topic:   Mocking Modules & APIs
 // Phase:   10 — Testing
-// File:    tutorial.tsx
+// File:    tutorial.tsx  (visual reference — run in browser)
 //
-// Instructions
-//   1. Read notes.md for the concept before touching this file.
-//   2. Complete each exercise in order — each builds on the last.
-//   3. Use the Playground at the bottom to experiment freely.
-//   4. Run in StackBlitz (stackblitz.com/new/react-ts) or a local
-//      Vite app: npm create vite@latest my-app -- --template react-ts
+// Run in browser:   npm run tutorial 04-mocking-modules-apis
+// Run the tests:    npm test
 // ============================================================
 
-import { useState, useEffect, useRef, useCallback, useMemo, FC } from 'react';
+import { useState, useEffect, FC } from 'react'
 
-// ─── Exercise 1 ──────────────────────────────────────────────
-// Goal: Implement the simplest possible demonstration of Mocking Modules & APIs
-//       with explicit TypeScript types.
-//
-// TODO: Replace this stub with your implementation.
-const Exercise1: FC = () => {
-  return <div>Exercise 1 — Mocking Modules & APIs (stub)</div>;
-};
+// ─── The "api" module that exercises.test.tsx will mock ───────
+// In production, this hits the real API.
+// In tests, it's replaced with controlled fakes.
 
-// ─── Exercise 2 ──────────────────────────────────────────────
-// Goal: Handle a realistic TypeScript edge case for Mocking Modules & APIs.
-//       Check notes.md "Check yourself" prompts for hints.
-//
-// TODO: Replace this stub with your implementation.
-const Exercise2: FC = () => {
-  return <div>Exercise 2 — TypeScript edge case (stub)</div>;
-};
+export type User = {
+  id: number
+  name: string
+  email: string
+  role: 'admin' | 'user'
+}
 
-// ─── Exercise 3 ──────────────────────────────────────────────
-// Goal: Build a small, fully-typed composable unit using Mocking Modules & APIs
-//       in a pattern you'd write in a production TypeScript codebase.
-//
-// TODO: Replace this stub with your implementation.
-const Exercise3: FC = () => {
-  return <div>Exercise 3 — production pattern (stub)</div>;
-};
+// In a real codebase this would be in a separate api.ts file.
+// Here it's inline for the browser demo.
+export async function fetchUser(id: number): Promise<User> {
+  const res = await fetch(`/api/users/${id}`)
+  if (!res.ok) throw new Error(`Failed to fetch user: HTTP ${res.status}`)
+  return res.json()
+}
 
-// ─── Playground ──────────────────────────────────────────────
-const Playground: FC = () => {
-  return <div>Playground — experiment here</div>;
-};
+export async function updateUserRole(id: number, role: User['role']): Promise<User> {
+  const res = await fetch(`/api/users/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ role }),
+    headers: { 'Content-Type': 'application/json' },
+  })
+  if (!res.ok) throw new Error(`Failed to update role: HTTP ${res.status}`)
+  return res.json()
+}
+
+// ─── Date utilities (partially mocked in Exercise 2) ─────────
+export function getCurrentDate(): Date {
+  return new Date()
+}
+
+export function formatDateRelative(date: Date): string {
+  const diff = Math.floor((Date.now() - date.getTime()) / 1000 / 60)
+  if (diff < 1) return 'just now'
+  if (diff < 60) return `${diff}m ago`
+  return `${Math.floor(diff / 60)}h ago`
+}
+
+// ─── UserCard component (the thing being tested) ─────────────
+export function UserCard({ userId }: { userId: number }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    fetchUser(userId)
+      .then(data => { if (!cancelled) { setUser(data); setLoading(false) } })
+      .catch(err => { if (!cancelled) { setError(err.message); setLoading(false) } })
+    return () => { cancelled = true }
+  }, [userId])
+
+  if (loading) return <p role="status">Loading user...</p>
+  if (error) return <p role="alert">{error}</p>
+  if (!user) return null
+
+  return (
+    <article aria-label={`${user.name}'s card`}>
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
+      <span aria-label="role badge">{user.role}</span>
+    </article>
+  )
+}
 
 // ─── App ─────────────────────────────────────────────────────
 const App: FC = () => {
   return (
-    <div style={{ fontFamily: 'sans-serif', padding: '1rem' }}>
+    <div style={{ fontFamily: 'system-ui', padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Mocking Modules & APIs</h1>
-      <h2>Exercise 1</h2><Exercise1 />
-      <h2>Exercise 2</h2><Exercise2 />
-      <h2>Exercise 3</h2><Exercise3 />
-      <h2>Playground</h2><Playground />
-    </div>
-  );
-};
+      <p style={{ color: '#666', marginBottom: '2rem' }}>
+        <code>UserCard</code> fetches from <code>/api/users/:id</code>. In this browser demo
+        it will show a loading error (no real API). In <code>exercises.test.tsx</code>,
+        you'll intercept that fetch two ways: module mock and MSW.
+      </p>
 
-export default App;
+      <section style={{ padding: '1rem', border: '1px solid #ddd', borderRadius: '8px', marginBottom: '2rem' }}>
+        <h2>UserCard (fetches from /api/users/1)</h2>
+        <UserCard userId={1} />
+      </section>
+
+      <section style={{ background: '#fffbe6', padding: '1.5rem', borderRadius: '8px' }}>
+        <h2>Two mocking strategies</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+          <thead>
+            <tr style={{ background: '#f0f0f0' }}>
+              {['', 'Module mock (vi.mock)', 'MSW (network level)'].map(h => (
+                <th key={h} style={{ padding: '0.5rem', textAlign: 'left', border: '1px solid #ddd' }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ['What it fakes', 'The function that calls fetch', 'The actual HTTP response'],
+              ['Catches wrong URL?', '✗ No', '✓ Yes'],
+              ['Catches wrong method?', '✗ No', '✓ Yes'],
+              ['Works with any HTTP library?', '✗ Must mock each', '✓ Yes'],
+              ['Setup cost', 'Low', 'Medium'],
+              ['Best for', 'Unit tests', 'Integration tests'],
+            ].map(([label, ...values]) => (
+              <tr key={label}>
+                <td style={{ padding: '0.5rem', border: '1px solid #ddd', fontWeight: 'bold' }}>{label}</td>
+                {values.map((v, i) => (
+                  <td key={i} style={{ padding: '0.5rem', border: '1px solid #ddd' }}>{v}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  )
+}
+
+export default App

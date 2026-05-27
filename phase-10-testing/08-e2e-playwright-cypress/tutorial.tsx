@@ -1,61 +1,129 @@
 // ============================================================
 // Topic:   E2E with Playwright & Cypress
 // Phase:   10 — Testing
-// File:    tutorial.tsx
+// File:    tutorial.tsx  (visual reference — run in browser)
 //
-// Instructions
-//   1. Read notes.md for the concept before touching this file.
-//   2. Complete each exercise in order — each builds on the last.
-//   3. Use the Playground at the bottom to experiment freely.
-//   4. Run in StackBlitz (stackblitz.com/new/react-ts) or a local
-//      Vite app: npm create vite@latest my-app -- --template react-ts
+// Run in browser:   npm run tutorial 08-e2e-playwright-cypress
+//
+// The Playwright exercises are in: exercises.spec.ts
+// To run them: npx playwright test (requires Playwright installed)
+// Install: npx playwright install
+//
+// E2E tests run against a REAL browser + server.
+// These components show what you'd be testing in that real browser.
 // ============================================================
 
-import { useState, useEffect, useRef, useCallback, useMemo, FC } from 'react';
+import { useState, FC } from 'react'
 
-// ─── Exercise 1 ──────────────────────────────────────────────
-// Goal: Implement the simplest possible demonstration of E2E with Playwright & Cypress
-//       with explicit TypeScript types.
-//
-// TODO: Replace this stub with your implementation.
-const Exercise1: FC = () => {
-  return <div>Exercise 1 — E2E with Playwright & Cypress (stub)</div>;
-};
+// ─── What the E2E tests would target ────────────────────────
+// A minimal login + dashboard flow — the kind of critical path
+// that justifies the cost of an E2E test.
 
-// ─── Exercise 2 ──────────────────────────────────────────────
-// Goal: Handle a realistic TypeScript edge case for E2E with Playwright & Cypress.
-//       Check notes.md "Check yourself" prompts for hints.
-//
-// TODO: Replace this stub with your implementation.
-const Exercise2: FC = () => {
-  return <div>Exercise 2 — TypeScript edge case (stub)</div>;
-};
+type User = { name: string; email: string }
 
-// ─── Exercise 3 ──────────────────────────────────────────────
-// Goal: Build a small, fully-typed composable unit using E2E with Playwright & Cypress
-//       in a pattern you'd write in a production TypeScript codebase.
-//
-// TODO: Replace this stub with your implementation.
-const Exercise3: FC = () => {
-  return <div>Exercise 3 — production pattern (stub)</div>;
-};
+export function LoginPage({ onLogin }: { onLogin: (user: User) => void }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
-// ─── Playground ──────────────────────────────────────────────
-const Playground: FC = () => {
-  return <div>Playground — experiment here</div>;
-};
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (email === 'alice@example.com' && password === 'password') {
+      onLogin({ name: 'Alice Chen', email })
+    } else {
+      setError('Invalid credentials')
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} aria-label="Login form">
+      <h1>Sign in</h1>
+      {error && <p role="alert">{error}</p>}
+      <label>
+        Email
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
+      </label>
+      <label>
+        Password
+        <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+      </label>
+      <button type="submit">Log in</button>
+    </form>
+  )
+}
+
+export function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div aria-label="Dashboard">
+      <header>
+        <h1>Welcome, {user.name}</h1>
+        <button onClick={onLogout}>Log out</button>
+      </header>
+      <main>
+        <p>You are logged in as {user.email}</p>
+        <section aria-label="Widget">
+          <h2>Counter Widget</h2>
+          <output>{count}</output>
+          <button onClick={() => setCount(c => c + 1)}>Increment</button>
+        </section>
+      </main>
+    </div>
+  )
+}
 
 // ─── App ─────────────────────────────────────────────────────
 const App: FC = () => {
-  return (
-    <div style={{ fontFamily: 'sans-serif', padding: '1rem' }}>
-      <h1>E2E with Playwright & Cypress</h1>
-      <h2>Exercise 1</h2><Exercise1 />
-      <h2>Exercise 2</h2><Exercise2 />
-      <h2>Exercise 3</h2><Exercise3 />
-      <h2>Playground</h2><Playground />
-    </div>
-  );
-};
+  const [user, setUser] = useState<User | null>(null)
 
-export default App;
+  return (
+    <div style={{ fontFamily: 'system-ui', padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+      {!user ? (
+        <div>
+          <p style={{ color: '#666', marginBottom: '2rem' }}>
+            E2E exercises target this login flow. Use credentials:
+            <code> alice@example.com</code> / <code>password</code>
+          </p>
+          <LoginPage onLogin={setUser} />
+        </div>
+      ) : (
+        <Dashboard user={user} onLogout={() => setUser(null)} />
+      )}
+
+      <hr style={{ margin: '2rem 0' }} />
+
+      <section style={{ background: '#fffbe6', padding: '1rem', borderRadius: '8px' }}>
+        <h2>E2E vs Integration cheatsheet</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
+          <thead>
+            <tr style={{ background: '#f0f0f0' }}>
+              {['', 'E2E (Playwright)', 'Integration (RTL + MSW)'].map(h => (
+                <th key={h} style={{ padding: '0.4rem', border: '1px solid #ddd', textAlign: 'left' }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ['Browser', 'Real Chromium/Firefox/WebKit', 'jsdom (simulated)'],
+              ['Network', 'Real HTTP (or intercepted)', 'MSW (intercepted)'],
+              ['Auth cookies', '✓ Real', '✗ Simulated'],
+              ['Speed', '5–30s per test', '20–200ms per test'],
+              ['Flakiness', 'Higher', 'Lower'],
+              ['Best for', 'Critical user flows', 'Feature behavior'],
+            ].map(([label, ...cols]) => (
+              <tr key={label}>
+                <td style={{ padding: '0.4rem', border: '1px solid #ddd', fontWeight: 'bold' }}>{label}</td>
+                {cols.map((c, i) => (
+                  <td key={i} style={{ padding: '0.4rem', border: '1px solid #ddd' }}>{c}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  )
+}
+
+export default App

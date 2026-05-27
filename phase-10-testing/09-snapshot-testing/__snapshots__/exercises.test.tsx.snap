@@ -1,0 +1,53 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Exercise 1: What snapshots capture (observe, then refactor) > StatusBadge full snapshot — observe what gets captured 1`] = `
+<span
+  aria-label="Complete"
+  class="badge badge-success"
+  role="status"
+>
+  Complete
+</span>
+`;
+
+exports[`Exercise 2: Dynamic content — mock before snapshotting > snapshot with Date.now() — fails every run WITHOUT mocking 1`] = `
+<article
+  aria-label="Order ORD-1"
+>
+  <h3>
+    Order #
+    ORD-1
+  </h3>
+  <span
+    aria-label="complete"
+    class="badge badge-success"
+    role="status"
+  >
+    complete
+  </span>
+  <time
+    datetime="2025-01-15T10:00:00.000Z"
+  >
+    1/15/2025
+  </time>
+</article>
+`;
+
+exports[`Exercise 4: Migrate from snapshot to explicit assertions > BAD: full container snapshot (breaks on any markup change) 1`] = `
+<div>
+  <span
+    aria-label="Active"
+    class="badge badge-success"
+    role="status"
+  >
+    Active
+  </span>
+  <span
+    aria-label="Inactive"
+    class="badge badge-error"
+    role="status"
+  >
+    Inactive
+  </span>
+</div>
+`;
