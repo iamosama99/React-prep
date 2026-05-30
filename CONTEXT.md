@@ -390,20 +390,20 @@ Legend: ✅ Done | ✅ Not started | 👉 **Next up**
 
 | # | Topic | File | Status |
 |---|-------|------|--------|
-| 1 | Build a useDebounce hook | `phase-14-live-coding/01-use-debounce-throttle/notes.md` | 👉 **Next** |
-| 2 | Build a useFetch hook | `phase-14-live-coding/02-use-fetch/notes.md` | ⬜ |
-| 3 | Implement useState from scratch | `phase-14-live-coding/03-implement-use-state-scratch/notes.md` | ⬜ |
-| 4 | Autocomplete / typeahead | `phase-14-live-coding/04-autocomplete-typeahead/notes.md` | ⬜ |
-| 5 | Infinite scroll | `phase-14-live-coding/05-infinite-scroll/notes.md` | ⬜ |
-| 6 | Modal / dialog | `phase-14-live-coding/06-modal-dialog/notes.md` | ⬜ |
-| 7 | Tabs component | `phase-14-live-coding/07-tabs-component/notes.md` | ⬜ |
-| 8 | Accordion | `phase-14-live-coding/08-accordion/notes.md` | ⬜ |
-| 9 | Pagination | `phase-14-live-coding/09-pagination/notes.md` | ⬜ |
-| 10 | Star rating | `phase-14-live-coding/10-star-rating/notes.md` | ⬜ |
-| 11 | OTP input | `phase-14-live-coding/11-otp-input/notes.md` | ⬜ |
-| 12 | Recursive comments / file tree | `phase-14-live-coding/12-recursive-comments-file-tree/notes.md` | ⬜ |
-| 13 | Drag and drop list | `phase-14-live-coding/13-drag-and-drop-list/notes.md` | ⬜ |
-| 14 | Toast / notification system | `phase-14-live-coding/14-toast-notification-system/notes.md` | ⬜ |
+| 1 | Build a useDebounce hook | `phase-14-live-coding/01-use-debounce-throttle/notes.md` | ✅ |
+| 2 | Build a useFetch hook | `phase-14-live-coding/02-use-fetch/notes.md` | ✅ |
+| 3 | Implement useState from scratch | `phase-14-live-coding/03-implement-use-state-scratch/notes.md` | ✅ |
+| 4 | Autocomplete / typeahead | `phase-14-live-coding/04-autocomplete-typeahead/notes.md` | ✅ |
+| 5 | Infinite scroll | `phase-14-live-coding/05-infinite-scroll/notes.md` | ✅ |
+| 6 | Modal / dialog | `phase-14-live-coding/06-modal-dialog/notes.md` | ✅ |
+| 7 | Tabs component | `phase-14-live-coding/07-tabs-component/notes.md` | ✅ |
+| 8 | Accordion | `phase-14-live-coding/08-accordion/notes.md` | ✅ |
+| 9 | Pagination | `phase-14-live-coding/09-pagination/notes.md` | ✅ |
+| 10 | Star rating | `phase-14-live-coding/10-star-rating/notes.md` | ✅ |
+| 11 | OTP input | `phase-14-live-coding/11-otp-input/notes.md` | ✅ |
+| 12 | Recursive comments / file tree | `phase-14-live-coding/12-recursive-comments-file-tree/notes.md` | ✅ |
+| 13 | Drag and drop list | `phase-14-live-coding/13-drag-and-drop-list/notes.md` | ✅ |
+| 14 | Toast / notification system | `phase-14-live-coding/14-toast-notification-system/notes.md` | ✅ |
 
 ---
 
