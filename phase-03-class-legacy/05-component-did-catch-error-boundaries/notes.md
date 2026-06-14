@@ -290,7 +290,7 @@ The trap: saying hooks "can't handle errors." They can (try/catch in event handl
 
 **Q (High): What kinds of errors do error boundaries NOT catch?**
 
-Answer: Three categories. First, errors in event handlers — they don't run in React's render pipeline, so React can't intercept them. Use try/catch inside the handler and setState to show local error UI. Second, errors in asynchronous code — `setTimeout` callbacks, promises, `async/await` in effects. These errors propagate outside React's control and must be caught explicitly. Third, errors in server-side rendering — SSR has its own error handling mechanism. And critically, error boundaries don't catch errors in themselves — an error in the boundary's own `render` propagates up to the next boundary.
+Answer: Four categories. First, errors in event handlers — they don't run in React's render pipeline, so React can't intercept them. Use try/catch inside the handler and setState to show local error UI. Second, errors in asynchronous code — `setTimeout` callbacks, promises, `async/await` in effects. These errors propagate outside React's control and must be caught explicitly. Third, errors in server-side rendering — SSR has its own error handling mechanism. Fourth, errors in the error boundary itself — a boundary cannot catch its own errors; they propagate up to the next boundary in the tree.
 
 ---
 

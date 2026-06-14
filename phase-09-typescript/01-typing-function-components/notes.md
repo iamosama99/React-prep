@@ -17,7 +17,7 @@
 
 `React.FC<Props>` was the canonical pattern for years. The Create React App template dropped it in 2020. Two problems drove the change:
 
-**Implicit children.** `React.FC` injects `children?: ReactNode` into every component's props, whether or not the component uses children. That's a type lie — it says your component accepts children when it doesn't. On a large team, that gap between the type and the runtime is subtle and hard to trace.
+**Implicit children (pre-React 18 types).** In @types/react before v18, `React.FC` injected `children?: ReactNode` into every component's props, whether or not the component used children — a type lie. This was fixed in @types/react v18.0.0: the implicit children injection was removed. For React 18 projects with current types, this specific problem is gone. The return type restriction below remains a valid reason to prefer plain functions.
 
 **Return type.** `FC` constrains the return to `ReactElement | null`. Plain functions can return `ReactNode` — which includes strings, arrays, numbers, and in React 18, `undefined`. `FC` blocks those valid return shapes.
 

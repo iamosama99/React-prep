@@ -80,7 +80,7 @@ useQuery({ queryKey: ['user', 42], queryFn: ... }); // deduped
 
 ## Status Flags
 
-`isLoading` is true only when there's no cached data and a fetch is in-flight. `isFetching` is true whenever a request is in-flight — including background refetches. Use `isFetching` for "subtle refresh spinner" UX; use `isLoading` for "full loading screen" UX.
+In v5, the primary "no data yet" flag is `isPending` (`status === 'pending'`). `isLoading` is a convenience alias for `isPending && isFetching` — it's true only when there's no cached data AND a fetch is in-flight. `isFetching` is true whenever a request is in-flight (including background refetches). Use `isFetching` for "subtle refresh spinner" UX; use `isPending` (or `isLoading`) for "full loading screen" UX. Prefer `isPending` in v5 code as it's the primary status flag.
 
 v5 also exposes a `status` field (`'pending' | 'error' | 'success'`) and `fetchStatus` (`'fetching' | 'paused' | 'idle'`) for more granular control.
 

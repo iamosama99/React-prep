@@ -40,7 +40,7 @@ The SyntheticEvent has the same interface as the native event — same propertie
 
 This is less relevant today — modern browsers are much more consistent. But the synthetic event system exists for another reason too:
 
-**Event delegation.** React doesn't attach your event listeners directly to each DOM node. Instead, it attaches a single listener at the root (document root in React 17+, the React root container in React 18+). When any DOM event bubbles up to that root listener, React looks at which component was the source, finds the matching handler in the fiber tree, and calls it — passing a SyntheticEvent.
+**Event delegation.** React doesn't attach your event listeners directly to each DOM node. Instead, it attaches a single listener at the root (document in React 16 and earlier, the React root container in React 17+). When any DOM event bubbles up to that root listener, React looks at which component was the source, finds the matching handler in the fiber tree, and calls it — passing a SyntheticEvent.
 
 This is more efficient at scale: instead of thousands of individual event listeners (one per button, one per input), there's one listener at the top. Adding and removing components doesn't add or remove event listeners from the DOM — just the fiber tree changes. React can control the entire event dispatch lifecycle, ensuring consistent behavior for batching, synthetic event creation, and future features.
 

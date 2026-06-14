@@ -393,7 +393,7 @@ const inputRef = useRef(null);
 <MyInput ref={inputRef} />;
 ```
 
-Without `forwardRef`, the ref would be in the `props` object (and wouldn't work as a special ref attribute).
+Without `forwardRef`, the `ref` prop is silently ignored — it is not passed through in `props` (React strips `ref` from props just like `key`).
 
 The trap: Developers forget about `forwardRef` and try to pass refs directly, then wonder why it doesn't work. Also, they forget to actually use the `ref` parameter inside the functional component.
 

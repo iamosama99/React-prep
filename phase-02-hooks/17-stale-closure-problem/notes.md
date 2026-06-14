@@ -40,7 +40,7 @@ Because the effect has an empty dependency array, the interval callback closes o
 ### Fixes
 - add the stale value to effect dependencies
 - use refs to hold the latest value
-- use an event hook like `useEvent` to always access current state
+- use `useEffectEvent` (experimental in React 18.3+) to always access current state without adding it as a dependency
 
 Example with ref:
 
@@ -71,7 +71,7 @@ Answer: it is when a callback uses a value captured from a previous render, caus
 The trap: saying it is a React bug rather than a JavaScript closure behavior combined with render semantics.
 
 **Q (High): How do you fix stale closures in hooks?**
-Answer: by including current values in dependency arrays, by using refs to store the latest value, or by using patterns like `useEvent` for stable callbacks that access fresh state. The right fix depends on the exact case.
+Answer: by including current values in dependency arrays, by using refs to store the latest value, or by using `useEffectEvent` (experimental in React 18.3+) for stable callbacks that always read fresh state without being listed as a dependency. The right fix depends on the exact case.
 The trap: blindly removing dependencies or disabling lint rules.
 
 ---

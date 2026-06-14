@@ -313,7 +313,7 @@ Or use a library like React Query that handles this pattern.
 
 **Q (High): When does `useEffect` run relative to rendering?**
 
-Answer: Effects run *after* the DOM has been committed (painted to screen). React's order is: render phase (compute JSX) → commit phase (update DOM) → effects run. This is why DOM mutations in effects are safe — the DOM is already updated and visible.
+Answer: Effects run *after* the browser has painted the committed DOM to screen. The full order is: render phase (compute JSX) → commit phase (update DOM) → `useLayoutEffect` → browser paint → `useEffect`. This is why DOM reads in effects are safe — the DOM is already updated and painted.
 
 If you need to update the DOM *before* it's painted, use `useLayoutEffect` instead, which runs synchronously after DOM updates but before paint.
 

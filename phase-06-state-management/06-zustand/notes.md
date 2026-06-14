@@ -13,7 +13,7 @@
 
 Zustand is global state management with almost no API surface. There are no providers, no reducers, no action creators, no boilerplate. You define a store as a function, read it with a selector hook, and update it by calling functions you defined in the store. That's the entire model.
 
-It's built by Daishi Kato (also Jotai, React Spring) on top of `useSyncExternalStore` — it subscribes to a plain JavaScript object stored outside the React tree, with selective re-renders via selector comparison.
+It's built by the pmndrs collective (primarily Paul Henschel) on top of `useSyncExternalStore` — it subscribes to a plain JavaScript object stored outside the React tree, with selective re-renders via selector comparison.
 
 ---
 

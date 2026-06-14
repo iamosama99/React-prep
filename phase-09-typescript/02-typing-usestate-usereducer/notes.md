@@ -186,7 +186,7 @@ function Controls({ dispatch }: ControlsProps) {
 
 ## Gotchas
 
-**`useState<T>(undefined)` vs `useState<T | undefined>(undefined)`.** Both let you set undefined, but the former makes `undefined` invisible to TypeScript — it still types the state as `T` while letting it be set to `undefined`. Use `useState<T | undefined>(undefined)` to be honest.
+**`useState<T>()` (no argument) gives `T | undefined` state, not `T`.** TypeScript matches the no-argument overload and infers `T | undefined`, which can surprise you if you expected `T` state. Be explicit: `useState<User | null>(null)` makes the type and initial value obvious. Note: `useState<T>(undefined)` is a compile error — `undefined` is not assignable to `T` — so do not use it.
 
 **Lazy initializer is typed too.** The function passed to `useState` must return the state type:
 

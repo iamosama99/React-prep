@@ -148,7 +148,7 @@ The callback receives `T | null` — `null` when the element unmounts. TypeScrip
 When a ref is forwarded through `forwardRef`, the `ref` parameter inside the render function has type `React.ForwardedRef<T>`, which is:
 
 ```typescript
-type ForwardedRef<T> = ((instance: T | null) => void) | MutableRefObject<T | null> | null;
+type ForwardedRef<T> = ((instance: T | null) => void) | RefObject<T> | null;
 ```
 
 You don't call the ref yourself — you just attach it. But if you're building something custom (like a focus manager that combines its own ref with a forwarded ref), you need to handle all three union members:
@@ -211,7 +211,7 @@ When you need to react to the ref being attached or detached — for example, to
 
 **Q: What's the TypeScript type of the `ref` parameter inside a `forwardRef` render function? (Medium)**
 
-`React.ForwardedRef<T>`, which is `((instance: T | null) => void) | React.MutableRefObject<T | null> | null`. It's a union because the caller might pass a ref object, a callback ref, or null. You normally just pass it to the JSX `ref` attribute without touching it, but if you need to combine it with your own ref (for a component that also needs internal DOM access), you need a `mergeRefs` utility that handles all three cases.
+`React.ForwardedRef<T>`, which is `((instance: T | null) => void) | React.RefObject<T> | null`. It's a union because the caller might pass a ref object (`RefObject<T>` with readonly `current`), a callback ref, or null. You normally just pass it to the JSX `ref` attribute without touching it, but if you need to combine it with your own ref (for a component that also needs internal DOM access), you need a `mergeRefs` utility that handles all three cases.
 
 ---
 

@@ -14,7 +14,7 @@
 
 List virtualization (also called "windowing") is a technique where only the rows currently visible in the viewport are rendered as DOM nodes. As the user scrolls, rows that leave the viewport are unmounted and rows entering the viewport are mounted — the total number of live DOM nodes stays small regardless of the total list size.
 
-The main libraries for React: `react-window` (lighter, modern) and `react-virtual` (TanStack Virtual — headless, framework-agnostic). `react-virtualized` is the predecessor to `react-window` and is now largely superseded.
+The main libraries for React: `react-window` (lighter, modern) and `@tanstack/react-virtual` (TanStack Virtual — headless, framework-agnostic). `react-virtualized` is the predecessor to `react-window` and is now largely superseded.
 
 ```js
 import { FixedSizeList } from 'react-window';

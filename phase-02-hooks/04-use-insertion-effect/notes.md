@@ -5,7 +5,7 @@
 | Concept | What it is | Why it matters |
 |---|---|---|
 | Runs first of all effects | Fires before `useLayoutEffect` and `useEffect` | Styles are injected before any effect reads the DOM |
-| No DOM access | Browser hasn't laid out yet; refs are null | Cannot measure elements — wrong timing for that |
+| No layout reads | Browser hasn't calculated layout yet | Cannot measure elements — wrong timing for that; refs ARE populated |
 | CSS-in-JS only | Designed for style injection, not app logic | Library authors' tool; app devs should never need it |
 | Effect order | `useInsertionEffect` → `useLayoutEffect` → `useEffect` | Guarantees styles exist when measurements happen |
 
@@ -86,7 +86,7 @@ useEffect(() => {
 // 3. useEffect
 ```
 
-All effects run synchronously. `useInsertionEffect` can be thought of as "before the DOM is even visible to other JavaScript code."
+`useInsertionEffect` and `useLayoutEffect` run synchronously (blocking paint). `useEffect` runs asynchronously after paint. `useInsertionEffect` can be thought of as "before the DOM is even visible to other JavaScript code."
 
 ## CSS-in-JS Use Case (Real World)
 
@@ -112,17 +112,18 @@ Now when user code runs `useLayoutEffect` to measure elements, the styles are al
 
 ## Gotchas
 
-### 1. Can't access refs
+### 1. Can't read layout or measure elements
 
 ```javascript
-// ❌ Won't work
+// ❌ Won't work correctly
 const ref = useRef(null);
 useInsertionEffect(() => {
-  console.log(ref.current); // null — DOM isn't ready yet
+  // ref.current IS populated (DOM nodes exist), but layout hasn't been calculated
+  console.log(ref.current.offsetWidth); // 0 or stale — browser hasn't laid out yet
 }, []);
 ```
 
-`useInsertionEffect` runs before DOM nodes are "ready" in the normal sense. Refs don't point to anything yet.
+`useInsertionEffect` runs after DOM nodes are inserted but before the browser has calculated layout. `ref.current` is populated, but measurements like `offsetWidth` or `getBoundingClientRect()` will be wrong. Use `useLayoutEffect` for measurements.
 
 ### 2. Can't read DOM properties
 
@@ -168,7 +169,7 @@ This hook is an implementation detail for library authors, not application code.
 
 | Aspect | useInsertionEffect | useLayoutEffect |
 |--------|-------------------|-----------------|
-| **When** | Before DOM is visible to other effects | After DOM is painted but before user sees it |
+| **When** | Before DOM is visible to other effects | After DOM mutations, before browser paints |
 | **Access DOM** | ❌ No (browser hasn't laid it out) | ✅ Yes |
 | **Measure elements** | ❌ No | ✅ Yes |
 | **Inject styles** | ✅ Yes | ❌ Not the right tool |
@@ -221,11 +222,11 @@ The trap: This is mostly relevant to library code. App developers writing HTML u
 
 **Q (Low): Can you access refs in `useInsertionEffect`?**
 
-Answer: No. Refs won't be populated yet. `useInsertionEffect` runs at a point in the React lifecycle where DOM nodes have been inserted, but the browser hasn't laid them out, and React's internal state for refs hasn't fully settled.
+Answer: `ref.current` IS populated — DOM nodes exist by the time `useInsertionEffect` runs. What you cannot do is read layout properties like `offsetWidth` or `getBoundingClientRect()`, because the browser hasn't calculated layout yet. Those will return stale or zero values.
 
-Use `useLayoutEffect` or `useEffect` to access refs.
+Use `useLayoutEffect` to read layout/measurements. `useInsertionEffect` is for injecting styles only.
 
-The trap: Developers new to `useInsertionEffect` try to access refs and get confused when they're null or undefined.
+The trap: Developers assume refs are null in `useInsertionEffect`. They aren't — DOM nodes exist. What's missing is browser layout calculation, not the DOM nodes themselves.
 
 ---
 

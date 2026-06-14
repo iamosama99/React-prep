@@ -98,7 +98,7 @@ Inside `startTransition`, the update goes into a TransitionLane. If the user typ
 
 ## Time Slicing
 
-React breaks render work into **5ms chunks** (approximately one frame at 120fps). After each chunk, it checks: "Is there higher-priority work?" If yes, it yields. If no, it continues.
+React breaks render work into **~5ms time slices**. After each slice, it checks: "Is there higher-priority work?" If yes, it yields. If no, it continues. (Note: 120fps = ~8.3ms per frame; the 5ms scheduler budget is React's own threshold, not a frame duration.)
 
 This is invisible to your component code — `render` still runs synchronously from the component's perspective. The chunking happens in the scheduler, not inside your components.
 

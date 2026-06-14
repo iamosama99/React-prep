@@ -254,12 +254,12 @@ function Exercise1_JSXTransformVisualizer() {
 // EXERCISE 2 — "Who Handles This?" Responsibility Sorter
 //
 // Ten tasks/descriptions. Click to categorise each as:
-//   Babel/SWC | TypeScript (tsc) | Bundler (Webpack/Vite/Rollup)
+//   Babel/SWC | TypeScript (tsc) | Bundler (Webpack/Vite/Rollup) | ESLint
 //
 // Then reveal the answer.
 // ─────────────────────────────────────────────────────────────
 
-type Responsibility = 'Babel/SWC' | 'TypeScript (tsc)' | 'Bundler';
+type Responsibility = 'Babel/SWC' | 'TypeScript (tsc)' | 'Bundler' | 'ESLint';
 
 interface ResponsibilityTask {
   id: number;
@@ -326,8 +326,8 @@ const RESPONSIBILITY_TASKS: ResponsibilityTask[] = [
   {
     id: 10,
     description: 'Report an error when a React Hook is called inside an if statement',
-    answer: 'TypeScript (tsc)',
-    explanation: 'Actually — this is neither! This is eslint-plugin-react-hooks (rules-of-hooks). Neither the compiler nor the bundler understands React semantics. TypeScript might catch it as a type error in some cases, but the rules-of-hooks lint rule is what specifically enforces this.',
+    answer: 'ESLint',
+    explanation: 'This is eslint-plugin-react-hooks (rules-of-hooks). Neither the compiler nor the bundler understands React semantics. TypeScript might surface a type error in some cases, but the rules-of-hooks lint rule is what specifically detects and reports violations of the Hook call order rule.',
   },
 ];
 
@@ -335,6 +335,7 @@ const RESP_COLORS: Record<Responsibility, string> = {
   'Babel/SWC': '#a855f7',
   'TypeScript (tsc)': '#1a73e8',
   'Bundler': '#e67e22',
+  'ESLint': '#4a7c59',
 };
 
 type RespGuessState = Record<number, { guess: Responsibility | null; revealed: boolean }>;
@@ -352,8 +353,9 @@ function Exercise2_ResponsibilitySorter() {
       <p style={{ color: '#555', fontSize: '0.9rem' }}>
         For each task, decide which tool is responsible. The categories are{' '}
         <span style={{ color: RESP_COLORS['Babel/SWC'], fontWeight: 600 }}>Babel/SWC</span>,{' '}
-        <span style={{ color: RESP_COLORS['TypeScript (tsc)'], fontWeight: 600 }}>TypeScript (tsc)</span>, and{' '}
-        <span style={{ color: RESP_COLORS['Bundler'], fontWeight: 600 }}>Bundler</span>.
+        <span style={{ color: RESP_COLORS['TypeScript (tsc)'], fontWeight: 600 }}>TypeScript (tsc)</span>,{' '}
+        <span style={{ color: RESP_COLORS['Bundler'], fontWeight: 600 }}>Bundler</span>, and{' '}
+        <span style={{ color: RESP_COLORS['ESLint'], fontWeight: 600 }}>ESLint</span>.
       </p>
 
       {revealed > 0 && (
@@ -393,7 +395,7 @@ function Exercise2_ResponsibilitySorter() {
               <div style={{ padding: '0 1.25rem 0.75rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
                 {!state.revealed && (
                   <>
-                    {(['Babel/SWC', 'TypeScript (tsc)', 'Bundler'] as Responsibility[]).map(r => (
+                    {(['Babel/SWC', 'TypeScript (tsc)', 'Bundler', 'ESLint'] as Responsibility[]).map(r => (
                       <button
                         key={r}
                         onClick={() => setStates(prev => ({ ...prev, [task.id]: { ...prev[task.id], guess: r } }))}

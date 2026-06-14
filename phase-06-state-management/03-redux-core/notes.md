@@ -28,7 +28,7 @@ Nothing ever mutates state directly. Every change is a described intent (action)
 The store holds the state tree, exposes `getState()`, accepts `dispatch(action)`, and allows `subscribe(listener)` for change notifications.
 
 ```js
-import { createStore } from 'redux';
+import { createStore } from 'redux'; // ⚠️ Deprecated since Redux 4.2 — use configureStore from Redux Toolkit for new code
 
 const store = createStore(rootReducer);
 

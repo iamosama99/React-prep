@@ -117,7 +117,7 @@ function ProtectedPage({ isAuthenticated }) {
 }
 ```
 
-Under the hood `<Navigate>` calls `navigate()` in a `useEffect`. Don't use it in event handlers — use `navigate()` there. `<Navigate>` is for conditional render-time redirects.
+Under the hood `<Navigate>` calls `navigate()` during the render phase (not in a `useEffect`). Don't use it in event handlers — use `navigate()` there. `<Navigate>` is for conditional render-time redirects.
 
 > **Check yourself:** When would you choose `<Navigate>` over `navigate()`? When would you choose the opposite?
 

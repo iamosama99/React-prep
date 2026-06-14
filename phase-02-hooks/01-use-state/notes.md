@@ -70,7 +70,7 @@ This is automatic in React 18+. In React 17 and earlier, batching only happened 
 In React 18, **automatic batching** applies everywhere (event handlers, promises, timeouts, etc.), unless you explicitly opt out with `flushSync()`:
 
 ```javascript
-import { flushSync } from 'react';
+import { flushSync } from 'react-dom';
 
 const handleClick = () => {
   flushSync(() => setCount(c => c + 1));  // renders immediately
@@ -302,7 +302,7 @@ In React 17, this would cause two re-renders. In React 18, it's batched into one
 If you *need* a render in between, use `flushSync()`:
 
 ```javascript
-import { flushSync } from 'react';
+import { flushSync } from 'react-dom';
 
 flushSync(() => setCount(c => c + 1)); // renders immediately
 console.log(document.getElementById('count').textContent); // can inspect updated DOM
