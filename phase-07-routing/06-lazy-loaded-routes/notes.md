@@ -248,4 +248,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Know why `React.lazy` only works with default exports and the workaround for named exports
 
 ---
-*Next: Data Loaders & Actions — the v6.4 Remix-style data layer that replaces useEffect-based fetching.*
+*Next: [Data Loaders & Actions (v6.4+)](../07-data-loaders-actions/notes.md) — the v6.4 Remix-style data layer that replaces useEffect-based fetching.*

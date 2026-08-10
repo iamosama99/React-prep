@@ -251,4 +251,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can articulate why typing a HOC in TypeScript is genuinely harder than typing a hook
 
 ---
-*Next: Custom Hooks as the Modern Pattern — why hooks subsume both render props and HOCs for most logic-sharing use cases, and how to think about the design of a good custom hook.*
+*Next: [Custom Hooks as the Modern Pattern](../05-custom-hooks-modern-pattern/notes.md) — why hooks subsume both render props and HOCs for most logic-sharing use cases, and how to think about the design of a good custom hook.*

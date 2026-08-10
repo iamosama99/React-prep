@@ -330,4 +330,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Can explain the `defer` + `<Await>` pattern and when to use it
 
 ---
-*Next: URL State vs Component State — the decision framework for when a value belongs in the URL vs. React state.*
+*Next: [URL State vs Component State](../08-url-state-vs-component-state/notes.md) — the decision framework for when a value belongs in the URL vs. React state.*

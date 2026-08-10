@@ -241,4 +241,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: [useRef](05-use-ref.md) — Accessing DOM directly AND storing mutable values across renders.*
+*Next: [useRef](../05-use-ref/notes.md) — Accessing DOM directly AND storing mutable values across renders.*

@@ -284,4 +284,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Fiber Architecture — reconciliation explains *what* React diffs; Fiber explains *how* React schedules and interrupts that work to keep UIs responsive.*
+*Next: [Fiber Architecture](../02-fiber-architecture/notes.md) — reconciliation explains *what* React diffs; Fiber explains *how* React schedules and interrupts that work to keep UIs responsive.*

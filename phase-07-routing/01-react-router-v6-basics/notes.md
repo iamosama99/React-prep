@@ -217,4 +217,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Can name the v5 → v6 API renames: Switch→Routes, Redirect→Navigate, useHistory→useNavigate
 
 ---
-*Next: Nested Routes & Layouts — Outlet is introduced here; the next file goes deep on how to compose multi-level layout trees with it.*
+*Next: [Nested Routes & Layouts](../02-nested-routes-layouts/notes.md) — Outlet is introduced here; the next file goes deep on how to compose multi-level layout trees with it.*

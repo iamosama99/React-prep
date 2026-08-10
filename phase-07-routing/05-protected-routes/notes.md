@@ -278,4 +278,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Can explain why client-side route protection is insufficient from a security standpoint
 
 ---
-*Next: Lazy-Loaded Routes — combining `React.lazy` with the router for route-based code splitting.*
+*Next: [Lazy-Loaded Routes](../06-lazy-loaded-routes/notes.md) — combining `React.lazy` with the router for route-based code splitting.*

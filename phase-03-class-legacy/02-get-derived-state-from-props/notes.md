@@ -248,4 +248,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: shouldComponentUpdate — how to manually control whether a component re-renders, which underpins PureComponent and the class-world equivalent of React.memo.*
+*Next: [shouldComponentUpdate](../03-should-component-update/notes.md) — how to manually control whether a component re-renders, which underpins PureComponent and the class-world equivalent of React.memo.*

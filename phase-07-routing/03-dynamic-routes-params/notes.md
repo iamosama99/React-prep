@@ -253,4 +253,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Know how to set up a 404 catch-all route with `path="*"`
 
 ---
-*Next: Programmatic Navigation — `useNavigate` for imperative redirects, replace vs push, and carrying state through navigations.*
+*Next: [Programmatic Navigation](../04-programmatic-navigation/notes.md) — `useNavigate` for imperative redirects, replace vs push, and carrying state through navigations.*

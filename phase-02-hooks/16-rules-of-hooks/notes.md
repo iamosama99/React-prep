@@ -74,4 +74,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Stale closure problem — a common bug pattern once hook rules are understood.*
+*Next: [Stale closure problem](../17-stale-closure-problem/notes.md) — a common bug pattern once hook rules are understood.*

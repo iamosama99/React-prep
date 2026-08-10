@@ -234,4 +234,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: PureComponent vs React.memo — the automated versions of shouldComponentUpdate for class and function components respectively, and the shallow comparison semantics they share.*
+*Next: [PureComponent vs React.memo](../04-pure-component-vs-react-memo/notes.md) — the automated versions of shouldComponentUpdate for class and function components respectively, and the shallow comparison semantics they share.*

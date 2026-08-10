@@ -249,4 +249,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Avoiding Re-renders Without Memo — React.memo is one tool, but there are structural patterns that prevent unnecessary re-renders without needing memoization at all. These patterns are often simpler and more robust.*
+*Next: [Avoiding Re-renders Without Memo](../06-avoiding-rerenders-without-memo/notes.md) — React.memo is one tool, but there are structural patterns that prevent unnecessary re-renders without needing memoization at all. These patterns are often simpler and more robust.*

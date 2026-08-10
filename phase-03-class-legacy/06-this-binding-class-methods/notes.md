@@ -274,4 +274,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Phase 4 begins — Composition over Inheritance, the architectural principle that explains why React avoided class inheritance hierarchies and how composition patterns solve the same problems more flexibly.*
+*Next: [Composition Over Inheritance](../../phase-04-component-patterns/01-composition-over-inheritance/notes.md) — Composition over Inheritance, the architectural principle that explains why React avoided class inheritance hierarchies and how composition patterns solve the same problems more flexibly.*

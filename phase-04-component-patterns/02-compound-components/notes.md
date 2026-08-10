@@ -226,4 +226,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can name at least two real-world libraries that use compound components and one gotcha specific to this pattern
 
 ---
-*Next: Render Props — an older but still relevant pattern for sharing behavior without hooks, and still found throughout the ecosystem.*
+*Next: [Render Props](../03-render-props/notes.md) — an older but still relevant pattern for sharing behavior without hooks, and still found throughout the ecosystem.*

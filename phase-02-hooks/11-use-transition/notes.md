@@ -84,4 +84,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useDeferredValue — deferring a value is the natural complement to deferring an update.*
+*Next: [useDeferredValue](../12-use-deferred-value/notes.md) — deferring a value is the natural complement to deferring an update.*

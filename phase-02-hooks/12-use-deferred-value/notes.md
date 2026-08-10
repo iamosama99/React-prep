@@ -66,4 +66,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useId — stable, SSR-safe IDs are the next building block for accessible components.*
+*Next: [useId](../13-use-id/notes.md) — stable, SSR-safe IDs are the next building block for accessible components.*

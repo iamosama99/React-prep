@@ -258,4 +258,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Code Splitting — batching reduces re-render count; code splitting reduces how much JavaScript the browser loads upfront. Both are essential performance levers for production React apps.*
+*Next: [Code Splitting](../09-code-splitting/notes.md) — batching reduces re-render count; code splitting reduces how much JavaScript the browser loads upfront. Both are essential performance levers for production React apps.*

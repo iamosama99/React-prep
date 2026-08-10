@@ -262,4 +262,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can write the `useLocalStorage` hook's lazy initializer pattern and explain why it's needed
 
 ---
-*Next: Controlled vs Uncontrolled Component Design — the pattern (from Phase 1's input discussion) elevated to a full component design principle, covering how to build library-quality components that support both modes.*
+*Next: [Controlled vs Uncontrolled Component Design](../06-controlled-vs-uncontrolled-design/notes.md) — the pattern (from Phase 1's input discussion) elevated to a full component design principle, covering how to build library-quality components that support both modes.*

@@ -232,4 +232,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Polymorphic Components — building components that can render as different HTML elements or other components, a key pattern in design system work.*
+*Next: [Polymorphic Components](../11-polymorphic-components/notes.md) — building components that can render as different HTML elements or other components, a key pattern in design system work.*

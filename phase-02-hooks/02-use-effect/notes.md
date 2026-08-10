@@ -43,7 +43,7 @@ React's render-and-commit cycle:
 2. **Commit phase**: Update the DOM (or don't, if nothing changed).
 3. **Effects run**: *After* the commit, React calls your effect functions.
 
-This is important: effects run *after* the DOM is painted. If you need to update the DOM *before* the paint, use `useLayoutEffect` instead (see [useLayoutEffect](03-use-layout-effect.md)).
+This is important: effects run *after* the DOM is painted. If you need to update the DOM *before* the paint, use `useLayoutEffect` instead (see [useLayoutEffect](../03-use-layout-effect/notes.md)).
 
 ### Dependency Array
 
@@ -475,4 +475,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: [useLayoutEffect](03-use-layout-effect.md) — Synchronous effects that run before the browser paints.*
+*Next: [useLayoutEffect](../03-use-layout-effect/notes.md) — Synchronous effects that run before the browser paints.*

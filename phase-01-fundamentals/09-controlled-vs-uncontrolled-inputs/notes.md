@@ -332,4 +332,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Synthetic Events — inputs emit events when the user interacts with them. React wraps those native browser events in a synthetic event system. Understanding why that wrapper exists and what it does (and what it used to do but no longer does) is essential for any code that handles user interactions.*
+*Next: [Synthetic Events](../10-synthetic-events/notes.md) — inputs emit events when the user interacts with them. React wraps those native browser events in a synthetic event system. Understanding why that wrapper exists and what it does (and what it used to do but no longer does) is essential for any code that handles user interactions.*

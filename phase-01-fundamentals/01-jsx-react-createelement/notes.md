@@ -303,4 +303,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Function vs Class Components — now that you know JSX produces element objects and that React calls functions to render components, the logical next question is: what are those functions, how do they differ from classes, and why did the ecosystem move from one to the other?*
+*Next: [Function vs Class Components](../02-function-vs-class-components/notes.md) — now that you know JSX produces element objects and that React calls functions to render components, the logical next question is: what are those functions, how do they differ from classes, and why did the ecosystem move from one to the other?*

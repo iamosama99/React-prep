@@ -61,4 +61,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useSyncExternalStore — subscribe to external stores safely in concurrent React.*
+*Next: [useSyncExternalStore](../14-use-sync-external-store/notes.md) — subscribe to external stores safely in concurrent React.*

@@ -274,4 +274,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Redux Toolkit — createSlice, Immer integration, and why you should never write raw Redux again.*
+*Next: [Redux Toolkit](../04-redux-toolkit/notes.md) — createSlice, Immer integration, and why you should never write raw Redux again.*

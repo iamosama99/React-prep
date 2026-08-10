@@ -265,4 +265,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: componentDidCatch & error boundaries — the only use case where class components remain mandatory even in 2026, and how React's error propagation model works.*
+*Next: [componentDidCatch & Error Boundaries](../05-component-did-catch-error-boundaries/notes.md) — the only use case where class components remain mandatory even in 2026, and how React's error propagation model works.*

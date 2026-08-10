@@ -274,4 +274,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Zustand — minimal global state without providers, reducers, or boilerplate.*
+*Next: [Zustand](../06-zustand/notes.md) — minimal global state without providers, reducers, or boilerplate.*

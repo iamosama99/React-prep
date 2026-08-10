@@ -364,4 +364,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Props, props.children, and defaultProps — now that you understand what a component is and how it gets called, the next question is how data moves into it: what props are, how children work, how defaults are set, and where prop drilling starts to become a design problem.*
+*Next: [Props, props.children, and defaultProps](../03-props-children-defaultprops/notes.md) — now that you understand what a component is and how it gets called, the next question is how data moves into it: what props are, how children work, how defaults are set, and where prop drilling starts to become a design problem.*

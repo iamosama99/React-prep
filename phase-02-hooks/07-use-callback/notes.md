@@ -78,4 +78,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useContext — the provider-consumer pattern is the next step after stable callback and value identity.*
+*Next: [useContext](../08-use-context/notes.md) — the provider-consumer pattern is the next step after stable callback and value identity.*

@@ -105,4 +105,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Phase 3 begins with lifecycle methods, which is the natural follow-up after hooks and modern component patterns.*
+*Next: [Lifecycle Methods](../../phase-03-class-legacy/01-lifecycle-methods/notes.md) — which is the natural follow-up after hooks and modern component patterns.*

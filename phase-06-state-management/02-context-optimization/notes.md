@@ -233,4 +233,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Redux core — store, reducers, actions, middleware, and why the architecture was designed this way.*
+*Next: [Redux Core](../03-redux-core/notes.md) — store, reducers, actions, middleware, and why the architecture was designed this way.*

@@ -225,4 +225,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Tree Shaking — bundle analysis tells you what's in your bundle; tree shaking is the mechanism that removes what isn't needed. Understanding how tree shaking works explains why some code disappears from bundles and some doesn't.*
+*Next: [Tree Shaking](../13-tree-shaking/notes.md) — bundle analysis tells you what's in your bundle; tree shaking is the mechanism that removes what isn't needed. Understanding how tree shaking works explains why some code disappears from bundles and some doesn't.*

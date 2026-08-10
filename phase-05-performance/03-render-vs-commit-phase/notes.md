@@ -257,4 +257,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: What Causes Re-renders — the render/commit model explains how React processes work; next is understanding what triggers that work in the first place, and how to reason about unnecessary re-renders.*
+*Next: [What Causes Re-renders](../04-what-causes-rerenders/notes.md) — the render/commit model explains how React processes work; next is understanding what triggers that work in the first place, and how to reason about unnecessary re-renders.*

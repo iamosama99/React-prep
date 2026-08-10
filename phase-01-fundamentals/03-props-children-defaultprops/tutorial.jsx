@@ -47,7 +47,34 @@ import { useState } from 'react';
 
 function Button({ label, variant = 'primary', disabled = false, onClick, icon }) {
   // TODO: implement this component
-  return <button>{label}</button>;
+  const getColors = () => {
+    switch (variant) {
+      case 'secondary':
+        return { bg: '#f1f5f9', text: '#0f172a' };
+      case 'danger':
+        return { bg: '#ef4444', text: '#ffffff' };
+      case 'primary':
+      default:
+        return { bg: '#3b82f6', text: '#ffffff' };
+    }
+  };
+  const { bg, text } = getColors();
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        backgroundColor: bg,
+        color: text,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+      }}
+
+    >
+      {icon && <span>{icon}</span>}
+      {label}
+    </button>);
 }
 
 function Exercise1() {
@@ -57,7 +84,10 @@ function Exercise1() {
   return (
     <div>
       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-        {/* TODO: render 4 Button variants here */}
+        <Button label="Save" onClick={() => { }} />
+        <Button label="Cancel" variant="secondary" onClick={() => { }} />
+        <Button label="Delete" variant="danger" onClick={() => { }} />
+        <Button label="Can't touch this" disabled />
       </div>
       {lastClicked && (
         <p style={{ fontSize: '0.85rem', color: '#64748b' }}>
@@ -102,17 +132,30 @@ function Exercise1() {
 
 function Card({ children }) {
   // TODO: implement
-  return <div>{children}</div>;
+  return <div style={{ backgroundColor: "#fff", border: "1px solid #e2e8f0", padding: "16px", borderRadius: "8px" }}>{children}</div>;
 }
 
 function Section({ title = 'Untitled Section', children }) {
   // TODO: implement
-  return <div>{children}</div>;
+  return <>
+    <h3>{title}</h3>
+    {children}
+  </>;
 }
 
 function Exercise2() {
   // TODO: use Card and Section to build the nested structure described above
-  return <div>Exercise 2 — implement the Card + Section composition</div>;
+  return (
+    <Card>
+      <Section title="User Info">
+        <p>Name: Osama</p>
+        <p>Role: Senior Engineer</p>
+      </Section>
+      <Section>
+        <p>No title provided — default title should appear here</p>
+      </Section>
+    </Card>
+  )
 }
 
 
@@ -156,7 +199,13 @@ function Exercise2() {
 
 function TagList({ tags, onRemove }) {
   // TODO: implement
-  return <div>TagList — implement me</div>;
+  return <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+    {tags.map((tag) => {
+      return <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#e0f2fe', color: '#0369a1', borderRadius: '1em', padding: '1em' }}>{tag}
+        <button onClick={() => { onRemove(tag) }}>x</button>
+      </span>
+    })}
+  </div>;
 }
 
 function TagInput({ onAdd }) {
@@ -169,11 +218,13 @@ function Exercise3() {
   const [tags, setTags] = useState(['React', 'TypeScript', 'Next.js']);
 
   function handleAdd(tag) {
-    // TODO: add tag if not already in the list
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
   }
 
   function handleRemove(tag) {
-    // TODO: filter out the removed tag
+    setTags(tags.filter((t) => t != tag));
   }
 
   return (

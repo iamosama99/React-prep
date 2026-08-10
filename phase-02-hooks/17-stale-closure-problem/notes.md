@@ -88,4 +88,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Common custom hooks — practical reusable patterns once you master the hook primitives.*
+*Next: [Common custom hooks](../18-common-custom-hooks/notes.md) — practical reusable patterns once you master the hook primitives.*

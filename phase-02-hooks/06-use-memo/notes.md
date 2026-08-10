@@ -78,4 +78,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useCallback — stable function identity is the next concern after stable values.*
+*Next: [useCallback](../07-use-callback/notes.md) — stable function identity is the next concern after stable values.*

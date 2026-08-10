@@ -206,4 +206,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can explain how custom hooks replace inheritance for logic reuse, and what the pre-hooks alternative was
 
 ---
-*Next: Compound Components — how to take composition further when you need related components to share implicit state without prop drilling.*
+*Next: [Compound Components](../02-compound-components/notes.md) — how to take composition further when you need related components to share implicit state without prop drilling.*

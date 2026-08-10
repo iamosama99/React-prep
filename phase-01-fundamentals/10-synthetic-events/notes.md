@@ -280,4 +280,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useState — Phase 1 has covered the conceptual foundation: what JSX is, how components work, how data flows through props and state, and how the DOM interacts with React's event system. Phase 2 starts the deep dive into hooks. useState is the most fundamental hook — it's also a richer topic than it first appears, with important mechanics around closures, batching, and initialization that every senior engineer should understand precisely.*
+*Next: [useState](../../phase-02-hooks/01-use-state/notes.md) — Phase 1 has covered the conceptual foundation: what JSX is, how components work, how data flows through props and state, and how the DOM interacts with React's event system. Phase 2 starts the deep dive into hooks. useState is the most fundamental hook — it's also a richer topic than it first appears, with important mechanics around closures, batching, and initialization that every senior engineer should understand precisely.*

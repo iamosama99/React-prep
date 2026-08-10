@@ -66,4 +66,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Rules of hooks — the foundation for why these hooks must be called consistently.*
+*Next: [Rules of hooks](../16-rules-of-hooks/notes.md) — the foundation for why these hooks must be called consistently.*

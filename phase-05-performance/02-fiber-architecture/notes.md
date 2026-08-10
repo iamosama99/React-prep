@@ -247,4 +247,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Render vs Commit Phase — now that you know Fiber splits work into a render phase and commit phase, the next topic examines what exactly happens in each, where your effects fire, and what you can and can't do in each.*
+*Next: [Render vs Commit Phase](../03-render-vs-commit-phase/notes.md) — now that you know Fiber splits work into a render phase and commit phase, the next topic examines what exactly happens in each, where your effects fire, and what you can and can't do in each.*

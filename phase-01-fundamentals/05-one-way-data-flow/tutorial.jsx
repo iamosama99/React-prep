@@ -51,21 +51,49 @@ import { useState, useEffect } from 'react';
 const COLORS = ['tomato', 'steelblue', 'mediumseagreen', 'goldenrod', 'mediumpurple'];
 
 function ColorPicker({ selectedColor, onSelect }) {
-  // TODO: render a button per color
-  return <div>ColorPicker — implement me</div>;
+  return (
+    <div style={{ display: 'flex', gap: '0.5rem' }}>
+      {COLORS.map((color) => {
+        const isSelected = color === selectedColor;
+        return (
+          <button
+            key={color}
+            onClick={() => onSelect(color)}
+            style={{
+              backgroundColor: color,
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              border: isSelected ? '3px solid black' : '1px solid #ccc',
+            }}
+            title={color}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
 function ColorPreview({ color }) {
-  // TODO: render the preview box
-  return <div>ColorPreview — implement me</div>;
+  return (
+    <div
+      style={{
+        width: '200px',
+        height: '100px',
+        backgroundColor: color,
+      }}
+    />
+  );
 }
 
 function Exercise1() {
-  // TODO: own the state here; wire up ColorPicker and ColorPreview
+  const [selectedColor, setSelectedColor] = useState('tomato');
+
   return (
-    <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-      <ColorPicker selectedColor={null} onSelect={() => {}} />
-      <ColorPreview color="transparent" />
+    <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+      <ColorPicker selectedColor={selectedColor} onSelect={setSelectedColor} />
+      <ColorPreview color={selectedColor} />
     </div>
   );
 }
@@ -84,7 +112,7 @@ function Exercise1() {
 //   PREDICTION: after 3 seconds, does BuggyNameDisplay update? ___
 //
 //   Run it and observe. Write your answer:
-//   "BuggyNameDisplay does / does not update because ___"
+//   "BuggyNameDisplay does / does not update because we did not use name variable directly, instead it created new local name variable"
 //
 // PART B — Implement the correct version:
 //   CorrectNameDisplay receives `name` prop and renders it directly.
@@ -112,8 +140,8 @@ function BuggyNameDisplay({ name }) {
 // TODO: implement this correctly — no local state, just render the prop
 function CorrectNameDisplay({ name }) {
   // TODO: render name directly
-  // Comment: this updates automatically when the prop changes because ___
-  return <div>CorrectNameDisplay — implement me</div>;
+  // Comment: this updates automatically when the prop changes because i am using name directly
+  return <div>{name}</div>;
 }
 
 function Exercise2() {

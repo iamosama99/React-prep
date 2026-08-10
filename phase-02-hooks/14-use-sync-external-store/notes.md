@@ -78,4 +78,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useDebugValue — add meaningful labels for custom hooks in DevTools.*
+*Next: [useDebugValue](../15-use-debug-value/notes.md) — add meaningful labels for custom hooks in DevTools.*

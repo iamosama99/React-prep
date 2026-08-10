@@ -404,4 +404,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: [useInsertionEffect](04-use-insertion-effect.md) — The most specialized effect, for CSS-in-JS libraries.*
+*Next: [useInsertionEffect](../04-use-insertion-effect/notes.md) — The most specialized effect, for CSS-in-JS libraries.*

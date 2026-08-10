@@ -262,4 +262,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: List Virtualization — code splitting reduces what you load; list virtualization reduces what you render. When a list has thousands of rows, rendering them all at once — even after fast loading — produces layout and paint bottlenecks.*
+*Next: [List Virtualization](../10-list-virtualization/notes.md) — code splitting reduces what you load; list virtualization reduces what you render. When a list has thousands of rows, rendering them all at once — even after fast loading — produces layout and paint bottlenecks.*

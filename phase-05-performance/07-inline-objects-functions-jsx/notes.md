@@ -298,4 +298,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Automatic Batching (React 18) — related to re-renders: React 18 batches multiple state updates together into a single render. Understanding what changed in React 18 explains why some apps got a free performance boost on upgrade.*
+*Next: [Automatic Batching (React 18)](../08-automatic-batching-react-18/notes.md) — related to re-renders: React 18 batches multiple state updates together into a single render. Understanding what changed in React 18 explains why some apps got a free performance boost on upgrade.*

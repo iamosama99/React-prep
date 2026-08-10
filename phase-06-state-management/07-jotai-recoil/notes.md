@@ -222,4 +222,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Server state vs client state — why they have fundamentally different lifecycles and why trying to manage both with one tool is a mistake.*
+*Next: [Server State vs Client State](../08-server-state-vs-client-state/notes.md) — why they have fundamentally different lifecycles and why trying to manage both with one tool is a mistake.*

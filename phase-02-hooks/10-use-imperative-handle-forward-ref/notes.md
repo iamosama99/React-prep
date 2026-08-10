@@ -89,4 +89,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useTransition — for marking updates as non-urgent in concurrent rendering.*
+*Next: [useTransition](../11-use-transition/notes.md) — for marking updates as non-urgent in concurrent rendering.*

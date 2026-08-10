@@ -23,34 +23,41 @@ import { useState } from 'react';
 //
 //   Button 1 — "Buggy: +3 (direct)"
 //     calls setCount(count + 1) THREE times in one handler
-//     Prediction: count goes up by ___?
+//     Prediction: count goes up by 1?
 //
 //   Button 2 — "Fixed: +3 (functional)"
 //     calls setCount(prev => prev + 1) THREE times
-//     Prediction: count goes up by ___?
+//     Prediction: count goes up by 3?
 //
 //   Button 3 — "Async +1 after 1s (stale)"
 //     captures count now, fires setCount(count + 1) after 1 second
 //     Rapidly click Button 2 a few times DURING that second.
-//     Prediction: what value does the async update set count to?
+//     Prediction: what value does the async update set count to? 1
 //
 // PART B — write your explanation below:
 // WHY BUTTON 1 ONLY INCREMENTS BY 1:
 // TODO: explain here using the word "snapshot"
+// because the calls in react are batched and not instantly updated, the snapshot of the react component stayed at 0 during all 3 settimeout calls
 
 function Exercise1() {
   const [count, setCount] = useState(0);
 
   function handleBuggyTriple() {
-    // TODO: call setCount(count + 1) three times (intentionally wrong)
+    setCount(count + 1);
+    setCount(count + 1);
+    setCount(count + 1);
   }
 
   function handleFixedTriple() {
-    // TODO: call setCount(prev => prev + 1) three times
+    setCount(count => count + 1);
+    setCount(count => count + 1);
+    setCount(count => count + 1);
   }
 
   function handleAsyncIncrement() {
-    // TODO: after 1000ms, call setCount(count + 1) using the captured snapshot
+    setTimeout(() => {
+      setCount(count + 1);
+    }, 1000)
   }
 
   return (
@@ -80,8 +87,8 @@ function Exercise1() {
 //     tasks[0].done = true;   // mutates in place
 //     setTasks(tasks);         // same reference → React sees no change → no re-render
 //
-//   Click "Mark Done (Buggy)". Does the checkbox update? ___
-//   Then click "Add Task". Does it show checked now? Why? ___
+//   Click "Mark Done (Buggy)". Does the checkbox update? i think because the state is not changed
+//   Then click "Add Task". Does it show checked now? Why? because state is changed
 //
 // PART B — Implement three correct immutable operations:
 //
@@ -109,16 +116,22 @@ function Exercise2() {
   }
 
   function toggleDone(id) {
-    // TODO
+    setTasks(tasks.map((t) => {
+      if (t.id === id) {
+        return { ...t, done: !t.done }
+      }
+      return t;
+    }))
   }
 
   function removeTask(id) {
-    // TODO
+    setTasks(tasks.filter((t) => t.id !== id));
   }
 
   function addTask() {
     if (!newText.trim()) return;
-    // TODO — append new task immutably, then setNewText('')
+    setTasks([...tasks, { id: Date.now(), text: newText, done: false }]);
+    setNewText('');
   }
 
   return (

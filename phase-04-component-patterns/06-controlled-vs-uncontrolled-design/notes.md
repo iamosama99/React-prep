@@ -236,4 +236,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can explain the mode-switching warning, how to implement it with `useRef`, and what bug it catches
 
 ---
-*Next: forwardRef — how refs propagate through component boundaries, and why it's a prerequisite for building composable, accessible component libraries.*
+*Next: [forwardRef](../07-forward-ref/notes.md) — how refs propagate through component boundaries, and why it's a prerequisite for building composable, accessible component libraries.*

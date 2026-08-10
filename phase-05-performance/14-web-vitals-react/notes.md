@@ -271,4 +271,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Concurrent Rendering — the final topic of Phase 5 ties together Fiber (the mechanism), automatic batching, useTransition, and the scheduler to explain how React 18's concurrent mode enables all the INP improvements and responsive UIs discussed throughout this phase.*
+*Next: [Concurrent Rendering](../15-concurrent-rendering/notes.md) — the final topic of Phase 5 ties together Fiber (the mechanism), automatic batching, useTransition, and the scheduler to explain how React 18's concurrent mode enables all the INP improvements and responsive UIs discussed throughout this phase.*

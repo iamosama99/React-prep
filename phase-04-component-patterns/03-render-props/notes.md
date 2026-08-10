@@ -249,4 +249,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can name at least two real-world APIs (library or framework) that still use render props today
 
 ---
-*Next: Higher-Order Components (HOCs) — the other pre-hooks pattern for sharing logic, still found throughout the ecosystem and important to understand deeply.*
+*Next: [Higher-Order Components (HOCs)](../04-hocs/notes.md) — the other pre-hooks pattern for sharing logic, still found throughout the ecosystem and important to understand deeply.*

@@ -274,4 +274,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: React.memo Deep Dive — now that you know parent renders always cascade to children, the next topic examines exactly how React.memo intercepts that cascade, what its comparison does and doesn't guarantee, and when it helps vs hurts.*
+*Next: [React.memo Deep Dive](../05-react-memo-deep-dive/notes.md) — now that you know parent renders always cascade to children, the next topic examines exactly how React.memo intercepts that cascade, what its comparison does and doesn't guarantee, and when it helps vs hurts.*

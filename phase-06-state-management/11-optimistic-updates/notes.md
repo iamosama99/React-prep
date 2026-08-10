@@ -243,4 +243,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Cache invalidation strategies — tags, query keys, manual refetch, and when to use each.*
+*Next: [Cache Invalidation Strategies](../12-cache-invalidation-strategies/notes.md) — tags, query keys, manual refetch, and when to use each.*

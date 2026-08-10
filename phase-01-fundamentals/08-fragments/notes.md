@@ -227,4 +227,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Controlled vs Uncontrolled Inputs — Fragments are a structural concern: what the DOM looks like. Controlled vs uncontrolled inputs are a data-flow concern: who owns the value of a form field — React state, or the DOM itself. This distinction determines how you read, validate, and reset form data.*
+*Next: [Controlled vs Uncontrolled Inputs](../09-controlled-vs-uncontrolled-inputs/notes.md) — Fragments are a structural concern: what the DOM looks like. Controlled vs uncontrolled inputs are a data-flow concern: who owns the value of a form field — React state, or the DOM itself. This distinction determines how you read, validate, and reset form data.*

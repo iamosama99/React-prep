@@ -252,4 +252,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can explain what `React.isValidElement` checks for and when you'd use it alongside `React.Children.map`
 
 ---
-*Next: Portals — how React renders into a different part of the DOM while keeping the component tree intact, essential for modals, tooltips, and dropdowns.*
+*Next: [Portals](../09-portals/notes.md) — how React renders into a different part of the DOM while keeping the component tree intact, essential for modals, tooltips, and dropdowns.*

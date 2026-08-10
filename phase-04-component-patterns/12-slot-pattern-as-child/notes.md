@@ -293,4 +293,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Phase 5 — Performance & Internals. Starting with Virtual DOM & Reconciliation — the mechanism that makes everything we've built so far work efficiently.*
+*Next: [Virtual DOM & Reconciliation](../../phase-05-performance/01-virtual-dom-reconciliation/notes.md) — Performance & Internals. Starting with Virtual DOM & Reconciliation — the mechanism that makes everything we've built so far work efficiently.*

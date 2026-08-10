@@ -287,4 +287,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: RTK Query — data fetching, caching, and invalidation built directly into Redux Toolkit.*
+*Next: [RTK Query](../05-rtk-query/notes.md) — data fetching, caching, and invalidation built directly into Redux Toolkit.*

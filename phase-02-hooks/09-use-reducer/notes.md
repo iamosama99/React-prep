@@ -104,4 +104,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useImperativeHandle + forwardRef — the imperative escape hatch when a parent needs a child instance API.*
+*Next: [useImperativeHandle + forwardRef](../10-use-imperative-handle-forward-ref/notes.md) — the imperative escape hatch when a parent needs a child instance API.*

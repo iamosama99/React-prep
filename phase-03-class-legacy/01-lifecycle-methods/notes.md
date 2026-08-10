@@ -286,4 +286,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: getDerivedStateFromProps — the specific lifecycle method that replaced `componentWillReceiveProps`, and why its API is designed the way it is.*
+*Next: [getDerivedStateFromProps](../02-get-derived-state-from-props/notes.md) — the specific lifecycle method that replaced `componentWillReceiveProps`, and why its API is designed the way it is.*

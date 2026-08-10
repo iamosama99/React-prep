@@ -264,4 +264,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Inline Objects/Functions in JSX — the children-as-props pattern works because elements are created in a stable parent. But inline objects and functions created in JSX defeat memoization entirely. This topic covers exactly why, and the systematic fix.*
+*Next: [Inline Objects and Functions in JSX](../07-inline-objects-functions-jsx/notes.md) — the children-as-props pattern works because elements are created in a stable parent. But inline objects and functions created in JSX defeat memoization entirely. This topic covers exactly why, and the systematic fix.*

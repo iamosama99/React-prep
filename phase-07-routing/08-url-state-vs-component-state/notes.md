@@ -260,4 +260,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Know that URL state is always strings and understand the parsing requirements
 
 ---
-*Next: Phase 8 — Forms. Building on the router's `<Form>` and action patterns, going deep on controlled/uncontrolled form design, validation, React Hook Form, and multi-step wizards.*
+*Next: [Controlled Form Patterns](../../phase-08-forms/01-controlled-form-patterns/notes.md) — Forms. Building on the router's `<Form>` and action patterns, going deep on controlled/uncontrolled form design, validation, React Hook Form, and multi-step wizards.*

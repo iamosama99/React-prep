@@ -251,7 +251,7 @@ const ref = useRef(null);
 <MyComponent ref={ref} />; // ✅ Works
 ```
 
-(See [forwardRef](../phase-04-component-patterns/07-forward-ref.md) for deep dive.)
+(See [forwardRef](../../phase-04-component-patterns/07-forward-ref/notes.md) for deep dive.)
 
 ## Gotchas
 
@@ -483,4 +483,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: [useMemo](06-use-memo.md) — Caching expensive computations to avoid re-renders.*
+*Next: [useMemo](../06-use-memo/notes.md) — Caching expensive computations to avoid re-renders.*

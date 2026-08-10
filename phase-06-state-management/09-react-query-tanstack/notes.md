@@ -301,4 +301,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: SWR — Vercel's alternative to React Query and where they differ.*
+*Next: [SWR](../10-swr/notes.md) — Vercel's alternative to React Query and where they differ.*

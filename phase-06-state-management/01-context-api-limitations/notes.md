@@ -180,4 +180,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Context optimization — splitting providers, memoizing values, and using selector libraries to get selective subscriptions out of Context.*
+*Next: [Context Optimization](../02-context-optimization/notes.md) — splitting providers, memoizing values, and using selector libraries to get selective subscriptions out of Context.*

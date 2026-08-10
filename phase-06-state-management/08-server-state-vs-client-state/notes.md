@@ -179,4 +179,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: React Query / TanStack Query — the definitive server state management library.*
+*Next: [React Query / TanStack Query](../09-react-query-tanstack/notes.md) — the definitive server state management library.*

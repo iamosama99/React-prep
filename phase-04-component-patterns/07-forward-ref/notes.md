@@ -226,4 +226,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 - [ ] Can explain why a HOC that doesn't use `forwardRef` breaks refs on its wrapped component
 
 ---
-*Next: React.Children Utilities — the API for introspecting and manipulating `children` programmatically, often paired with compound components and the cloneElement pattern.*
+*Next: [React.Children Utilities](../08-react-children-utilities/notes.md) — the API for introspecting and manipulating `children` programmatically, often paired with compound components and the cloneElement pattern.*

@@ -324,4 +324,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: this binding in class methods — the last piece of the class component puzzle, and why this became one of the most common JavaScript interview questions in the React era.*
+*Next: [`this` Binding in Class Methods](../06-this-binding-class-methods/notes.md) — the last piece of the class component puzzle, and why this became one of the most common JavaScript interview questions in the React era.*

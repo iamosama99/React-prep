@@ -193,4 +193,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Slot Pattern / asChild — diving deep into the implementation behind Radix's `asChild`, how Slot merges props, and why it's becoming the dominant pattern in modern component libraries.*
+*Next: [Slot Pattern / asChild](../12-slot-pattern-as-child/notes.md) — diving deep into the implementation behind Radix's `asChild`, how Slot merges props, and why it's becoming the dominant pattern in modern component libraries.*

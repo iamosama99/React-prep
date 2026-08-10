@@ -53,33 +53,51 @@ import { useState } from 'react';
 //   Then try it with ?? and notice the difference when name is an empty string.
 
 function UserGreeting({ user }) {
-  // TODO: early return if !user, then render the greeting
-  return null;
+  if (!user) return null;
+  return <p>Welcome back, {user.name}!</p>;
 }
 
 function ToggleLabel({ isOn }) {
   // TODO: ternary for className and text
-  return <span>implement me</span>;
+  return <span className={isOn ? 'badge online' : 'badge offline'}>{isOn ? 'Online' : 'Offline'}</span>;
 }
 
 function Notifications({ count }) {
   // TODO: && with a boolean condition
-  return <div>implement me</div>;
+  return (
+    <div>
+      {count > 0 && <span>{count} new</span>}
+    </div>
+  );
 }
 
 function PriorityBadge({ priority }) {
   // TODO: variable + if/else before return
-  return <span>implement me</span>;
+  let content = "";
+  if (priority === "low") {
+    content = "🟢 Low";
+  } else if (priority === "medium") {
+    content = "🟡 Medium";
+  } else if (priority === "high") {
+    content = "🔴 High";
+  }
+  return <span>{content}</span>
 }
 
 function StatusIcon({ status }) {
   // TODO: lookup object
-  return <span>implement me</span>;
+  const lookUp = {
+    loading: "⏳ Loading",
+    success: "✅ Success",
+    error: "❌ Error",
+    default: "❓ Unknown",
+  }
+  return <span>{lookUp[status] || lookUp.default}</span>;
 }
 
 function DisplayName({ name }) {
   // TODO: || fallback, then try ?? — what's different?
-  return <span>implement me</span>;
+  return <span>{name ?? "Anonymous"}</span>;
 }
 
 function Exercise1() {

@@ -308,4 +308,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Lists & Keys — conditional rendering decides *whether* to render something. Lists and keys decide how to render *collections* of things — the reconciliation implications of mapping data to elements, and why the key prop is architecturally significant, not just a warning to suppress.*
+*Next: [Lists & Keys](../07-lists-and-keys/notes.md) — conditional rendering decides *whether* to render something. Lists and keys decide how to render *collections* of things — the reconciliation implications of mapping data to elements, and why the key prop is architecturally significant, not just a warning to suppress.*

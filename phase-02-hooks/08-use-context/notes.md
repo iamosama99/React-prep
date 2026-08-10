@@ -87,4 +87,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: useReducer — for more structured state logic after shared values and callbacks.*
+*Next: [useReducer](../09-use-reducer/notes.md) — for more structured state logic after shared values and callbacks.*

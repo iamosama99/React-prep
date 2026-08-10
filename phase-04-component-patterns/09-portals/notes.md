@@ -242,4 +242,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: StrictMode — how React's development-only safety net works and what double-invocation of effects actually tells you.*
+*Next: [StrictMode](../10-strict-mode/notes.md) — how React's development-only safety net works and what double-invocation of effects actually tells you.*

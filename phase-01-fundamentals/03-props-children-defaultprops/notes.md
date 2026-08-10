@@ -373,4 +373,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: State & Immutability — props are data passed in from outside that a component can't change. State is data a component owns and can change. Understanding how that change mechanism works — and why you must never mutate it directly — is the foundation for everything in React's rendering model.*
+*Next: [State & Immutability](../04-state-and-immutability/notes.md) — props are data passed in from outside that a component can't change. State is data a component owns and can change. Understanding how that change mechanism works — and why you must never mutate it directly — is the foundation for everything in React's rendering model.*

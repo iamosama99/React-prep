@@ -238,4 +238,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Bundle Analysis — the Profiler measures runtime render performance; bundle analysis measures the static cost of your JavaScript before any rendering happens. Understanding what's in your bundle and why is the other half of frontend performance work.*
+*Next: [Bundle Analysis](../12-bundle-analysis/notes.md) — the Profiler measures runtime render performance; bundle analysis measures the static cost of your JavaScript before any rendering happens. Understanding what's in your bundle and why is the other half of frontend performance work.*

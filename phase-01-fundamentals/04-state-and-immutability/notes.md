@@ -405,4 +405,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: One-Way Data Flow — state and props both participate in React's data flow model. One-way flow is the architectural rule that makes state changes predictable: data moves down the tree as props, change requests move back up through callbacks. Understanding this constraint is what makes lifting state up and the broader patterns of state management click.*
+*Next: [One-Way Data Flow](../05-one-way-data-flow/notes.md) — state and props both participate in React's data flow model. One-way flow is the architectural rule that makes state changes predictable: data moves down the tree as props, change requests move back up through callbacks. Understanding this constraint is what makes lifting state up and the broader patterns of state management click.*

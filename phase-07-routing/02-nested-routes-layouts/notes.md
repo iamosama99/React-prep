@@ -256,4 +256,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Know when `path="foo/*"` is needed vs. when `children` in the object config handles it automatically
 
 ---
-*Next: Dynamic Routes & Params — the URL as data: `:param` segments, `useParams`, and `useSearchParams` for query strings.*
+*Next: [Dynamic Routes & Params](../03-dynamic-routes-params/notes.md) — the URL as data: `:param` segments, `useParams`, and `useSearchParams` for query strings.*

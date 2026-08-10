@@ -249,4 +249,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Jotai and Recoil — atom-based state management for granular, composable subscriptions.*
+*Next: [Jotai and Recoil](../07-jotai-recoil/notes.md) — atom-based state management for granular, composable subscriptions.*

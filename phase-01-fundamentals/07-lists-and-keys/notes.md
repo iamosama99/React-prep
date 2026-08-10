@@ -279,4 +279,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Fragments — lists need a wrapper element to be valid JSX, but sometimes that wrapper shouldn't be a real DOM node. Fragments solve the "I need a root but I don't want a DOM element" problem — and understanding what they compile to clarifies why they exist.*
+*Next: [Fragments](../08-fragments/notes.md) — lists need a wrapper element to be valid JSX, but sometimes that wrapper shouldn't be a real DOM node. Fragments solve the "I need a root but I don't want a DOM element" problem — and understanding what they compile to clarifies why they exist.*

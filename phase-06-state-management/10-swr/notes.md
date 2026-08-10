@@ -235,4 +235,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Optimistic updates — the pattern for making mutations feel instant with rollback on failure.*
+*Next: [Optimistic Updates](../11-optimistic-updates/notes.md) — the pattern for making mutations feel instant with rollback on failure.*

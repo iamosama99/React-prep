@@ -278,4 +278,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Web Vitals in React — now that you understand how to optimize bundles, rendering, and loading, the final piece is how to measure the user-facing impact of these optimizations using the Core Web Vitals metric system.*
+*Next: [Web Vitals in React](../14-web-vitals-react/notes.md) — now that you understand how to optimize bundles, rendering, and loading, the final piece is how to measure the user-facing impact of these optimizations using the Core Web Vitals metric system.*

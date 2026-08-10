@@ -237,4 +237,4 @@ Before moving on, check off each item you can do WITHOUT looking at the file.
 - [ ] Know the risk of `navigate(-1)` when there's no prior history
 
 ---
-*Next: Protected Routes — auth guards built on Navigate and Outlet, plus redirect-back patterns.*
+*Next: [Protected Routes](../05-protected-routes/notes.md) — auth guards built on Navigate and Outlet, plus redirect-back patterns.*

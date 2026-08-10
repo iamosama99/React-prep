@@ -250,4 +250,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: State machines (XState) — when explicit states and transitions are cleaner than a tangle of booleans.*
+*Next: [State Machines (XState)](../13-state-machines-xstate/notes.md) — when explicit states and transitions are cleaner than a tangle of booleans.*

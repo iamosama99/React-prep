@@ -291,4 +291,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Profiler API & DevTools Profiler — now that you know all the things that cause performance problems, the next topic covers how to measure and locate them precisely.*
+*Next: [Profiler API & DevTools Profiler](../11-profiler-api-devtools/notes.md) — now that you know all the things that cause performance problems, the next topic covers how to measure and locate them precisely.*

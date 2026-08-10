@@ -172,7 +172,7 @@ setState({ name: 'Alice' });
 // Two renders, because the objects have different references
 ```
 
-This is why you must use spread or structuredClone to update state objects (see [State & Immutability](../phase-01-fundamentals/04-state-and-immutability.md)).
+This is why you must use spread or structuredClone to update state objects (see [State & Immutability](../../phase-01-fundamentals/04-state-and-immutability/notes.md)).
 
 > **Check yourself:** You call `setState({ name: 'Alice' })` twice in a row. How many re-renders happen, and what comparison does React use to decide?
 
@@ -225,7 +225,7 @@ function Component() {
 // If you click the button then wait 3 seconds, it logs 0, not the new count
 ```
 
-This is the stale closure problem in action (covered in detail in [Stale Closure Problem](17-stale-closure-problem.md)).
+This is the stale closure problem in action (covered in detail in [Stale Closure Problem](../17-stale-closure-problem/notes.md)).
 
 ### 4. Infinite loops with state and side effects
 
@@ -417,4 +417,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: [useEffect](02-use-effect.md) — How React handles side effects and synchronization with the external world.*
+*Next: [useEffect](../02-use-effect/notes.md) — How React handles side effects and synchronization with the external world.*

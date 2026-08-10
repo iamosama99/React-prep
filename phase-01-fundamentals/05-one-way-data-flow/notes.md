@@ -241,4 +241,4 @@ Before moving on, check off each item you can answer WITHOUT looking at the file
 
 ---
 
-*Next: Conditional Rendering — one-way flow governs how data gets to a component. Conditional rendering governs what that component does with the data: how you use it to decide what to show or hide, and the patterns and gotchas that come with expressing conditions inside JSX.*
+*Next: [Conditional Rendering](../06-conditional-rendering/notes.md) — one-way flow governs how data gets to a component. Conditional rendering governs what that component does with the data: how you use it to decide what to show or hide, and the patterns and gotchas that come with expressing conditions inside JSX.*
