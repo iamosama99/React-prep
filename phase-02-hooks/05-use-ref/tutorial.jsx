@@ -123,8 +123,8 @@ function Exercise2() {
         {display}
       </p>
       <div style={{ display: 'flex', gap: 8 }}>
-        <button onClick={start}  disabled={running}>Start</button>
-        <button onClick={stop}   disabled={!running}>Stop</button>
+        <button onClick={start} disabled={running}>Start</button>
+        <button onClick={stop} disabled={!running}>Stop</button>
         <button onClick={reset}>Reset</button>
       </div>
       <p style={{ fontSize: 12, color: '#888' }}>
