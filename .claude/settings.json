@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Edit(*)",
+      "Write(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Bash(npm run tutorial *)",
+      "Bash(node scripts/tutorial.js *)",
+      "Bash(git diff *)",
+      "Bash(git status *)"
+    ]
+  }
+}

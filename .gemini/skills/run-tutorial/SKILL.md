@@ -1,24 +1,42 @@
 ---
 name: run-tutorial
-description: Runs a specific React tutorial based on phase and tutorial number. Use this whenever the user asks to start, run, or open a tutorial.
+description: Runs a specific React tutorial based on phase and tutorial number, or the currently open/active tutorial file. Runs automatically in auto mode without asking for permissions or confirmation.
 ---
 
 # run-tutorial
 
-This skill helps you run a tutorial in the React prep project when the user specifies a phase and a tutorial number (e.g., "run phase 2 tutorial 1").
+This skill runs a tutorial in the React prep project.
 
-## Step 1: Find the exact tutorial name
-1. You are given a phase number (e.g., "2" or "02") and a tutorial number (e.g., "1" or "01").
-2. Format them to have leading zeros: phase `02`, tutorial `01`.
-3. Use the `list_dir` tool on the project root directory (`/Users/osama/Developer/Projects/React prep`) to find the folder matching `phase-<XX>*` (e.g., `phase-02-hooks`).
-4. Use the `list_dir` tool on that phase folder to find the tutorial folder matching `<NN>-*` (e.g., `01-use-state`).
-5. The exact tutorial name is the name of that tutorial folder (e.g., `01-use-state`).
+## Auto Mode & Permissions Protocol (CRITICAL)
+- **Run in Full Auto Mode**: Execute immediately and autonomously.
+- **Do NOT ask for permissions, approval, or confirmation** before executing commands, starting servers, or reading files.
+- **Do NOT enter Planning Mode**: Do not produce an implementation plan or ask for user review. This is an operational command execution task that must be started immediately.
+- **Autonomous Parameter Resolution**: Deduces the tutorial target automatically from user input or context without stopping to ask questions.
 
-## Step 2: Run the tutorial command
-Use the `run_command` tool to execute the tutorial runner script.
-- **CommandLine**: `npm run tutorial <tutorial-folder-name>` (e.g., `npm run tutorial 01-use-state`)
+## Step 1: Resolve the Exact Tutorial Name
+1. **From active file or mentioned path**:
+   - If the user provides a path (e.g., `@phase-01-fundamentals/10-synthetic-events/tutorial.jsx`) or is currently viewing a tutorial file, extract the tutorial directory name directly (e.g., `10-synthetic-events`).
+2. **From phase and tutorial numbers / query**:
+   - If given phase and tutorial numbers (e.g., "run phase 2 tutorial 1"):
+     - Format with leading zeros: phase `02`, tutorial `01`.
+     - Use `list_dir` on the project root (`/Users/osama/Developer/Projects/React prep`) to find `phase-<XX>*`.
+     - Use `list_dir` on that phase folder to find `<NN>-*`.
+     - The tutorial name is that folder name (e.g., `01-use-state`).
+   - If given a keyword (e.g., "synthetic events" or "use-state"):
+     - Match against folder names to determine the tutorial folder without asking.
+3. If no target is given, inspect the user's active editor document or recently opened tutorial and run that automatically.
+
+## Step 2: Run the Tutorial Dev Server
+Execute the tutorial command immediately using the `run_command` tool in the background:
+- **CommandLine**: `npm run tutorial <tutorial-folder-name>` (e.g., `npm run tutorial 10-synthetic-events`)
 - **Cwd**: `/Users/osama/Developer/Projects/React prep`
-- **WaitMsBeforeAsync**: `5000` (since it starts a Vite dev server and will stay running in the background, give it a few seconds to initialize)
+- **IsDaemon**: `true`
+- **WaitMsBeforeAsync**: `5000`
+
+Do NOT ask the user for permission or confirmation before running the command.
 
 ## Step 3: Inform the User
-Tell the user that the tutorial has been successfully started, the Vite server is running in the background, and the browser should open automatically. Let them know they can edit the tutorial file directly in the phase folder and Vite will hot-reload their changes.
+Provide a brief summary confirming:
+- The tutorial server is running in the background at `http://localhost:5173/`.
+- The active tutorial file path that they can edit.
+- Hot module replacement (HMR) is active and the browser will open automatically.

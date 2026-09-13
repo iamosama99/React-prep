@@ -205,20 +205,43 @@ function Exercise3() {
   const [cart, setCart] = useState(INITIAL_CART);
 
   function increaseQty(id) {
-    // TODO
+    setCart((prevCart) => {
+      return prevCart.map((item) => {
+        if (item.id === id) {
+          return { ...item, qty: item.qty + 1 }
+        }
+        return item;
+      })
+    })
   }
 
   function decreaseQty(id) {
-    // TODO — remove the item if qty would reach 0
+    // TODO — remove the item if qty would reach 
+
+    setCart((prevCart) => {
+      return prevCart.map((item) => {
+        if (item.id === id) {
+          return { ...item, qty: item.qty - 1 }
+        }
+        return item;
+      }).filter((item) => item.qty > 0)
+    })
+
   }
 
   function removeItem(id) {
-    // TODO
+    setCart((prevCart) => {
+      return prevCart.filter((item) => {
+        return item.id !== id;
+      })
+    })
   }
 
   // TODO: derive from cart, not from state
-  const totalItems = 0;
-  const totalPrice = '0.00';
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const totalPrice = cart
+    .reduce((sum, item) => sum + item.price * item.qty, 0)
+    .toFixed(2);
 
   return (
     <div>

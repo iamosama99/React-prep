@@ -46,11 +46,11 @@ import React, { useState } from 'react';
 function Exercise1() {
   // --- Pair 1: element with no props, one text child ---
   const jsx_1 = <p>Hello</p>;
-  const byHand_1 = null; // TODO: React.createElement(...)
+  const byHand_1 = React.createElement('p', null, 'Hello'); // TODO: React.createElement(...)
 
   // --- Pair 2: element with two props and one text child ---
   const jsx_2 = <button className="btn" type="submit">Save</button>;
-  const byHand_2 = null; // TODO: React.createElement(...)
+  const byHand_2 = React.createElement('button', { type: "submit", className: "btn" }, 'Save'); // TODO: React.createElement(...)
 
   // --- Pair 3 (Step C): nested structure — requires nesting createElement calls ---
   const jsx_3 = (
@@ -59,7 +59,10 @@ function Exercise1() {
       <p>React engineer</p>
     </div>
   );
-  const byHand_3 = null; // TODO: React.createElement(...)
+  const byHand_3 = React.createElement('div', { className: "card" },
+    React.createElement('h2', null, "Profile"),
+    React.createElement('p', null, "React engineer"),
+  ); // TODO: React.createElement(...)
 
   console.log('Pair 1 | jsx:    ', jsx_1);
   console.log('Pair 1 | byHand: ', byHand_1);
@@ -111,11 +114,11 @@ function Exercise2() {
     <div>
 
       {/* Bug 1 — This logs a console warning about an unknown DOM prop. What's wrong? */}
-      <label class="form-label">Email address</label>
+      <label className="form-label">Email address</label>
 
       {/* Bug 2 — When notifications is empty, this renders "0" instead of nothing. Why?
           Hint: trace what value `notifications.length && ...` evaluates to when length is 0. */}
-      {notifications.length && (
+      {!!notifications.length && (
         <ul>
           {notifications.map(n => <li key={n}>{n}</li>)}
         </ul>
@@ -126,11 +129,11 @@ function Exercise2() {
 
           Buggy:   <input type="text" placeholder="Search...">
       */}
-      {/* ↓ Write the corrected JSX here (replace this comment): */}
+      <input type="text" placeholder="Search..."></input>
 
       {/* Bug 4 — GreetUser won't be called. React will try to render an unknown HTML element
           instead. Why? Fix just the tag name. */}
-      <greetUser name={name} />
+      <GreetUser name={name} />
 
       {/* Bug 5 — This is a JSX syntax error because it uses a statement inside {}.
           It's in a comment so the file compiles. Identify the rule, then write the fix below.
@@ -138,7 +141,7 @@ function Exercise2() {
 
           Buggy:   <p>{if (name) { `Welcome back, ${name}` }}</p>
       */}
-      {/* ↓ Write the corrected JSX here (replace this comment): */}
+      <p>{name && `Welcome back, ${name}`}</p>
 
     </div>
   );

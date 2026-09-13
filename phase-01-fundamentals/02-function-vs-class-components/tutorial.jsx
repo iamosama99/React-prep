@@ -32,16 +32,35 @@ import React, { useState, useEffect } from 'react';
 //
 // TODO: implement ClassCounter (class component)
 class ClassCounter extends React.Component {
-  // hint: constructor(props) { super(props); this.state = { count: 0 }; }
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+
+  componentDidMount() {
+    document.title = `Count: ${this.state.count}`;
+  }
+  componentDidUpdate() {
+    document.title = `Count: ${this.state.count}`;
+  }
+
 
   render() {
-    return <div>ClassCounter — implement me</div>;
+    return <div>Count: {this.state.count}
+      <button onClick={() => this.setState({ count: this.state.count + 1 })}>+1</button>
+    </div>;
   }
 }
 
 // TODO: implement FunctionCounter (function component)
 function FunctionCounter() {
-  return <div>FunctionCounter — implement me</div>;
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    document.title = `Count: ${count}`;
+  }, [count]);
+  return <div>Count: {count}
+    <button onClick={() => setCount(count + 1)}>+1</button>
+  </div>;
 }
 
 function Exercise1() {
@@ -90,15 +109,20 @@ function Exercise1() {
 // TODO: implement ClassFollowButton (class component)
 class ClassFollowButton extends React.Component {
   // Use a class field arrow function for the handler so `this` is bound:
-  // handleClick = () => { ... }
+  handleClick = () => {
+    setTimeout(() => alert(`Followed ${this.props.username}`), 3000);
+  }
   render() {
-    return <button>Follow {this.props.username} (class)</button>;
+    return <button onClick={this.handleClick}>Follow {this.props.username} (class)</button>;
   }
 }
 
 // TODO: implement FunctionFollowButton (function component)
 function FunctionFollowButton({ username }) {
-  return <button>Follow {username} (function)</button>;
+  const handleClick = () => {
+    setTimeout(() => alert(`Followed ${username}`), 3000);
+  }
+  return <button onClick={handleClick}>Follow {username} (function)</button>;
 }
 
 // ── Parent that switches users after the button is clicked ──
@@ -155,7 +179,24 @@ function Exercise2() {
 
 class ErrorBoundary extends React.Component {
   // TODO: implement this class
+  state = { hasError: false };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+  }
+
   render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ color: 'red', padding: '1rem', border: '1px solid red', borderRadius: 4 }}>
+          Something went wrong. Please refresh.
+        </div>
+      );
+    }
     return this.props.children;
   }
 }

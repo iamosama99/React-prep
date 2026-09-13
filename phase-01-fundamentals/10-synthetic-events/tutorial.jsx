@@ -50,17 +50,47 @@ function Exercise1() {
   const [info, setInfo] = useState(null);
 
   function handleEvent(e) {
-    // TODO: capture event properties and setInfo
     // Don't forget to call e.preventDefault() for the form submit
+    if (e.type === 'submit') {
+      e.preventDefault();
+    }
+    setInfo({
+      type: e.type,
+      target: e.target.tagName,
+      value: e.target.value,
+      same: e.currentTarget === e.target,
+      nativeEvent: typeof e.nativeEvent,
+      bubbles: e.bubbles
+    });
   }
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-        {/* TODO: add interactive elements here — button, input, form */}
-        <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
-          Add a button, input, and form here — each calls handleEvent
-        </p>
+      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+        {/* 1. Button (click) */}
+        <button
+          onClick={handleEvent}
+        >
+          Click Button
+        </button>
+
+        {/* 2. Text Input (change, focus, blur) */}
+        <input
+          type="text"
+          placeholder="Type here..."
+          onChange={handleEvent}
+          onFocus={handleEvent}
+          onBlur={handleEvent}
+        />
+
+        {/* 3. Form (submit — calls e.preventDefault()) */}
+        <form onSubmit={handleEvent} style={{ display: 'inline-flex', gap: '0.5rem' }}>
+          <button
+            type="submit"
+          >
+            Submit Form
+          </button>
+        </form>
       </div>
 
       {info ? (
@@ -91,29 +121,29 @@ function Exercise1() {
 // YOUR TASKS — add handlers for each button below:
 //
 // Button 1 — "Click Inner (no stop)":
-//   No stopPropagation. Click Inner div. Which handlers fire? ___
-//   Order: ___
+//   No stopPropagation. Click Inner div. Which handlers fire? All three handlers fire
+//   Order: inner, middle, outer
 //
 // Button 2 — "stopPropagation in Middle":
 //   Add e.stopPropagation() in the Middle div's onClick.
-//   Click Inner. Which handlers fire now? ___
-//   Prediction: does Outer fire? ___
+//   Click Inner. Which handlers fire now? only middle
+//   Prediction: does Outer fire? No
 //
 // Button 3 — "preventDefault on link":
 //   The link below navigates to "#test" by default.
 //   Add e.preventDefault() in its onClick handler.
-//   Click it. Does the URL change? ___
-//   Does the click handler still fire? ___
+//   Click it. Does the URL change? No
+//   Does the click handler still fire? Yes
 //
 // Button 4 — "return false from handler":
 //   Change the link's onClick to: return false
-//   Does the URL change this time? ___
+//   Does the URL change this time? Yes
 //   MORAL: return false does NOT prevent default in React (unlike vanilla JS).
 //
 // DISCUSS: After observing all four, write a one-line summary for each:
-//   stopPropagation: ___
-//   preventDefault: ___
-//   return false: ___
+//   stopPropagation: will stop propagation to parent element
+//   preventDefault: sill stop default behavior
+//   return false: Does not prevent default like in vanilla JS
 
 function Exercise2() {
   const [log, setLog] = useState([]);
@@ -135,6 +165,7 @@ function Exercise2() {
           <div
             onClick={(e) => {
               // TODO Part 2: add e.stopPropagation() here
+              e.stopPropagation()
               addLog('MIDDLE clicked');
             }}
             style={{ padding: '1rem', background: '#dbeafe', border: '2px solid #93c5fd', borderRadius: 6, cursor: 'pointer' }}
@@ -151,7 +182,7 @@ function Exercise2() {
 
         <div style={{ marginTop: '0.75rem' }}>
           {/* TODO Part 3 & 4: add onClick with preventDefault, then try return false */}
-          <a href="#test" style={{ color: '#3b82f6' }}>
+          <a href="#test" style={{ color: '#3b82f6' }} onClick={(e) => { return false }}>
             Link — does it navigate? (add onClick here)
           </a>
         </div>
@@ -226,6 +257,19 @@ function Dropdown() {
   // TODO: useEffect that adds a document mousedown listener
   // Close when the click target is outside dropdownRef.current
   // Remember to return a cleanup function
+
+  useEffect(() => {
+    function handleMouseDown(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    const listener = (e) => handleMouseDown(e);
+
+    document.addEventListener('mousedown', listener);
+    return () => document.removeEventListener('mousedown', listener);
+  }, []);
 
   function handleItemClick(item) {
     console.log(`Action: ${item}`);

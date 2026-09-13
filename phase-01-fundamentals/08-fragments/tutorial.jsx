@@ -42,13 +42,13 @@ const SKILLS = [
 // TODO: fix the wrapper — replace <div> with <>
 function SkillRow({ name, level }) {
   return (
-    <div>
+    <>
       <td style={{ padding: '0.4rem 1rem 0.4rem 0' }}>{name}</td>
       <td style={{ padding: '0.4rem 1rem 0.4rem 0', color: '#64748b' }}>{level}</td>
-    </div>
+    </>
   );
 }
-// EXPLANATION: ___
+// EXPLANATION: fragment is like an html tag which does not show up in dom but helps to virtually wrap the multiple tags
 
 function Exercise1() {
   return (
@@ -107,8 +107,8 @@ function TermEntry({ term, definition }) {
   return (
     // Use <> here — no key needed because TermEntry isn't in the direct map
     <>
-      <dt style={{ fontWeight: 600, marginTop: '0.5rem' }}>{/* TODO */}</dt>
-      <dd style={{ marginLeft: '1.5rem', color: '#475569' }}>{/* TODO */}</dd>
+      <dt style={{ fontWeight: 600, marginTop: '0.5rem' }}>{term}</dt>
+      <dd style={{ marginLeft: '1.5rem', color: '#475569' }}>{definition}</dd>
     </>
   );
 }
@@ -118,13 +118,12 @@ function Glossary({ terms }) {
   return (
     <dl>
       {terms.map(t => (
-        // TODO: <React.Fragment key={t.id}> <TermEntry ... /> </React.Fragment>
-        null
+        <React.Fragment key={t.id}> <TermEntry term={t.term} definition={t.definition} /> </React.Fragment>
       ))}
     </dl>
   );
 }
-// WHY React.Fragment (not <>) in the map: ___
+// WHY React.Fragment (not <>) in the map: because we cannot pass props when using <> empty fragements
 
 function Exercise2() {
   return <Glossary terms={TERMS} />;
@@ -158,6 +157,8 @@ function EmptyFragment() {
 // Currently always renders the children. Add a null early return.
 function Hider({ isHidden, children }) {
   // TODO: if isHidden, return null
+
+  if (isHidden) return null;
   return <>{children}</>;
 }
 
@@ -165,10 +166,10 @@ function Hider({ isHidden, children }) {
 // Currently wraps in a span — which is invalid inside <tr>.
 function TwoColumns({ a, b }) {
   return (
-    <span>
+    <>
       <td>{a}</td>
       <td>{b}</td>
-    </span>
+    </>
   );
 }
 

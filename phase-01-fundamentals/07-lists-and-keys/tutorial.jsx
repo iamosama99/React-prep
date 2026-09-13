@@ -80,14 +80,14 @@ function Exercise1() {
           // TODO PART A: key={index}  — observe the bug
           // TODO PART B: key={person.id} — confirm the fix
           <PersonRow
-            key={index}
+            key={person.id} // change to index to see the bug
             name={person.name}
             onMoveToTop={() => moveToTop(person.id)}
           />
         ))}
       </ul>
-      {/* OBSERVATION: with index keys, reordering causes ___
-          with id keys, reordering causes ___ */}
+      {/* OBSERVATION: with index keys, reordering causes the index to be taken as keys, those index gets reassigned to other items based on their location in newly rendered list
+          this causes react to confuse whatr has changes, it is unable to understand what is removed and what is updated */}
     </div>
   );
 }
@@ -167,10 +167,15 @@ function Exercise2() {
 
       {/* TODO PART A: no key — observe stale state
           TODO PART B: add key={selectedId} — confirm reset */}
-      <UserForm userId={selectedId} />
+      <UserForm key={selectedId} userId={selectedId} />
 
-      {/* WHY NO KEY → stale bio: ___
-          WHY KEY FIXES IT: ___ */}
+      {/* WHY NO KEY → stale bio:
+    React preserves component state across re-renders when the component remains 
+    at the same position in the tree, even if its props (userId) change.
+          WHY KEY FIXES IT:
+    Changing the key signals to React that this is a completely different component 
+    identity. React unmounts the old instance (disposing of its state) and mounts a 
+    fresh instance with clean initial state. */}
     </div>
   );
 }
@@ -217,18 +222,43 @@ function Exercise2() {
 
 function TodoItem({ todo, onToggle, onDelete }) {
   // TODO: implement
-  return <li>TodoItem — implement me</li>;
+  return <li>
+    <input checked={todo.done} type='checkbox' onChange={() => onToggle(todo.id)}></input>
+    <span style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>{todo.text}</span>
+    <button onClick={() => onDelete(todo.id)}>Delete</button>
+  </li>;
 }
 
 function TodoList({ todos, onToggle, onDelete }) {
   // TODO: implement — map with key={todo.id}
-  return <ul>TodoList — implement me</ul>;
+  if (todos.length === 0) {
+    return <div>All Done</div>
+  }
+  return <ul>{
+    todos.map((todo) => {
+      return (
+        <TodoItem key={todo.id} todo={todo} onToggle={onToggle} onDelete={onDelete}></TodoItem>
+      )
+    })
+  }</ul>;
 }
 
 function AddTodoForm({ onAdd }) {
   const [text, setText] = useState('');
   // TODO: implement controlled input + submit
-  return <div>AddTodoForm — implement me</div>;
+  function handleSubmit(e) {
+    e.preventDefault(); // prevents page refresh
+    if (text.trim() === '') return;
+    onAdd(text.trim());
+    setText('');
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 
 function Exercise3() {
@@ -239,17 +269,42 @@ function Exercise3() {
 
   function handleAdd(text) {
     // TODO: append new todo with stable unique ID
+    if (text.trim() === '') {
+      return;
+    }
+    setTodos((prev) => {
+      return [
+        ...prev,
+        { id: Date.now().toString(), text: text, done: false }
+      ]
+    })
   }
 
   function handleToggle(id) {
     // TODO: flip the done property for the matching todo
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, done: !todo.done };
+        }
+        return todo;
+      })
+    );
   }
 
   function handleDelete(id) {
     // TODO: remove the matching todo
+    setTodos((prevTodos) =>
+      prevTodos.filter((todo) => {
+        if (todo.id === id) {
+          return false;
+        }
+        return true;
+      })
+    );
   }
 
-  const remaining = 0; // TODO: derive from todos
+  const remaining = todos.filter((todo) => !todo.done).length;; // TODO: derive from todos
   const total = todos.length;
 
   return (

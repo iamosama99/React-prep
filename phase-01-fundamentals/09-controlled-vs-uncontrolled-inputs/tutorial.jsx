@@ -44,9 +44,18 @@ function ControlledSearch() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
 
+  function handleOnClick() {
+    setResult(query);
+  }
+
   // TODO: implement
   // Hint: <input value={query} onChange={e => setQuery(e.target.value)} />
-  return <div>ControlledSearch — implement me</div>;
+  return <>
+    <input onChange={(e) => setQuery(e.target.value)} value={query} />
+    <button disabled={query.trim().length === 0} onClick={handleOnClick}>search</button>
+    <p>{query.length} characters</p>
+    {result && <p>Searching for {result}</p>}
+  </>
 }
 
 function UncontrolledSearch() {
@@ -55,11 +64,17 @@ function UncontrolledSearch() {
 
   function handleSearch() {
     // TODO: read from ref.current.value
+    setResult(inputRef.current.value);
   }
 
   // TODO: implement
   // Hint: <input ref={inputRef} defaultValue="" />
-  return <div>UncontrolledSearch — implement me</div>;
+  return <>
+    <input ref={inputRef} defaultValue="" />
+    <button onClick={handleSearch}>search</button>
+    <p>? characters</p>
+    {result && <p>Searching for {result}</p>}
+  </>
 }
 
 function Exercise1() {
@@ -130,13 +145,13 @@ function Exercise2() {
       {/* BUG: value={user?.name} is undefined before data loads → uncontrolled
           FIX: value={user?.name ?? ''} → always a string → always controlled */}
       <input
-        value={user?.name}
+        value={user?.name ?? ''}
         onChange={e => setUser(prev => ({ ...prev, name: e.target.value }))}
         placeholder="Loading..."
         style={{ display: 'block', marginBottom: '0.5rem' }}
       />
       {user && <p style={{ color: '#22c55e' }}>Data loaded: {user.name}</p>}
-      {/* PART C answer: when to prefer uncontrolled with defaultValue: ___ */}
+      {/* PART C answer: when to prefer uncontrolled with defaultValue: when forms are large and we do not need state of every fields, for better performance and for third party integeration which have their own internal DOM */}
     </div>
   );
 }
@@ -179,6 +194,36 @@ function Exercise2() {
 const INITIAL_VALUES = { username: '', email: '', password: '', confirm: '' };
 const INITIAL_TOUCHED = { username: false, email: false, password: false, confirm: false };
 
+// Helper component declared OUTSIDE Exercise3 so React preserves DOM nodes and focus across re-renders
+function Field({ label, value, onChange, onBlur, error, showError, type = 'text' }) {
+  return (
+    <div style={{ marginBottom: '0.75rem' }}>
+      <label style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        style={{
+          display: 'block',
+          borderColor: showError ? '#ef4444' : '#cbd5e1',
+          outline: 'none',
+          padding: '6px 10px',
+          borderRadius: 4,
+          border: `1px solid ${showError ? '#ef4444' : '#cbd5e1'}`,
+          width: '100%',
+          maxWidth: 300,
+        }}
+      />
+      {showError && (
+        <p style={{ color: '#ef4444', fontSize: '0.8rem', margin: '0.2rem 0 0' }}>{error}</p>
+      )}
+    </div>
+  );
+}
+
 function Exercise3() {
   const [values, setValues] = useState(INITIAL_VALUES);
   const [touched, setTouched] = useState(INITIAL_TOUCHED);
@@ -195,19 +240,31 @@ function Exercise3() {
   }
 
   // TODO: derive all validation errors from values
-  const usernameError = ''; // implement
-  const emailError = '';    // implement
-  const passwordError = ''; // implement
-  const confirmError = '';  // implement
-  const isValid = false;    // implement — true when all errors are ''
+  const usernameError = values.username.length < 3 ? 'Min 3 Characters' : '';  // implement
+  const emailError = !values.email.includes('@') ? 'Enter a valid email' : '';    // implement
+  const passwordError = values.password.length < 8 ? 'Min 8 characters' : ''; // implement
+  const confirmError = values.confirm !== values.password ? 'Passwords do not match' : '';  // implement
+  const isValid = !usernameError && !emailError && !passwordError && !confirmError;    // implement — true when all errors are ''
+
+  const errors = {
+    username: usernameError,
+    email: emailError,
+    password: passwordError,
+    confirm: confirmError,
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
-    // TODO: log values, setSubmitted(true), reset values and touched
+    console.log('Submitted values:', values);
+    setSubmitted(true);
+    setValues(INITIAL_VALUES);
+    setTouched(INITIAL_TOUCHED);
   }
 
   function handleReset() {
-    // TODO: reset values and touched to initial state, setSubmitted(false)
+    setValues(INITIAL_VALUES);
+    setTouched(INITIAL_TOUCHED);
+    setSubmitted(false);
   }
 
   if (submitted) {
@@ -221,44 +278,43 @@ function Exercise3() {
     );
   }
 
-  // Helper to render a field with its label and error
-  function Field({ label, field, type = 'text' }) {
-    const error = { username: usernameError, email: emailError, password: passwordError, confirm: confirmError }[field];
-    const showError = touched[field] && error;
-    return (
-      <div style={{ marginBottom: '0.75rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
-          {label}
-        </label>
-        <input
-          type={type}
-          value={values[field]}
-          onChange={e => handleChange(field, e.target.value)}
-          onBlur={() => handleBlur(field)}
-          style={{
-            display: 'block',
-            borderColor: showError ? '#ef4444' : '#cbd5e1',
-            outline: 'none',
-            padding: '6px 10px',
-            borderRadius: 4,
-            border: `1px solid ${showError ? '#ef4444' : '#cbd5e1'}`,
-            width: '100%',
-            maxWidth: 300,
-          }}
-        />
-        {showError && (
-          <p style={{ color: '#ef4444', fontSize: '0.8rem', margin: '0.2rem 0 0' }}>{error}</p>
-        )}
-      </div>
-    );
-  }
-
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 320 }}>
-      <Field label="Username" field="username" />
-      <Field label="Email" field="email" type="email" />
-      <Field label="Password" field="password" type="password" />
-      <Field label="Confirm Password" field="confirm" type="password" />
+      <Field
+        label="Username"
+        value={values.username}
+        onChange={e => handleChange('username', e.target.value)}
+        onBlur={() => handleBlur('username')}
+        error={errors.username}
+        showError={touched.username && errors.username}
+      />
+      <Field
+        label="Email"
+        type="email"
+        value={values.email}
+        onChange={e => handleChange('email', e.target.value)}
+        onBlur={() => handleBlur('email')}
+        error={errors.email}
+        showError={touched.email && errors.email}
+      />
+      <Field
+        label="Password"
+        type="password"
+        value={values.password}
+        onChange={e => handleChange('password', e.target.value)}
+        onBlur={() => handleBlur('password')}
+        error={errors.password}
+        showError={touched.password && errors.password}
+      />
+      <Field
+        label="Confirm Password"
+        type="password"
+        value={values.confirm}
+        onChange={e => handleChange('confirm', e.target.value)}
+        onBlur={() => handleBlur('confirm')}
+        error={errors.confirm}
+        showError={touched.confirm && errors.confirm}
+      />
       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
         <button type="submit" disabled={!isValid}>
           Register
