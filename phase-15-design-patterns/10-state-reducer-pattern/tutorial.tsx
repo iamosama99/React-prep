@@ -101,11 +101,13 @@ function Exercise1() {
 //   actions: 'toggle' | 'on' | 'off' | 'reset'  (reset carries initialState)
 //   export useToggle.reducer and useToggle.types
 //
-// PART B (consumer)  In LimitedToggle, write a stateReducer that IGNORES the
-//   'toggle' action once the user has toggled 4 times. The click count lives in
-//   the consumer's own state — note that this makes the reducer a closure over
-//   changing consumer state (identity changes every render; that's fine).
-//   Then show the "Limit reached" message when clicks >= 4.
+// PART B (consumer)  In LimitedToggle, write a stateReducer that lets EXACTLY four
+//   toggles succeed (OFF→ON→OFF→ON→OFF) and IGNORES the 'toggle' action after that.
+//   The click count lives in the consumer's own state — this makes the reducer a
+//   closure over changing consumer state (identity changes every render; fine).
+//   MIND THE OFF-BY-ONE: toggle() and setClicks run in the same click and are
+//   batched; the reducer runs during the render that ALREADY includes this click,
+//   so `clicks` is one ahead of what the handler saw. Test the 4th and 5th click.
 
 type ToggleState = { on: boolean };
 type ToggleAction =
@@ -132,8 +134,8 @@ useToggle.types = { toggle: 'toggle', on: 'on', off: 'off', reset: 'reset' } as 
 const LimitedToggle: FC = () => {
   const [clicks, setClicks] = useState(0);
 
-  // TODO B: replace with a reducer that returns `state` for 'toggle' when clicks >= 4,
-  //         and delegates to useToggle.reducer otherwise
+  // TODO B: replace with a reducer that returns `state` for 'toggle' once the limit is hit
+  //         (mind the off-by-one described above) and delegates to useToggle.reducer otherwise
   const stateReducer: ToggleReducer = (s, a) => useToggle.reducer(s, a);
 
   const { on, toggle, reset } = useToggle({ stateReducer });

@@ -107,12 +107,14 @@ useToggle.types = { toggle: 'toggle', on: 'on', off: 'off', reset: 'reset' } as 
 const [clicks, setClicks] = useState(0);
 const { on, toggle } = useToggle({
   stateReducer(state, action) {
-    if (action.type === useToggle.types.toggle && clicks >= 4) return state;   // ignore
+    if (action.type === useToggle.types.toggle && clicks > 4) return state;    // ignore the 5th click onward
     return useToggle.reducer(state, action);
   },
 });
 <button onClick={() => { toggle(); setClicks(c => c + 1); }}>{on ? 'ON' : 'OFF'}</button>
 ```
+
+Note the `> 4`, not `>= 4`. `toggle()` and `setClicks` run in the *same event* and are batched into one render; the reducer executes **during that render**, so the `clicks` it closes over *already includes the current click*. On the fifth click it sees `clicks === 5`. (`useReducer` doesn't compute the next state at dispatch time — it runs whichever reducer the component passed on the render that processes the update.) This "the reducer sees the freshest consumer state" behaviour is what makes overrides feel natural — and it is also the classic off-by-one, so test the boundary.
 
 Returning `state` unchanged = "ignore this action". Returning a modified copy = "do something different." Returning `reducer(state, action)` = "defer to the default."
 
@@ -165,6 +167,8 @@ const [state, dispatch] = useReducer((s: ToggleState, a: ToggleAction) => reduce
 **Exposing internals as public API.** Action types and state shape become contract. Renaming `'toggle'` to `'flip'` is a breaking change; version and document them.
 
 **Impure reducers.** Side effects or randomness in the consumer's reducer double-fire in Strict Mode and under concurrent rendering.
+
+**Off-by-one with consumer state.** A consumer reducer that closes over its own state (a click counter) runs in a render that already contains updates batched with the dispatch, so counters are one ahead of what a handler would have seen. Test the boundary values.
 
 **Forgetting to delegate.** A consumer's reducer that returns `state` for unknown actions disables everything else. Always end with `return defaultReducer(state, action)`.
 
