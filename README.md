@@ -1,6 +1,6 @@
 # React Interview Prep
 
-Senior frontend engineer interview preparation — 148 topics across 14 phases.
+Senior frontend engineer interview preparation — 167 topics across 15 phases.
 
 ---
 
@@ -46,7 +46,7 @@ scripts/
 package.json        ← root scripts: { "tutorial": "node scripts/tutorial.js" }
 ```
 
-Phases 1–8 use `.jsx`; phases 9–13 use `.tsx` (TypeScript). The sandbox handles both.
+Phases 1–8 use `.jsx`; phases 9–15 use `.tsx` (TypeScript). The sandbox handles both.
 
 **Study workflow per topic:**
 1. Read `notes.md` — understand the concept, internals, and interview traps
@@ -65,7 +65,7 @@ Phases 1–8 use `.jsx`; phases 9–13 use `.tsx` (TypeScript). The sandbox hand
    ```
    If the name matches multiple topics, the script lists them and asks you to
    narrow down. If you can't remember the name, run any non-matching word (e.g.
-   `npm run tutorial list`) — the error output prints all 134 tutorials.
+   `npm run tutorial list`) — the error output prints all 167 tutorials.
 
 3. Complete Exercise 1 → 2 → 3 inside the tutorial file, then experiment in the Playground — Vite hot-reloads on every save
 
@@ -91,7 +91,8 @@ See [`_templates/README.md`](_templates/README.md) for a full matching reference
 | [Phase 12](#phase-12--ssr--meta-frameworks) | 8 | SSR & meta-frameworks |
 | [Phase 13](#phase-13--tooling-security-a11y) | 10 | Tooling, security, a11y |
 | [Phase 14](#phase-14--live-coding-round-patterns) | 14 | Live coding round patterns |
-| **Total** | **148** | |
+| [Phase 15](#phase-15--react-design-patterns) | 19 | React design patterns |
+| **Total** | **167** | |
 
 ---
 
@@ -338,3 +339,29 @@ See [`_templates/README.md`](_templates/README.md) for a full matching reference
 - [ ] [Recursive comments / file tree](phase-14-live-coding/12-recursive-comments-file-tree/notes.md) — recursive component pattern
 - [ ] [Drag and drop list](phase-14-live-coding/13-drag-and-drop-list/notes.md) — HTML5 DnD or dnd-kit
 - [ ] [Toast / notification system](phase-14-live-coding/14-toast-notification-system/notes.md) — context + portal + queue
+
+---
+
+## Phase 15 — React Design Patterns
+
+> A pattern-lens pass over the whole repo, following tapaScript's "15 Days of React Design Patterns" playlist. Roughly half of these revisit earlier phases — each notes.md links back to where you first met the concept and focuses on *when to pick this pattern*, not on re-teaching the mechanics.
+
+- [ ] [Why React needs design patterns](phase-15-design-patterns/01-why-design-patterns/notes.md) — code smells → patterns, plus a crash course refresher
+- [ ] [Container–Presenter](phase-15-design-patterns/02-container-presenter/notes.md) — split logic from UI; the pattern hooks replaced
+- [ ] [State vs refs, controlled vs uncontrolled](phase-15-design-patterns/03-state-vs-refs-inputs/notes.md) — source of truth, when refs beat state
+- [ ] [Compound components](phase-15-design-patterns/04-compound-component-pattern/notes.md) — implicit shared state, inversion of control
+- [ ] [Render props](phase-15-design-patterns/05-render-prop-pattern/notes.md) — children-as-function, and what hooks replaced
+- [ ] [Higher-order functions & components](phase-15-design-patterns/06-hof-and-hoc-pattern/notes.md) — HOF → HOC, when HOCs still win
+- [ ] [Custom hook pattern](phase-15-design-patterns/07-custom-hook-pattern/notes.md) — extracting logic; useLocalStorage, useClipboard
+- [ ] [Provider pattern](phase-15-design-patterns/08-provider-pattern/notes.md) — Context for shared state, React 19 syntax, composing providers
+- [ ] [Optimistic UI](phase-15-design-patterns/09-optimistic-ui-pattern/notes.md) — useOptimistic, rollback, transitions
+- [ ] [State reducer pattern](phase-15-design-patterns/10-state-reducer-pattern/notes.md) — letting consumers override internal transitions
+- [ ] [Pub-Sub vs Observer](phase-15-design-patterns/11-pub-sub-vs-observer/notes.md) — EventBus, BroadcastChannel, cross-tab sync
+- [ ] [Performance patterns I](phase-15-design-patterns/12-performance-rerender-patterns/notes.md) — re-renders, memoization, derived state, debounce/throttle
+- [ ] [Performance patterns II](phase-15-design-patterns/13-performance-advanced-patterns/notes.md) — React Compiler, splitting, virtualization, concurrency, profiling
+- [ ] [Slot pattern](phase-15-design-patterns/14-slot-composition-pattern/notes.md) — named slots vs compound components
+- [ ] [Strategy pattern](phase-15-design-patterns/15-strategy-pattern/notes.md) — remove if/else from hooks, hook factories
+- [ ] [Facade pattern](phase-15-design-patterns/16-facade-pattern/notes.md) — one hook as the single entry point for a component
+- [ ] [Error boundary pattern](phase-15-design-patterns/17-error-boundary-pattern/notes.md) — containing failures, fallbacks, reset, logging
+- [ ] [Suspense data-fetching pattern](phase-15-design-patterns/18-suspense-fetching-pattern/notes.md) — Suspense + use() + Error Boundary
+- [ ] [Custom hook for forms](phase-15-design-patterns/19-useform-hook-pattern/notes.md) — useForm + Context, cutting 100+ line forms

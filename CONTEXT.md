@@ -6,7 +6,7 @@
 
 ## What This Project Is
 
-A personal React interview prep repository for a **senior frontend engineer**. The goal is to cover 148 topics across 14 phases, one topic at a time, at the learner's pace. Quality over speed — there is no rush.
+A personal React interview prep repository for a **senior frontend engineer**. The goal is to cover 167 topics across 15 phases, one topic at a time, at the learner's pace. Quality over speed — there is no rush.
 
 Topics are generated as individual markdown files. Each file is a standalone, self-contained reference on that topic — written to build genuine understanding, not to memorize facts.
 
@@ -164,7 +164,8 @@ Leave unchecked anything you'd need to read to answer — that's what to revisit
 ├── phase-11-modern-react/        # TS examples
 ├── phase-12-ssr-frameworks/      # TS examples
 ├── phase-13-tooling-security-a11y/ # TS examples
-└── phase-14-live-coding/         # TS examples
+├── phase-14-live-coding/         # TS examples
+└── phase-15-design-patterns/     # TS examples — pattern-lens revisit of earlier phases
 ```
 
 **Running a tutorial:**
@@ -185,7 +186,7 @@ Edit `sandbox/src/App.jsx` (or `.tsx`) directly while the server is running — 
 
 ## Progress Tracker
 
-Legend: ✅ Done | ✅ Not started | 👉 **Next up**
+Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 ### Phase 1 — Fundamentals Refresher (10 topics)
 
@@ -404,6 +405,36 @@ Legend: ✅ Done | ✅ Not started | 👉 **Next up**
 | 12 | Recursive comments / file tree | `phase-14-live-coding/12-recursive-comments-file-tree/notes.md` | ✅ |
 | 13 | Drag and drop list | `phase-14-live-coding/13-drag-and-drop-list/notes.md` | ✅ |
 | 14 | Toast / notification system | `phase-14-live-coding/14-toast-notification-system/notes.md` | ✅ |
+
+### Phase 15 — React Design Patterns (19 topics) — TS examples
+
+> Source: tapaScript's "15 Days of React Design Patterns" playlist (YouTube, PLIJrr73KDmRyQVT__uFZvaVfWPdfyMFHC). Topic order follows the playlist. Notes are written fresh in the house format — the playlist is the syllabus, not the text.
+>
+> **Overlap convention:** roughly half of these patterns were already covered in Phases 2–6 and 11. Every Phase 15 notes.md has a **"Where You've Seen This Before"** section right after Quick Reference that links back to the earlier topics (`../../phase-XX-.../NN-slug/notes.md`), says what is *new* in this pass (the pattern lens: which code smell triggers it, how to choose between siblings, what the interviewer's "which pattern would you use?" follow-up looks like), and then does NOT re-teach the mechanics. Patterns with no earlier coverage (Container–Presenter, Strategy, Facade, Pub-Sub vs Observer, State Reducer) get full depth.
+>
+> **Sandbox note:** the sandbox runs React 18.3. React 19 APIs (`useOptimistic`, `use()`, Context-as-provider, React Compiler) are shown in code panels; runnable tutorials use a small React 18 shim/equivalent, same approach as Phase 11 `use()`.
+
+| # | Topic | File | Builds on | Status |
+|---|-------|------|-----------|--------|
+| 1 | Why React needs design patterns (+ crash course) | `phase-15-design-patterns/01-why-design-patterns/notes.md` | Phases 1–2 | ⬜ |
+| 2 | Container–Presenter | `phase-15-design-patterns/02-container-presenter/notes.md` | new | ⬜ |
+| 3 | State vs refs, controlled vs uncontrolled | `phase-15-design-patterns/03-state-vs-refs-inputs/notes.md` | 1/09, 2/05, 4/06, 8/01 | ⬜ |
+| 4 | Compound components | `phase-15-design-patterns/04-compound-component-pattern/notes.md` | 4/02, 14/07 | ⬜ |
+| 5 | Render props | `phase-15-design-patterns/05-render-prop-pattern/notes.md` | 4/03 | ⬜ |
+| 6 | Higher-order functions & components | `phase-15-design-patterns/06-hof-and-hoc-pattern/notes.md` | 4/04 | ⬜ |
+| 7 | Custom hook pattern | `phase-15-design-patterns/07-custom-hook-pattern/notes.md` | 4/05, 2/16, 2/18 | ⬜ |
+| 8 | Provider pattern | `phase-15-design-patterns/08-provider-pattern/notes.md` | 2/08, 6/01–02 | ⬜ |
+| 9 | Optimistic UI (`useOptimistic`) | `phase-15-design-patterns/09-optimistic-ui-pattern/notes.md` | 6/11, 11/06 | ⬜ |
+| 10 | State reducer pattern | `phase-15-design-patterns/10-state-reducer-pattern/notes.md` | 2/09, 4/06 | ⬜ |
+| 11 | Pub-Sub vs Observer | `phase-15-design-patterns/11-pub-sub-vs-observer/notes.md` | 2/14, 6/06 | ⬜ |
+| 12 | Performance patterns I — re-renders & memoization | `phase-15-design-patterns/12-performance-rerender-patterns/notes.md` | 5/04–07, 14/01 | ⬜ |
+| 13 | Performance patterns II — compiler, splitting, virtualization, concurrency | `phase-15-design-patterns/13-performance-advanced-patterns/notes.md` | 5/09–11, 5/15, 2/11–12 | ⬜ |
+| 14 | Slot pattern | `phase-15-design-patterns/14-slot-composition-pattern/notes.md` | 4/12, 4/01 | ⬜ |
+| 15 | Strategy pattern (hook factories) | `phase-15-design-patterns/15-strategy-pattern/notes.md` | new | ⬜ |
+| 16 | Facade pattern | `phase-15-design-patterns/16-facade-pattern/notes.md` | new | ⬜ |
+| 17 | Error boundary pattern | `phase-15-design-patterns/17-error-boundary-pattern/notes.md` | 3/05 | ⬜ |
+| 18 | Suspense data-fetching pattern | `phase-15-design-patterns/18-suspense-fetching-pattern/notes.md` | 11/03, 11/08 | ⬜ |
+| 19 | Custom hook for forms (`useForm`) | `phase-15-design-patterns/19-useform-hook-pattern/notes.md` | 8/01–03, 4/05 | ⬜ |
 
 ---
 

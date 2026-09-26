@@ -7,7 +7,7 @@ Base templates for `tutorial.jsx` and `tutorial.tsx` stub files generated for ea
 | File | Used for |
 |---|---|
 | `tutorial-js.jsx` | Phases 1–8 (plain JavaScript / JSX) |
-| `tutorial-ts.tsx` | Phases 9–13 (TypeScript / TSX) |
+| `tutorial-ts.tsx` | Phases 9–15 (TypeScript / TSX) |
 
 ## How to use a tutorial file
 
@@ -58,7 +58,7 @@ don't need to type the full path, just enough to identify one tutorial uniquely.
 
 | Pattern | Example | When to use |
 |---|---|---|
-| **Topic keyword** | `use-state`, `fiber`, `fragments` | Best default — keywords from the topic slug are usually unique across all 134 tutorials |
+| **Topic keyword** | `use-state`, `fiber`, `fragments` | Best default — keywords from the topic slug are usually unique across all 167 tutorials |
 | **Number + keyword** | `01-jsx`, `02-use-effect`, `09-reducer` | When a bare keyword might be ambiguous (e.g. `effect` matches three topics) |
 | **Phase + keyword** | `phase-02/use-state`, `hooks/use-state` | When you want to be explicit about which phase |
 | **Full topic slug** | `01-jsx-react-createelement` | Always unique — copy-paste from the folder name |
@@ -84,7 +84,7 @@ npm run tutorial layout-effect      # ✓ also unique
 
 #### Can't remember the name?
 
-Run any nonsense word — the "no matches" error prints all 134 tutorial paths:
+Run any nonsense word — the "no matches" error prints all 167 tutorial paths:
 
 ```bash
 npm run tutorial list
@@ -254,6 +254,27 @@ npm run tutorial aria-roles                    → ARIA roles & labels
 npm run tutorial focus-management              → Focus management in SPAs
 npm run tutorial keyboard-navigation           → Keyboard navigation
 npm run tutorial screen-reader                 → Screen reader testing
+
+# Phase 15 — React Design Patterns (uses .tsx)
+npm run tutorial why-design-patterns             → Why React needs design patterns
+npm run tutorial container-presenter             → Container–Presenter
+npm run tutorial state-vs-refs                   → State vs refs, controlled vs uncontrolled
+npm run tutorial compound-component-pattern      → Compound components
+npm run tutorial render-prop-pattern             → Render props
+npm run tutorial hof-and-hoc                     → Higher-order functions & components
+npm run tutorial custom-hook-pattern             → Custom hook pattern
+npm run tutorial provider-pattern                → Provider pattern
+npm run tutorial optimistic-ui                   → Optimistic UI
+npm run tutorial state-reducer                   → State reducer pattern
+npm run tutorial pub-sub                         → Pub-Sub vs Observer
+npm run tutorial performance-rerender            → Performance patterns I
+npm run tutorial performance-advanced            → Performance patterns II
+npm run tutorial slot-composition                → Slot pattern
+npm run tutorial strategy-pattern                → Strategy pattern
+npm run tutorial facade-pattern                  → Facade pattern
+npm run tutorial error-boundary-pattern          → Error boundary pattern
+npm run tutorial suspense-fetching               → Suspense data-fetching pattern
+npm run tutorial useform-hook                    → Custom hook for forms
 ```
 
 ---
@@ -263,7 +284,7 @@ npm run tutorial screen-reader                 → Screen reader testing
 | Phase | Link |
 |---|---|
 | Phases 1–8 (JSX) | [stackblitz.com/new/react](https://stackblitz.com/new/react) |
-| Phases 9–13 (TSX) | [stackblitz.com/new/react-ts](https://stackblitz.com/new/react-ts) |
+| Phases 9–15 (TSX) | [stackblitz.com/new/react-ts](https://stackblitz.com/new/react-ts) |
 
 Open the link, paste the tutorial file content into `src/App.jsx` (or `App.tsx`),
 and click Run. Useful when you don't have access to your local machine.
