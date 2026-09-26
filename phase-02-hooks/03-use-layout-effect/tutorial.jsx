@@ -32,10 +32,10 @@ import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 function FlickerDemo({ useHook }) {
   const containerRef = useRef(null);
   const [barWidth, setBarWidth] = useState(0);
-
+  const effectHook = useHook === 'layout' ? useLayoutEffect : useEffect;
   // TODO (right side): change useEffect to useLayoutEffect
   // Both stubs are useEffect right now — making both "broken" for comparison.
-  useEffect(() => {
+  effectHook(() => {
     // Simulate a brief expensive measurement
     const width = containerRef.current?.offsetWidth ?? 0;
     setBarWidth(width);
@@ -71,10 +71,10 @@ function Exercise1() {
     <div style={styles.box}>
       <button onClick={() => setKey(k => k + 1)}>Remount both (watch left)</button>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        <FlickerDemo key={`effect-${key}`}       useHook="effect" />
+        <FlickerDemo key={`effect-${key}`} useHook="effect" />
         {/* TODO: After you see the flicker, open FlickerDemo and change
                   the right side's useEffect to useLayoutEffect */}
-        <FlickerDemo key={`layout-${key}`}       useHook="layout" />
+        <FlickerDemo key={`layout-${key}`} useHook="layout" />
       </div>
     </div>
   );
@@ -108,6 +108,12 @@ function Exercise2() {
 
   // TODO: useLayoutEffect to measure triggerRef and set pos
   //       Run this effect whenever `open` changes to `true`
+
+  useLayoutEffect(() => {
+    if (!open || !triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    setPos({ top: rect.bottom + 4, left: rect.left });
+  }, [open])
 
   return (
     <div style={styles.box}>
@@ -166,9 +172,11 @@ const PAGES = {
 };
 
 function PageContent({ page, savedScrollY }) {
+
   useLayoutEffect(() => {
     // TODO: restore savedScrollY before paint
     // window.scrollTo(0, savedScrollY);
+    window.scrollTo(0, savedScrollY);
   }, [page, savedScrollY]);
 
   return (
@@ -193,6 +201,18 @@ function Exercise3() {
   const [scrollPositions, setScrollPositions] = useState({ A: 0, B: 0 });
 
   // TODO: add a scroll listener that updates scrollPositions[page]
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPositions(prev => ({
+        ...prev,
+        [page]: window.scrollY,
+      }));
+    };
+    window.addEventListener('scroll', handleScroll)
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [page])
 
   return (
     <div style={styles.box}>

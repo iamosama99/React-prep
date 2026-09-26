@@ -33,9 +33,9 @@ function Exercise1() {
   function tripleIncrement() {
     // BUG: all three calls close over the same stale `count` value.
     // If count is 5, each call schedules setCount(6), not 6→7→8.
-    setCount(count + 1);
-    setCount(count + 1);
-    setCount(count + 1);
+    setCount((count) => count + 1);
+    setCount((count) => count + 1);
+    setCount((count) => count + 1);
   }
 
   return (
@@ -43,6 +43,7 @@ function Exercise1() {
       <p>Count: <strong>{count}</strong></p>
       <button onClick={tripleIncrement}>Increment ×3</button>
       {/* TODO: add a Reset button */}
+      <button onClick={() => setCount(0)}>Reset</button>
     </div>
   );
 }
@@ -64,11 +65,11 @@ function Exercise1() {
 //          edit the others.
 
 function Exercise2() {
-  const [form, setForm] = useState({ name: '', email: '' });
+  const [form, setForm] = useState({ name: '', email: '', role: 'Engineer' });
 
   function handleChange(field, value) {
     // BUG: this replaces the whole object, losing the other field.
-    setForm({ [field]: value });
+    setForm({ ...form, [field]: value });
   }
 
   return (
@@ -87,7 +88,19 @@ function Exercise2() {
           onChange={e => handleChange('email', e.target.value)}
         />
       </label>
+
       {/* TODO: add Role <select> here */}
+      <label style={styles.label}>
+        Role
+        <select value={form.role}
+          onChange={e => handleChange('role', e.target.value)}>
+          <option value="Engineer">Engineer</option>
+          <option value="Designer">Designer</option>
+          <option value="Manager">Manager</option>
+        </select>
+      </label>
+
+
       <pre style={{ fontSize: 12 }}>{JSON.stringify(form, null, 2)}</pre>
     </div>
   );
@@ -114,14 +127,21 @@ function Exercise2() {
 
 function Exercise3() {
   // TODO: replace with lazy initialization from localStorage
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(() => JSON.parse(localStorage.getItem('ex3-count')) ?? 0);
 
   // TODO: add a useEffect that persists count to localStorage
+
+  useEffect(() => {
+    localStorage.setItem('ex3-count', count);
+  }, [count]);
 
   return (
     <div style={styles.box}>
       <p>Count (persisted): <strong>{count}</strong></p>
       {/* TODO: Increment / Decrement / Reset buttons */}
+      <button onClick={() => setCount((prev) => prev + 1)}>Increment</button>
+      <button onClick={() => setCount((prev) => prev - 1)}>Decrement</button>
+      <button onClick={() => setCount(0)}>Reset</button>
     </div>
   );
 }

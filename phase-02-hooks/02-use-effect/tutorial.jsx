@@ -35,10 +35,13 @@ function Exercise1() {
   useEffect(() => {
     const handler = () => {
       // TODO: update `width` state here
+      setWidth(window.innerWidth);
       console.log('window resized — width:', window.innerWidth);
     };
 
     window.addEventListener('resize', handler);
+
+    return () => window.removeEventListener('resize', handler);
 
     // BUG: no cleanup — handler accumulates with every re-render.
     // TODO: return () => window.removeEventListener('resize', handler);
@@ -80,7 +83,7 @@ function Exercise1() {
 
 const FAKE_USERS = {
   1: { name: 'Alice', role: 'Engineer' },
-  2: { name: 'Bob',   role: 'Designer' },
+  2: { name: 'Bob', role: 'Designer' },
   3: { name: 'Carol', role: 'Manager' },
 };
 
@@ -100,11 +103,14 @@ function Exercise2() {
   useEffect(() => {
     setLoading(true);
     // BUG: no cancellation — stale response can win the race.
-    fakeApi(userId).then(data => {
+    const controller = new AbortController();
+    fakeApi(userId, { signal: controller.signal }).then(data => {
+      if (controller.signal.aborted) return;
       setUser(data);
       setLoading(false);
     });
     // TODO: add cancellation and return cleanup
+    return () => controller.abort();
   }, [userId]);
 
   return (
@@ -158,21 +164,35 @@ function Exercise3() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // BUG: cannot make the effect function itself async.
-  // An async function returns a Promise; React expects undefined or
-  // a cleanup function.
-  useEffect(async () => {
-    const res = await fetch('https://jsonplaceholder.typicode.com/todos/1');
-    const json = await res.json();
-    setData(json);
-    setLoading(false);
+  // BUG: cannot make the effect function itself async. 
+  // An async function returns a Promise; React expects undefined or a cleanup function.
+  // (Temporarily commented out so Exercise 1 and 2 can render without crashing the tree.
+  //  Uncomment when you're ready to solve Exercise 3!)
+
+  useEffect(() => {
+    const controller = new AbortController();
+    async function fetchData() {
+      try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/todos/1', { signal: controller.signal });
+        const json = await res.json();
+        setData(json);
+        setLoading(false);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        setError(err.message);
+        setLoading(false);
+      }
+    }
+    fetchData();
+    return () => controller.abort();
   }, []);
+
   // TODO: rewrite using an inner async function or IIFE pattern.
   // TODO: add error handling (try/catch).
   // TODO: add AbortController for cleanup.
 
   if (loading) return <div style={styles.box}>Loading…</div>;
-  if (error)   return <div style={styles.box}>Error: {error}</div>;
+  if (error) return <div style={styles.box}>Error: {error}</div>;
 
   return (
     <div style={styles.box}>
