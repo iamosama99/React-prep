@@ -83,7 +83,7 @@ function useForm<T extends Values>({ initialValues, validate, onSubmit }: {
   const [isSubmitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const errors = useMemo(() => validate?.(values) ?? {}, [values, validate]);   // DERIVED
+  const errors = useMemo<Errors<T>>(() => validate?.(values) ?? {}, [values, validate]);   // DERIVED (annotate: `?? {}` alone widens to `{}` and breaks indexing)
   const isValid = Object.keys(errors).length === 0;
   const isDirty = useMemo(() => Object.keys(initialValues).some(k => values[k] !== initialValues[k]), [values, initialValues]);
   …

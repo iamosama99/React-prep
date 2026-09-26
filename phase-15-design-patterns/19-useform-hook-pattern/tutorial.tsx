@@ -25,7 +25,8 @@ import {
 //
 // BUILD  useForm<T>({ initialValues, validate?, onSubmit })
 //   state          values, touched, isSubmitting, submitError
-//   errors         DERIVED: useMemo(() => validate?.(values) ?? {}, [values, validate])
+//   errors         DERIVED: useMemo<Errors<T>>(() => validate?.(values) ?? {}, [values, validate])
+//                  (annotate the generic — `?? {}` alone widens the type to `{}`)
 //   isValid        no keys in errors
 //   isDirty        any value !== its initial value
 //   showError(n)   errors[n] only if touched[n]   (else undefined)
