@@ -30,6 +30,11 @@ import { useState, useEffect, useRef, useCallback, FC, FormEvent } from 'react';
 //        One ref object for the component's lifetime; update .current
 //        after every render.
 //
+// NOTE  usePrevious gives the value from the previous RENDER. The intervals below
+//   re-render this component every second, so after a moment "previous" equals
+//   the current count — click quickly to see them differ. That is the hook's
+//   real semantics (see the gotcha in notes.md), not a bug in your code.
+//
 // OBSERVE
 //   Both intervals below are created ONCE (deps = []).
 //     - "stale" reads `count` from its closure  → stuck at 0. That's the bug.

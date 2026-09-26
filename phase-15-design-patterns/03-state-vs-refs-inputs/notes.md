@@ -192,6 +192,8 @@ function useControllableState<T>({
 
 **Reading or writing `ref.current` during render.** It works in simple cases, then fails under Strict Mode or concurrent rendering because renders can be repeated or discarded. Mutate refs in effects and event handlers. (One allowed exception: lazy initialisation — `if (ref.current === null) ref.current = expensive()`.)
 
+**`usePrevious` returns the previous *render's* value, not the previous *change*.** Any unrelated re-render (a parent update, another state) re-runs the effect with the same value, so `prev` becomes equal to `current`. If you need "the value before it last changed", track it only when the value differs (`if (ref.current !== value) { prev.current = ref.current; ref.current = value }`) or keep an explicit history in state.
+
 **Effects depending on `ref.current`.** `useEffect(..., [ref.current])` is a bug — refs don't trigger renders, so the dependency is read once during render and never observed changing. If you need to react to a DOM node appearing, use a **callback ref** (or state set by a callback ref).
 
 **`value={undefined}` flips a controlled input uncontrolled.** Initialising state with `undefined`/`null` from an API then filling it later triggers "changing an uncontrolled input to be controlled." Coalesce: `value={user?.name ?? ''}`.
