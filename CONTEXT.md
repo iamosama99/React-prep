@@ -416,16 +416,16 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 
 | # | Topic | File | Builds on | Status |
 |---|-------|------|-----------|--------|
-| 1 | Why React needs design patterns (+ crash course) | `phase-15-design-patterns/01-why-design-patterns/notes.md` | Phases 1–2 | ⬜ |
-| 2 | Container–Presenter | `phase-15-design-patterns/02-container-presenter/notes.md` | new | ⬜ |
-| 3 | State vs refs, controlled vs uncontrolled | `phase-15-design-patterns/03-state-vs-refs-inputs/notes.md` | 1/09, 2/05, 4/06, 8/01 | ⬜ |
-| 4 | Compound components | `phase-15-design-patterns/04-compound-component-pattern/notes.md` | 4/02, 14/07 | ⬜ |
-| 5 | Render props | `phase-15-design-patterns/05-render-prop-pattern/notes.md` | 4/03 | ⬜ |
-| 6 | Higher-order functions & components | `phase-15-design-patterns/06-hof-and-hoc-pattern/notes.md` | 4/04 | ⬜ |
-| 7 | Custom hook pattern | `phase-15-design-patterns/07-custom-hook-pattern/notes.md` | 4/05, 2/16, 2/18 | ⬜ |
-| 8 | Provider pattern | `phase-15-design-patterns/08-provider-pattern/notes.md` | 2/08, 6/01–02 | ⬜ |
-| 9 | Optimistic UI (`useOptimistic`) | `phase-15-design-patterns/09-optimistic-ui-pattern/notes.md` | 6/11, 11/06 | ⬜ |
-| 10 | State reducer pattern | `phase-15-design-patterns/10-state-reducer-pattern/notes.md` | 2/09, 4/06 | ⬜ |
+| 1 | Why React needs design patterns (+ crash course) | `phase-15-design-patterns/01-why-design-patterns/notes.md` | Phases 1–2 |✅ |
+| 2 | Container–Presenter | `phase-15-design-patterns/02-container-presenter/notes.md` | new |✅ |
+| 3 | State vs refs, controlled vs uncontrolled | `phase-15-design-patterns/03-state-vs-refs-inputs/notes.md` | 1/09, 2/05, 4/06, 8/01 |✅ |
+| 4 | Compound components | `phase-15-design-patterns/04-compound-component-pattern/notes.md` | 4/02, 14/07 |✅ |
+| 5 | Render props | `phase-15-design-patterns/05-render-prop-pattern/notes.md` | 4/03 |✅ |
+| 6 | Higher-order functions & components | `phase-15-design-patterns/06-hof-and-hoc-pattern/notes.md` | 4/04 |✅ |
+| 7 | Custom hook pattern | `phase-15-design-patterns/07-custom-hook-pattern/notes.md` | 4/05, 2/16, 2/18 |✅ |
+| 8 | Provider pattern | `phase-15-design-patterns/08-provider-pattern/notes.md` | 2/08, 6/01–02 |✅ |
+| 9 | Optimistic UI (`useOptimistic`) | `phase-15-design-patterns/09-optimistic-ui-pattern/notes.md` | 6/11, 11/06 |✅ |
+| 10 | State reducer pattern | `phase-15-design-patterns/10-state-reducer-pattern/notes.md` | 2/09, 4/06 |✅ |
 | 11 | Pub-Sub vs Observer | `phase-15-design-patterns/11-pub-sub-vs-observer/notes.md` | 2/14, 6/06 | ⬜ |
 | 12 | Performance patterns I — re-renders & memoization | `phase-15-design-patterns/12-performance-rerender-patterns/notes.md` | 5/04–07, 14/01 | ⬜ |
 | 13 | Performance patterns II — compiler, splitting, virtualization, concurrency | `phase-15-design-patterns/13-performance-advanced-patterns/notes.md` | 5/09–11, 5/15, 2/11–12 | ⬜ |
