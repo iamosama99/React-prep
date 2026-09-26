@@ -346,22 +346,22 @@ See [`_templates/README.md`](_templates/README.md) for a full matching reference
 
 > A pattern-lens pass over the whole repo, following tapaScript's "15 Days of React Design Patterns" playlist. Roughly half of these revisit earlier phases — each notes.md links back to where you first met the concept and focuses on *when to pick this pattern*, not on re-teaching the mechanics.
 
-- [ ] [Why React needs design patterns](phase-15-design-patterns/01-why-design-patterns/notes.md) — code smells → patterns, plus a crash course refresher
-- [ ] [Container–Presenter](phase-15-design-patterns/02-container-presenter/notes.md) — split logic from UI; the pattern hooks replaced
-- [ ] [State vs refs, controlled vs uncontrolled](phase-15-design-patterns/03-state-vs-refs-inputs/notes.md) — source of truth, when refs beat state
-- [ ] [Compound components](phase-15-design-patterns/04-compound-component-pattern/notes.md) — implicit shared state, inversion of control
-- [ ] [Render props](phase-15-design-patterns/05-render-prop-pattern/notes.md) — children-as-function, and what hooks replaced
-- [ ] [Higher-order functions & components](phase-15-design-patterns/06-hof-and-hoc-pattern/notes.md) — HOF → HOC, when HOCs still win
-- [ ] [Custom hook pattern](phase-15-design-patterns/07-custom-hook-pattern/notes.md) — extracting logic; useLocalStorage, useClipboard
-- [ ] [Provider pattern](phase-15-design-patterns/08-provider-pattern/notes.md) — Context for shared state, React 19 syntax, composing providers
-- [ ] [Optimistic UI](phase-15-design-patterns/09-optimistic-ui-pattern/notes.md) — useOptimistic, rollback, transitions
-- [ ] [State reducer pattern](phase-15-design-patterns/10-state-reducer-pattern/notes.md) — letting consumers override internal transitions
-- [ ] [Pub-Sub vs Observer](phase-15-design-patterns/11-pub-sub-vs-observer/notes.md) — EventBus, BroadcastChannel, cross-tab sync
-- [ ] [Performance patterns I](phase-15-design-patterns/12-performance-rerender-patterns/notes.md) — re-renders, memoization, derived state, debounce/throttle
-- [ ] [Performance patterns II](phase-15-design-patterns/13-performance-advanced-patterns/notes.md) — React Compiler, splitting, virtualization, concurrency, profiling
-- [ ] [Slot pattern](phase-15-design-patterns/14-slot-composition-pattern/notes.md) — named slots vs compound components
-- [ ] [Strategy pattern](phase-15-design-patterns/15-strategy-pattern/notes.md) — remove if/else from hooks, hook factories
-- [ ] [Facade pattern](phase-15-design-patterns/16-facade-pattern/notes.md) — one hook as the single entry point for a component
-- [ ] [Error boundary pattern](phase-15-design-patterns/17-error-boundary-pattern/notes.md) — containing failures, fallbacks, reset, logging
-- [ ] [Suspense data-fetching pattern](phase-15-design-patterns/18-suspense-fetching-pattern/notes.md) — Suspense + use() + Error Boundary
-- [ ] [Custom hook for forms](phase-15-design-patterns/19-useform-hook-pattern/notes.md) — useForm + Context, cutting 100+ line forms
+- [x] [Why React needs design patterns](phase-15-design-patterns/01-why-design-patterns/notes.md) — code smells → patterns, plus a crash course refresher
+- [x] [Container–Presenter](phase-15-design-patterns/02-container-presenter/notes.md) — split logic from UI; the pattern hooks replaced
+- [x] [State vs refs, controlled vs uncontrolled](phase-15-design-patterns/03-state-vs-refs-inputs/notes.md) — source of truth, when refs beat state
+- [x] [Compound components](phase-15-design-patterns/04-compound-component-pattern/notes.md) — implicit shared state, inversion of control
+- [x] [Render props](phase-15-design-patterns/05-render-prop-pattern/notes.md) — children-as-function, and what hooks replaced
+- [x] [Higher-order functions & components](phase-15-design-patterns/06-hof-and-hoc-pattern/notes.md) — HOF → HOC, when HOCs still win
+- [x] [Custom hook pattern](phase-15-design-patterns/07-custom-hook-pattern/notes.md) — extracting logic; useLocalStorage, useClipboard
+- [x] [Provider pattern](phase-15-design-patterns/08-provider-pattern/notes.md) — Context for shared state, React 19 syntax, composing providers
+- [x] [Optimistic UI](phase-15-design-patterns/09-optimistic-ui-pattern/notes.md) — useOptimistic, rollback, transitions
+- [x] [State reducer pattern](phase-15-design-patterns/10-state-reducer-pattern/notes.md) — letting consumers override internal transitions
+- [x] [Pub-Sub vs Observer](phase-15-design-patterns/11-pub-sub-vs-observer/notes.md) — EventBus, BroadcastChannel, cross-tab sync
+- [x] [Performance patterns I](phase-15-design-patterns/12-performance-rerender-patterns/notes.md) — re-renders, memoization, derived state, debounce/throttle
+- [x] [Performance patterns II](phase-15-design-patterns/13-performance-advanced-patterns/notes.md) — React Compiler, splitting, virtualization, concurrency, profiling
+- [x] [Slot pattern](phase-15-design-patterns/14-slot-composition-pattern/notes.md) — named slots vs compound components
+- [x] [Strategy pattern](phase-15-design-patterns/15-strategy-pattern/notes.md) — remove if/else from hooks, hook factories
+- [x] [Facade pattern](phase-15-design-patterns/16-facade-pattern/notes.md) — one hook as the single entry point for a component
+- [x] [Error boundary pattern](phase-15-design-patterns/17-error-boundary-pattern/notes.md) — containing failures, fallbacks, reset, logging
+- [x] [Suspense data-fetching pattern](phase-15-design-patterns/18-suspense-fetching-pattern/notes.md) — Suspense + use() + Error Boundary
+- [x] [Custom hook for forms](phase-15-design-patterns/19-useform-hook-pattern/notes.md) — useForm + Context, cutting 100+ line forms

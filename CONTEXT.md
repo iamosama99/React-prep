@@ -426,15 +426,15 @@ Legend: ✅ Done | ⬜ Not started | 👉 **Next up**
 | 8 | Provider pattern | `phase-15-design-patterns/08-provider-pattern/notes.md` | 2/08, 6/01–02 |✅ |
 | 9 | Optimistic UI (`useOptimistic`) | `phase-15-design-patterns/09-optimistic-ui-pattern/notes.md` | 6/11, 11/06 |✅ |
 | 10 | State reducer pattern | `phase-15-design-patterns/10-state-reducer-pattern/notes.md` | 2/09, 4/06 |✅ |
-| 11 | Pub-Sub vs Observer | `phase-15-design-patterns/11-pub-sub-vs-observer/notes.md` | 2/14, 6/06 | ⬜ |
-| 12 | Performance patterns I — re-renders & memoization | `phase-15-design-patterns/12-performance-rerender-patterns/notes.md` | 5/04–07, 14/01 | ⬜ |
-| 13 | Performance patterns II — compiler, splitting, virtualization, concurrency | `phase-15-design-patterns/13-performance-advanced-patterns/notes.md` | 5/09–11, 5/15, 2/11–12 | ⬜ |
-| 14 | Slot pattern | `phase-15-design-patterns/14-slot-composition-pattern/notes.md` | 4/12, 4/01 | ⬜ |
-| 15 | Strategy pattern (hook factories) | `phase-15-design-patterns/15-strategy-pattern/notes.md` | new | ⬜ |
-| 16 | Facade pattern | `phase-15-design-patterns/16-facade-pattern/notes.md` | new | ⬜ |
-| 17 | Error boundary pattern | `phase-15-design-patterns/17-error-boundary-pattern/notes.md` | 3/05 | ⬜ |
-| 18 | Suspense data-fetching pattern | `phase-15-design-patterns/18-suspense-fetching-pattern/notes.md` | 11/03, 11/08 | ⬜ |
-| 19 | Custom hook for forms (`useForm`) | `phase-15-design-patterns/19-useform-hook-pattern/notes.md` | 8/01–03, 4/05 | ⬜ |
+| 11 | Pub-Sub vs Observer | `phase-15-design-patterns/11-pub-sub-vs-observer/notes.md` | 2/14, 6/06 |✅ |
+| 12 | Performance patterns I — re-renders & memoization | `phase-15-design-patterns/12-performance-rerender-patterns/notes.md` | 5/04–07, 14/01 |✅ |
+| 13 | Performance patterns II — compiler, splitting, virtualization, concurrency | `phase-15-design-patterns/13-performance-advanced-patterns/notes.md` | 5/09–11, 5/15, 2/11–12 |✅ |
+| 14 | Slot pattern | `phase-15-design-patterns/14-slot-composition-pattern/notes.md` | 4/12, 4/01 |✅ |
+| 15 | Strategy pattern (hook factories) | `phase-15-design-patterns/15-strategy-pattern/notes.md` | new |✅ |
+| 16 | Facade pattern | `phase-15-design-patterns/16-facade-pattern/notes.md` | new |✅ |
+| 17 | Error boundary pattern | `phase-15-design-patterns/17-error-boundary-pattern/notes.md` | 3/05 |✅ |
+| 18 | Suspense data-fetching pattern | `phase-15-design-patterns/18-suspense-fetching-pattern/notes.md` | 11/03, 11/08 |✅ |
+| 19 | Custom hook for forms (`useForm`) | `phase-15-design-patterns/19-useform-hook-pattern/notes.md` | 8/01–03, 4/05 |✅ |
 
 ---
 
